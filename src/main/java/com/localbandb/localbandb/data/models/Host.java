@@ -1,10 +1,7 @@
 package com.localbandb.localbandb.data.models;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 
@@ -24,10 +21,10 @@ public class Host extends BaseEntity {
   @Column(name = "last_name", nullable = false)
   private String lastName;
 
-  @OneToMany(targetEntity = Property.class, mappedBy = "host")
+  @OneToMany(targetEntity = Property.class, mappedBy = "host", cascade = CascadeType.ALL)
   private List<Property> properties;
 
-  @OneToMany(targetEntity = Payment.class, mappedBy = "host")
+  @OneToMany(targetEntity = Payment.class, mappedBy = "host", cascade = CascadeType.ALL)
   private List<Payment> payments;
 
   public Host() {

@@ -1,11 +1,7 @@
-package com.localbandb.localbandb.services.models.binding;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+package com.localbandb.localbandb.services.models.auth;
 
 
-public class UserBindingModel {
+public class UserRegisterModel {
   private String username;
   private String email;
   private String firstName;
@@ -14,7 +10,7 @@ public class UserBindingModel {
   private String password;
   private String confirmPassword;
 
-  public UserBindingModel() {
+  public UserRegisterModel() {
   }
 
   public String getUsername() {

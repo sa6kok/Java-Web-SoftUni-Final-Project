@@ -18,7 +18,7 @@ public class Reservation extends BaseEntity {
   @JoinColumn(name = "property_id")
   private Property property;
 
-  @OneToOne(targetEntity = Review.class)
+  @OneToOne(targetEntity = Review.class, cascade = CascadeType.ALL)
   @JoinColumn(name = "review_id", referencedColumnName = "id")
   private Review review;
 

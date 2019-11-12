@@ -1,9 +1,6 @@
 package com.localbandb.localbandb.data.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -13,7 +10,7 @@ public class Country extends BaseEntity {
   @Column(name = "name")
   private String name;
 
-  @OneToMany(targetEntity = City.class, mappedBy = "country")
+  @OneToMany(targetEntity = City.class, mappedBy = "country", cascade = CascadeType.ALL)
   private List<City> cities;
 
   public Country() {

@@ -13,7 +13,7 @@
                     <!-- Background image for card set in CSS! -->
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title text-center">Register</h5>
+                    <h5 class="card-title text-center">Register as Guest</h5>
                     <form class="form-signin" th:action="@{/user/register}" th:method="post"
                           oninput='confirmPassword.setCustomValidity(confirmPassword.value != password.value ? "Passwords do not match." : "")'>
                         <div class="form-label-group">
@@ -55,7 +55,7 @@
 
                         <button class="btn btn-lg btn-dark btn-block text-uppercase" type="submit">Register</button>
                         <hr class="my-4">
-                        <a class="d-block text-center mt-2 " th:href="@{/user/login}">Sign In</a>
+                        <a class="d-block text-center mt-2 " th:href="@{/user/login}">Log In as Guest</a>
                      </form>
                 </div>
             </div>

@@ -2,7 +2,7 @@ package com.localbandb.localbandb.services.services.implementations;
 
 import com.localbandb.localbandb.data.models.User;
 import com.localbandb.localbandb.repositories.UserRepository;
-import com.localbandb.localbandb.services.models.binding.UserBindingModel;
+import com.localbandb.localbandb.services.models.service.UserServiceModel;
 import com.localbandb.localbandb.services.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,10 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public boolean save(UserBindingModel user) {
+  public boolean save(UserServiceModel user) {
+    if(!user.getPassword().equals(user.getConfirmPassword())) {
+      return false;
+    }
     try {
       userRepository.save(modelMapper.map(user, User.class));
       return true;

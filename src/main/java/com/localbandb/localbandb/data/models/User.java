@@ -29,10 +29,10 @@ public class User extends BaseEntity {
   @Column(name = "age", nullable = false)
   private String age;
 
-  @OneToMany(targetEntity = Reservation.class, mappedBy = "user")
+  @OneToMany(targetEntity = Reservation.class, mappedBy = "user", cascade = CascadeType.ALL)
   private List<Reservation> reservations;
 
-  @OneToMany(targetEntity = Payment.class, mappedBy = "user")
+  @OneToMany(targetEntity = Payment.class, mappedBy = "user", cascade = CascadeType.ALL)
   private List<Payment> payments;
 
 

@@ -1,8 +1,8 @@
 package com.localbandb.localbandb.services.services;
 
-import com.localbandb.localbandb.data.models.User;
-import com.localbandb.localbandb.services.models.binding.UserBindingModel;
+import com.localbandb.localbandb.services.models.auth.UserRegisterModel;
+import com.localbandb.localbandb.services.models.service.UserServiceModel;
 
 public interface UserService {
-  boolean save(UserBindingModel user);
+  boolean save(UserServiceModel user);
 }

@@ -1,8 +1,9 @@
 package com.localbandb.localbandb.web.controlers;
 
-import com.localbandb.localbandb.services.models.binding.UserBindingModel;
+import com.localbandb.localbandb.services.models.auth.UserRegisterModel;
+import com.localbandb.localbandb.services.models.service.UserServiceModel;
 import com.localbandb.localbandb.services.services.UserService;
-import org.dom4j.rule.Mode;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +17,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/user")
 public class UserController {
   private final UserService userService;
+  private final ModelMapper mapper;
 
   @Autowired
-  public UserController(UserService userService) {
+  public UserController(UserService userService, ModelMapper mapper) {
     this.userService = userService;
+    this.mapper = mapper;
   }
 
 
@@ -35,15 +38,12 @@ public class UserController {
   }
 
   @PostMapping("/register")
-  public String registerConfirm(@ModelAttribute UserBindingModel model, RedirectAttributes redirectAttributes) {
-    if(!model.getPassword().equals(model.getConfirmPassword())) {
+  public String registerConfirm(@ModelAttribute UserRegisterModel model, RedirectAttributes redirectAttributes) {
+    if (!userService.save(mapper.map(model, UserServiceModel.class))) {
       redirectAttributes.addFlashAttribute("user", model);
       return "redirect:/user/register";
+
     }
-    if (userService.save(model)) {
-      return "redirect:/user/login";
-    }
-    redirectAttributes.addFlashAttribute("user", model);
-    return "redirect:/user/register";
+    return "redirect:/user/login";
   }
 }

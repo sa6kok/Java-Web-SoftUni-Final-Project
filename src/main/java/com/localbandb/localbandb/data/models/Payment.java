@@ -11,11 +11,11 @@ public class Payment extends BaseEntity {
   @Column(name = "amount")
   private BigDecimal amount;
 
-  @ManyToOne(targetEntity = User.class)
+  @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
 
-  @ManyToOne(targetEntity = Host.class)
+  @ManyToOne(targetEntity = Host.class, cascade = CascadeType.ALL)
   @JoinColumn(name = "host_id", referencedColumnName = "id")
   private Host host;
 

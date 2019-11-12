@@ -17,7 +17,7 @@ public class Property extends BaseEntity {
   @ManyToOne(targetEntity = Host.class)
   private Host host;
 
-  @OneToOne(targetEntity = Address.class)
+  @OneToOne(targetEntity = Address.class, cascade = CascadeType.ALL)
   @JoinColumn(name = "address_id", referencedColumnName = "id")
   private Address address;
 
@@ -29,10 +29,10 @@ public class Property extends BaseEntity {
   @Column(name = "busy_dates")
   private List<Date> busyDates;
 
-  @OneToMany(targetEntity = Reservation.class, mappedBy = "property")
+  @OneToMany(targetEntity = Reservation.class, mappedBy = "property", cascade = CascadeType.ALL)
   private List<Reservation> reservations;
 
-  @OneToMany(targetEntity = ReservationWithoutUser.class, mappedBy = "property")
+  @OneToMany(targetEntity = ReservationWithoutUser.class, mappedBy = "property", cascade = CascadeType.ALL)
   private List<ReservationWithoutUser> reservationWithoutUsers;
 
   @ElementCollection(targetClass = String.class)
