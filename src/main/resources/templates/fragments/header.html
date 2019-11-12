@@ -1,0 +1,45 @@
+<th:block th:fragment="header">
+    <header>
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                <!-- Slide One - Set the background image for this slide in the line below -->
+                <div class="carousel-item active"
+                     style="background-image: url('https://la-bulgarie.fr/media/pages/266/big/cdce3b86bbf1b118acd10f50a6810500.jpg')">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h3>Assenovgrad</h3>
+                        <p>Where the history meets the nature!</p>
+                    </div>
+                </div>
+                <!-- Slide Two - Set the background image for this slide in the line below -->
+                <div class="carousel-item"
+                     style="background-image: url('https://hayvan-storage-wordpress-master-studiowien.s3.amazonaws.com/uploads/2019/01/DSCF3908-kl-1-1984x1116.jpg')">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h3>Plovdiv</h3>
+                        <p>There is so much to be seen!</p>
+                    </div>
+                </div>
+                <!-- Slide Three - Set the background image for this slide in the line below -->
+                <div class="carousel-item"
+                     style="background-image: url('http://www.bhmpics.com/walls/marina_bay_sand-other.jpg')">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h3>Third Slide</h3>
+                        <p>This is a description for the third slide.</p>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </header>
+</th:block>
