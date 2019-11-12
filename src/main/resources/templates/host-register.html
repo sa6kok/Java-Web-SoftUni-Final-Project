@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/head"/>
+<body>
+<th:block th:replace="fragments/navigation"/>
+<th:block th:replace="fragments/header"/>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 col-xl-9 mx-auto">
+            <div class="card card-signin flex-row my-5">
+                <div class="card-img-left d-none d-md-flex">
+                    <!-- Background image for card set in CSS! -->
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-center">Register as Host</h5>
+                    <form class="form-signin" th:action="@{/host/register}" th:method="post"
+                          oninput='confirmPassword.setCustomValidity(confirmPassword.value != password.value ? "Passwords do not match." : "")'>
+                        <div class="form-label-group">
+                            <input type="text" id="inputUsername" class="form-control" name="username" placeholder="Username"  required autofocus>
+                            <label for="inputUsername">Username</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="email" id="inputEmail" class="form-control" name="email" placeholder="Email address"  required>
+                            <label for="inputEmail">Email address</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="text" id="inputFirstName" class="form-control" name="firstName" placeholder="First name"  required autofocus>
+                            <label for="inputFirstName">First name</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="text" id="inputLastName" class="form-control" name="lastName" placeholder="Last name" required autofocus>
+                            <label for="inputLastName">Last name</label>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-label-group">
+                            <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
+                            <label for="inputPassword">Password</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="password" id="inputConfirmPassword" class="form-control" name="confirmPassword" placeholder="Password" required>
+                            <label for="inputConfirmPassword">Confirm password</label>
+                        </div>
+
+                        <button class="btn btn-lg btn-dark btn-block text-uppercase" type="submit">Register</button>
+                        <hr class="my-4">
+                        <a class="d-block text-center mt-2 " th:href="@{/host/login}">Log In as Host</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="fragments/footer"/>
+</body>
+</html>
