@@ -25,7 +25,7 @@ public class Address extends BaseEntity {
 
 
   @OneToOne(targetEntity = Property.class)
-  @JoinColumn(name = "property_id", referencedColumnName = "id")
+  @JoinColumn(name = "property_id", referencedColumnName = "address_id")
   private Property property;
 
   public Address() {

@@ -24,8 +24,11 @@ public class Host extends BaseEntity {
   @Column(name = "last_name", nullable = false)
   private String lastName;
 
-  @OneToMany(targetEntity = Property.class, mappedBy = "id")
+  @OneToMany(targetEntity = Property.class, mappedBy = "host")
   private List<Property> properties;
+
+  @OneToMany(targetEntity = Payment.class, mappedBy = "host")
+  private List<Payment> payments;
 
   public Host() {
   }
@@ -69,5 +72,13 @@ public class Host extends BaseEntity {
 
   public void setProperties(List<Property> properties) {
     this.properties = properties;
+  }
+
+  public List<Payment> getPayments() {
+    return payments;
+  }
+
+  public void setPayments(List<Payment> payments) {
+    this.payments = payments;
   }
 }

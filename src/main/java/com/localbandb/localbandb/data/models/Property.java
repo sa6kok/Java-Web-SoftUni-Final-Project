@@ -2,6 +2,7 @@ package com.localbandb.localbandb.data.models;
 
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -23,15 +24,22 @@ public class Property extends BaseEntity {
   @Column(name = "description")
   private String description;
 
-  @OneToMany(targetEntity = Review.class, mappedBy = "id")
-  private List<Review> reviews;
 
   @ElementCollection(targetClass = Date.class)
   @Column(name = "busy_dates")
   private List<Date> busyDates;
 
-  @ManyToMany(targetEntity = User.class, mappedBy = "visitedProperties")
-  private List<User> visitors;
+  @OneToMany(targetEntity = Reservation.class, mappedBy = "property")
+  private List<Reservation> reservations;
+
+  @OneToMany(targetEntity = ReservationWithoutUser.class, mappedBy = "property")
+  private List<ReservationWithoutUser> reservationWithoutUsers;
+
+  @ElementCollection(targetClass = String.class)
+  private List<String> pictures;
+
+  @Column(name = "price")
+  private BigDecimal price;
 
   public Property() {
   }
@@ -69,14 +77,6 @@ public class Property extends BaseEntity {
     this.description = description;
   }
 
-  public List<Review> getReviews() {
-    return reviews;
-  }
-
-  public void setReviews(List<Review> reviews) {
-    this.reviews = reviews;
-  }
-
   public List<Date> getBusyDates() {
     return busyDates;
   }
@@ -85,11 +85,35 @@ public class Property extends BaseEntity {
     this.busyDates = busyDates;
   }
 
-  public List<User> getVisitors() {
-    return visitors;
+  public List<Reservation> getReservations() {
+    return reservations;
   }
 
-  public void setVisitors(List<User> visitors) {
-    this.visitors = visitors;
+  public void setReservations(List<Reservation> reservations) {
+    this.reservations = reservations;
+  }
+
+  public List<ReservationWithoutUser> getReservationWithoutUsers() {
+    return reservationWithoutUsers;
+  }
+
+  public void setReservationWithoutUsers(List<ReservationWithoutUser> reservationWithoutUsers) {
+    this.reservationWithoutUsers = reservationWithoutUsers;
+  }
+
+  public List<String> getPictures() {
+    return pictures;
+  }
+
+  public void setPictures(List<String> pictures) {
+    this.pictures = pictures;
+  }
+
+  public BigDecimal getPrice() {
+    return price;
+  }
+
+  public void setPrice(BigDecimal price) {
+    this.price = price;
   }
 }

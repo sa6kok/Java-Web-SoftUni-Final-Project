@@ -29,11 +29,11 @@ public class User extends BaseEntity {
   @Column(name = "age", nullable = false)
   private String age;
 
-  @ManyToMany(targetEntity = Property.class)
-  @JoinTable( name = "visitor_property",
-      joinColumns = @JoinColumn(name = "user_id"),
-  inverseJoinColumns = @JoinColumn(name = "property_id"))
-  private List<Property> visitedProperties;
+  @OneToMany(targetEntity = Reservation.class, mappedBy = "user")
+  private List<Reservation> reservations;
+
+  @OneToMany(targetEntity = Payment.class, mappedBy = "user")
+  private List<Payment> payments;
 
 
   public User() {
@@ -88,11 +88,19 @@ public class User extends BaseEntity {
     this.age = age;
   }
 
-  public List<Property> getVisitedProperties() {
-    return visitedProperties;
+  public List<Reservation> getReservations() {
+    return reservations;
   }
 
-  public void setVisitedProperties(List<Property> visitedProperties) {
-    this.visitedProperties = visitedProperties;
+  public void setReservations(List<Reservation> reservations) {
+    this.reservations = reservations;
+  }
+
+  public List<Payment> getPayments() {
+    return payments;
+  }
+
+  public void setPayments(List<Payment> payments) {
+    this.payments = payments;
   }
 }

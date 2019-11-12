@@ -15,9 +15,9 @@ public class Review extends BaseEntity {
   @Column(name = "description")
   private String description;
 
-  @ManyToOne(targetEntity = Property.class)
-  @JoinColumn(name = "property_id", referencedColumnName = "id")
-  private Property property;
+  @OneToOne(targetEntity = Reservation.class)
+  @JoinColumn(name = "reservation_id", referencedColumnName = "id")
+  private Reservation reservation;
 
   public Review() {
   }
@@ -38,11 +38,11 @@ public class Review extends BaseEntity {
     this.description = description;
   }
 
-  public Property getProperty() {
-    return property;
+  public Reservation getReservation() {
+    return reservation;
   }
 
-  public void setProperty(Property property) {
-    this.property = property;
+  public void setReservation(Reservation reservation) {
+    this.reservation = reservation;
   }
 }

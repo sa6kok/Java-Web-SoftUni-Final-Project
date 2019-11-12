@@ -12,10 +12,11 @@ public class City extends BaseEntity{
   @Column(name = "name")
   private String name;
 
-  @Column(name = "country" )
-  private String country;
+  @ManyToOne(targetEntity = Country.class)
+  @JoinColumn(name = "country_id", referencedColumnName = "id")
+  private Country country;
 
-  @OneToMany(targetEntity = Address.class, mappedBy = "id")
+  @OneToMany(targetEntity = Address.class, mappedBy = "city")
   private List<Address> addresses;
 
   public City() {
@@ -29,13 +30,7 @@ public class City extends BaseEntity{
     this.name = name;
   }
 
-  public String getCountry() {
-    return country;
-  }
 
-  public void setCountry(String country) {
-    this.country = country;
-  }
 
   public List<Address> getAddresses() {
     return addresses;
