@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/head"/>
+<body>
+<th:block th:replace="fragments/navigation"/>
+<th:block th:replace="fragments/header"/>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <th:block th:if="${countries != null}">
+                <div class="card card-signin my-5 align-items-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Pick a Country</h5>
+                        <div class="dropdown">
+                            <div class="dropdown-menu-lg-right" aria-labelledby="dropdownCountry">
+                                <a class="dropdown-item" th:each="country : ${countries}"
+                                   th:href="@{'/search/country/' + ${country}}"
+                                   th:value="${country}" th:text="${country}"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+            <th:block th:if="${cities != null}">
+                <div class="card card-signin my-5 align-items-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-center" th:text="|Pick a city in ${currentCountry}|"></h5>
+                        <th:block th:if="${cities.size() == 0}">
+                            <h4 class="card-title text-center" th:text="|No cities in ${currentCountry}|"></h4>
+                            <a th:href="@{/search/country}"><h2 class="text-center">Search for other properties!</h2></a>
+                        </th:block>
+                        <th:block th:if="${cities.size() != 0}">
+                        <h4>
+                            <div class=" dropdown">
+                                <h3><a class="dropdown-toggle text-black-50" href="#" id="dropdownCity"
+                                   data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    Cities
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownCity">
+                                    <a class="dropdown-item" th:each="city : ${cities}"
+                                       th:href="@{'/search/country/' + ${country} + '/' + ${city.getName()}}"
+                                       th:text="${city.getName()}"></a>
+                                </div></h3>
+                            </div>
+                        </h4>
+                        </th:block>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="fragments/footer"/>
+</body>
+</html>

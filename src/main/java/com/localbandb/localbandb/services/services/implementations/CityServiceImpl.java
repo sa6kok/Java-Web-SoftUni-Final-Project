@@ -1,7 +1,7 @@
 package com.localbandb.localbandb.services.services.implementations;
 
 import com.localbandb.localbandb.data.models.City;
-import com.localbandb.localbandb.repositories.CityRepository;
+import com.localbandb.localbandb.data.repositories.CityRepository;
 import com.localbandb.localbandb.services.services.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

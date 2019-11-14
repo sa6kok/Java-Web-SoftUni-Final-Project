@@ -1,6 +1,7 @@
-package com.localbandb.localbandb.services.models.service;
+package com.localbandb.localbandb.web.models;
 
-public class UserServiceModel {
+
+public class UserRegisterModel {
   private String username;
   private String email;
   private String firstName;
@@ -9,7 +10,7 @@ public class UserServiceModel {
   private String password;
   private String confirmPassword;
 
-  public UserServiceModel() {
+  public UserRegisterModel() {
   }
 
   public String getUsername() {

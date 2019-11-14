@@ -1,7 +1,7 @@
 package com.localbandb.localbandb.services.services.implementations;
 
 import com.localbandb.localbandb.data.models.Country;
-import com.localbandb.localbandb.repositories.CountryRepository;
+import com.localbandb.localbandb.data.repositories.CountryRepository;
 import com.localbandb.localbandb.services.services.CountryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
