@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/head"/>
+<body>
+<th:block th:replace="fragments/navigation"/>
+<th:block th:replace="fragments/header"/>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 col-xl-9 mx-auto">
+            <div class="card card-signin flex-row my-5">
+                <div class="card-img-left d-none d-md-flex">
+                    <!-- Background image for card set in CSS! -->
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-center">Create Property</h5>
+                    <form class="form-signin" th:action="@{/property/create}" th:method="post">
+                        <div class="form-label-group">
+                            <input type="text" id="inputPropertyName" class="form-control" name="name" placeholder="Name"  required autofocus>
+                            <label for="inputPropertyName">Name</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="text" id="inputDescription" class="form-control" name="description" placeholder="Description"  required>
+                            <label for="inputDescription">Description</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="number"  step="0.1" id="inputPrice" class="form-control" name="price" placeholder="Price" required autofocus>
+                            <label for="inputPrice">Price</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="text" id="inputPicture" class="form-control" name="picture" placeholder="Picture"  required>
+                            <label for="inputPicture">Picture URL</label>
+                        </div>
+
+                        <div class="form-label-group" th:object="${cities}">
+                        <select class="browser-default custom-select" id="selectCity" name="city">
+                            <option selected>Select City</option>
+                            <option th:each="city : ${cities}" th:value="${city.getName()}"
+                                    th:text="${city.getName()}">Options</option>
+                        </select>
+                            <label for="selectCity">City</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="text" id="inputStreet" class="form-control" name="street" placeholder="Street"  required autofocus>
+                            <label for="inputStreet">Street</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="number" id="inputStreetNumber" class="form-control" name="streetNumber" placeholder="Street Number"  required autofocus>
+                            <label for="inputStreetNumber">Street Number</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="text" id="inputStreetNumberLetter" class="form-control" name="streetNumberLetter" placeholder="Street Number Addition" autofocus>
+                            <label for="inputStreetNumberLetter">Street Number Addition</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="number" id="inputFloor" class="form-control" name="floor" placeholder="Floor" required>
+                            <label for="inputFloor">Floor</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="number" id="inputApartment" class="form-control" name="apartment" placeholder="Apartment" required>
+                            <label for="inputApartment">Apartment</label>
+                        </div>
+
+                        <button class="btn btn-lg btn-dark btn-block text-uppercase" type="submit">Create Property</button>
+                        <hr class="my-4">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="fragments/footer"/>
+</body>
+</html>
