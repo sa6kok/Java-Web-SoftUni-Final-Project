@@ -6,6 +6,8 @@ import com.localbandb.localbandb.services.services.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class CityServiceImpl implements CityService {
   private final CityRepository cityRepository;
@@ -15,17 +17,17 @@ public class CityServiceImpl implements CityService {
     this.cityRepository = cityRepository;
   }
 
-  public CityRepository getCityRepository() {
-    return cityRepository;
-  }
-
   @Override
   public void save(City city) {
+    if (city.getProperties() == null) {
+      city.setProperties(new ArrayList<>());
+    }
+
     cityRepository.save(city);
   }
 
   @Override
-  public City getCityByName(String name) {
+  public City findCityByName(String name) {
     return cityRepository.findByName(name);
   }
 }

@@ -2,12 +2,15 @@ package com.localbandb.localbandb.services.services.implementations;
 
 import com.localbandb.localbandb.data.models.Host;
 import com.localbandb.localbandb.data.repositories.HostRepository;
+import com.localbandb.localbandb.services.models.HostCheckServiceModel;
 import com.localbandb.localbandb.services.models.HostServiceModel;
 import com.localbandb.localbandb.services.services.HostService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 public class HostServiceImpl implements HostService {
@@ -27,9 +30,17 @@ public class HostServiceImpl implements HostService {
     }
     try {
       model.setPassword(DigestUtils.sha256Hex(model.getPassword()));
-      Host host = hostRepository.save(mapper.map(model, Host.class));
-      return host != null;
+      Host host = mapper.map(model, Host.class);
+      if(host.getProperties() == null) {
+        host.setProperties(new ArrayList<>());
+      }
+      if(host.getPayments() == null) {
+        host.setPayments(new ArrayList<>());
+      }
+      hostRepository.save(host);
+      return true;
     } catch (Exception e) {
+      e.printStackTrace();
       return false;
     }
   }
@@ -38,11 +49,21 @@ public class HostServiceImpl implements HostService {
   public boolean login(String username, String password) {
     System.out.println();
     try {
-      hostRepository.findByUsernameAndPassword(username, DigestUtils.sha256Hex(password));
-      return true;
+      Host host = hostRepository.findByUsernameAndPassword(username, DigestUtils.sha256Hex(password));
+      return host != null;
     } catch (Exception ex) {
       return false;
     }
+  }
+
+  @Override
+  public HostCheckServiceModel findUserWithUsername(String username) {
+    return this.mapper.map(hostRepository.findByUsername(username), HostCheckServiceModel.class);
+  }
+
+  @Override
+  public HostCheckServiceModel findUserWitHEmail(String email) {
+    return this.mapper.map(hostRepository.findByEmail(email), HostCheckServiceModel.class);
   }
 
 

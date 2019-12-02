@@ -2,17 +2,23 @@ package com.localbandb.localbandb.data.models;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "reservations")
 public class Reservation extends BaseEntity {
-  @Column(name = "start_date")
-  private Date startDate;
 
-  @Column(name = "end_date")
-  private Date endDate;
+
+  @Column(name = "start_date", nullable = false)
+  private LocalDate startDate;
+
+  @Column(name = "end_date", nullable = false)
+  private LocalDate endDate;
+
+  @Min(1)
+  private Integer occupancy;
 
   @ManyToOne(targetEntity = Property.class)
   @JoinColumn(name = "property_id")
@@ -26,26 +32,35 @@ public class Reservation extends BaseEntity {
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
 
+  @Min(0)
   @Column(name = "total_price")
   private BigDecimal totalPrice;
 
   public Reservation() {
   }
 
-  public Date getStartDate() {
+  public LocalDate getStartDate() {
     return startDate;
   }
 
-  public void setStartDate(Date startDate) {
+  public void setStartDate(LocalDate startDate) {
     this.startDate = startDate;
   }
 
-  public Date getEndDate() {
+  public LocalDate getEndDate() {
     return endDate;
   }
 
-  public void setEndDate(Date endDate) {
+  public void setEndDate(LocalDate endDate) {
     this.endDate = endDate;
+  }
+
+  public Integer getOccupancy() {
+    return occupancy;
+  }
+
+  public void setOccupancy(Integer occupancy) {
+    this.occupancy = occupancy;
   }
 
   public Property getProperty() {

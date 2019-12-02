@@ -2,6 +2,9 @@ package com.localbandb.localbandb.data.models;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 
@@ -9,15 +12,27 @@ import java.util.List;
 @Table(name = "hosts")
 public class Host extends BaseEntity {
 
+  @NotEmpty
+  @Size(min = 3, max = 25)
   @Column(name = "username", nullable = false, unique = true)
   private String username;
 
+  @Size(min = 3, max = 25)
+  @Email
+  @Column(name = "email", nullable = false, unique = true)
+  private String email;
+
+  @NotEmpty
   @Column(name = "password" , nullable = false)
   private String password;
 
+  @NotEmpty
+  @Size(min = 3, max = 25)
   @Column(name = "first_name", nullable = false)
   private String firstName;
 
+  @NotEmpty
+  @Size(min = 3, max = 25)
   @Column(name = "last_name", nullable = false)
   private String lastName;
 
@@ -37,6 +52,14 @@ public class Host extends BaseEntity {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   public String getPassword() {

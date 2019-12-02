@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 
 @Getter
@@ -12,23 +14,29 @@ import java.math.BigDecimal;
 public class PropertyServiceModel {
   private String name;
   private String description;
+  private Integer maxOccupancy;
   private BigDecimal price;
-  private String picture;
-  private AddressServiceModel addressServiceModel;
+  private String pictureUrl;
+  private String city;
+  private String street;
+  private int streetNumber;
+  private String streetNumberAddition;
+  private int floor;
+  private int apartment;
 
-  public AddressServiceModel getAddressServiceModel() {
-    return addressServiceModel;
+  public String getPictureUrl() {
+    return pictureUrl;
   }
 
-  public void setAddressServiceModel(AddressServiceModel addressServiceModel) {
-    this.addressServiceModel = addressServiceModel;
+  public void setPictureUrl(String pictureUrl) {
+    this.pictureUrl = pictureUrl;
   }
 
-  public String getPicture() {
-    return picture;
+  public String getCity() {
+    return city;
   }
 
-  public void setPicture(String picture) {
-    this.picture = picture;
+  public void setCity(String city) {
+    this.city = city;
   }
 }

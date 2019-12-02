@@ -4,7 +4,6 @@
 <th:block th:replace="fragments/head"/>
 <body>
 <th:block th:replace="fragments/navigation"/>
-<th:block th:replace="fragments/header"/>
 <div class="container">
     <div class="row">
         <div class="col-lg-10 col-xl-9 mx-auto">
@@ -14,26 +13,28 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title text-center">Register as Host</h5>
-                    <form class="form-signin" th:action="@{/host/register}" th:method="post"
-                          oninput='confirmPassword.setCustomValidity(confirmPassword.value != password.value ? "Passwords do not match." : "")'>
-                        <div class="form-label-group">
-                            <input type="text" id="inputUsername" class="form-control" name="username" placeholder="Username"  required autofocus>
-                            <label for="inputUsername">Username</label>
+                    <form class="form-signin" th:action="@{/host/register}" th:method="post" th:object="${hostRegisterModel}"
+                          oninput='confirmPassword.setCustomValidity(confirmPassword.value !== password.value ? "Passwords do not match." : "")'>
+                        <div class="form-label-group" th:classappend="${#fields.hasErrors('username')}? 'text-danger'">
+                            <label id="usernameCheckHost" class="text-danger" style="display: none">Username already exist. Please pick another!</label>
+                            <input type="text" th:field="*{username}" id="inputUsernameHost" class="form-control" name="username" placeholder="Username" onchange="checkUsername()"  required autofocus>
+                            <label for="inputUsernameHost">Username <label  th:each="error : ${#fields.errors('username')}" th:text="${error}"></label></label>
                         </div>
 
-                        <div class="form-label-group">
-                            <input type="email" id="inputEmail" class="form-control" name="email" placeholder="Email address"  required>
-                            <label for="inputEmail">Email address</label>
+                        <div class="form-label-group" th:classappend="${#fields.hasErrors('email')}? 'text-danger'">
+                            <label id="emailCheckHost" class="text-danger" style="display: none">Email already exist. Please use another!</label>
+                            <input type="email" th:field="*{email}" id="inputEmailHost" class="form-control" name="email" placeholder="Email address"  onchange="checkEmail()" required>
+                            <label for="inputEmailHost">Email address <label th:each="error : ${#fields.errors('email')}" th:text="${error}"></label></label>
                         </div>
 
-                        <div class="form-label-group">
-                            <input type="text" id="inputFirstName" class="form-control" name="firstName" placeholder="First name"  required autofocus>
-                            <label for="inputFirstName">First name</label>
+                        <div class="form-label-group" th:classappend="${#fields.hasErrors('firstName')}? 'text-danger'">
+                            <input type="text" th:field="*{firstName}" id="inputFirstName" class="form-control" name="firstName" placeholder="First name"  required autofocus>
+                            <label for="inputFirstName">First Name <label  th:each="error : ${#fields.errors('firstName')}" th:text="${error}"></label></label>
                         </div>
 
-                        <div class="form-label-group">
-                            <input type="text" id="inputLastName" class="form-control" name="lastName" placeholder="Last name" required autofocus>
-                            <label for="inputLastName">Last name</label>
+                        <div class="form-label-group" th:classappend="${#fields.hasErrors('lastName')}? 'text-danger'">
+                            <input type="text"  th:field="*{lastName}" id="inputLastName" class="form-control" name="lastName" placeholder="Last name" required autofocus>
+                            <label for="inputLastName">Last name <label th:each="error : ${#fields.errors('lastName')}" th:text="${error}"></label></label>
                         </div>
 
                         <hr>
@@ -50,7 +51,7 @@
 
                         <button class="btn btn-lg btn-dark btn-block text-uppercase" type="submit">Register</button>
                         <hr class="my-4">
-                        <a class="d-block text-center mt-2 " th:href="@{/templates/host/login}">Log In as Host</a>
+                        <a class="d-block text-center mt-2 " th:href="@{/host/login}">Log In as Host</a>
                     </form>
                 </div>
             </div>
@@ -58,5 +59,7 @@
     </div>
 </div>
 <th:block th:replace="fragments/footer"/>
+<script src="/vendor/jquery/jquery.js"></script>
+<script src="/js/hostRegistration.js"></script>
 </body>
 </html>

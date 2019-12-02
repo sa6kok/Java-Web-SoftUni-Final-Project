@@ -2,8 +2,11 @@ package com.localbandb.localbandb.data.models;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -11,23 +14,26 @@ import java.util.List;
 @Table(name = "properties")
 public class Property extends BaseEntity {
 
-  @Column(name = "name")
+  @NotEmpty
+  @Size(min = 3, max = 25)
+  @Column(name = "name", nullable = false)
   private String name;
 
   @ManyToOne(targetEntity = Host.class)
   private Host host;
 
-  @OneToOne(targetEntity = Address.class, cascade = CascadeType.ALL)
-  @JoinColumn(name = "address_id", referencedColumnName = "id")
-  private Address address;
-
-  @Column(name = "description")
+  @NotEmpty
+  @Size(min = 15)
+  @Column(name = "description",columnDefinition = "TEXT")
   private String description;
 
+  @Min(1)
+  private Integer maxOccupancy;
 
-  @ElementCollection(targetClass = Date.class)
+
+  @ElementCollection(targetClass = LocalDate.class)
   @Column(name = "busy_dates")
-  private List<Date> busyDates;
+  private List<LocalDate> busyDates;
 
   @OneToMany(targetEntity = Reservation.class, mappedBy = "property", cascade = CascadeType.ALL)
   private List<Reservation> reservations;
@@ -38,8 +44,34 @@ public class Property extends BaseEntity {
   @ElementCollection(targetClass = String.class)
   private List<String> pictures;
 
-  @Column(name = "price")
+  @Min(0)
+  @Column(name = "price", nullable = false)
   private BigDecimal price;
+
+  @NotEmpty
+  @Size(min = 3, max = 25)
+  @Column(name = "street", nullable = false)
+  private String street;
+
+  @Min(0)
+  @Column(name = "streetNumber", nullable = false)
+  private Integer streetNumber;
+
+
+  @Column(name = "streetNumberAddition")
+  private String streetNumberAddition;
+
+  @Min(0)
+  @Column(name = "floor")
+  private Integer floor;
+
+  @Min(0)
+  @Column(name = "apartment")
+  private Integer apartment;
+
+  @ManyToOne(targetEntity = City.class)
+  @JoinColumn(name = "city_id", referencedColumnName = "id")
+  private City city;
 
   public Property() {
   }
@@ -61,13 +93,6 @@ public class Property extends BaseEntity {
     this.host = host;
   }
 
-  public Address getAddress() {
-    return address;
-  }
-
-  public void setAddress(Address address) {
-    this.address = address;
-  }
 
   public String getDescription() {
     return description;
@@ -77,11 +102,19 @@ public class Property extends BaseEntity {
     this.description = description;
   }
 
-  public List<Date> getBusyDates() {
+  public Integer getMaxOccupancy() {
+    return maxOccupancy;
+  }
+
+  public void setMaxOccupancy(Integer maxOccupancy) {
+    this.maxOccupancy = maxOccupancy;
+  }
+
+  public List<LocalDate> getBusyDates() {
     return busyDates;
   }
 
-  public void setBusyDates(List<Date> busyDates) {
+  public void setBusyDates(List<LocalDate> busyDates) {
     this.busyDates = busyDates;
   }
 
@@ -115,5 +148,53 @@ public class Property extends BaseEntity {
 
   public void setPrice(BigDecimal price) {
     this.price = price;
+  }
+
+  public String getStreet() {
+    return street;
+  }
+
+  public void setStreet(String street) {
+    this.street = street;
+  }
+
+  public Integer getStreetNumber() {
+    return streetNumber;
+  }
+
+  public void setStreetNumber(Integer streetNumber) {
+    this.streetNumber = streetNumber;
+  }
+
+  public String getStreetNumberAddition() {
+    return streetNumberAddition;
+  }
+
+  public void setStreetNumberAddition(String streetNumberAddition) {
+    this.streetNumberAddition = streetNumberAddition;
+  }
+
+  public Integer getFloor() {
+    return floor;
+  }
+
+  public void setFloor(Integer floor) {
+    this.floor = floor;
+  }
+
+  public Integer getApartment() {
+    return apartment;
+  }
+
+  public void setApartment(Integer apartment) {
+    this.apartment = apartment;
+  }
+
+  public City getCity() {
+    return city;
+  }
+
+  public void setCity(City city) {
+    this.city = city;
   }
 }

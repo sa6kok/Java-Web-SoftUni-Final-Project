@@ -1,29 +1,37 @@
 package com.localbandb.localbandb.data.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
 @Table(name = "reservations_without_user")
 public class ReservationWithoutUser extends BaseEntity {
 
+  @Size(min = 15, max = 35)
   @Column(name = "guest_full_name", nullable = false)
   private String guestFullName;
 
-  @Column(name = "guest_email", nullable = false)
+  @Email
+  @Column(name = "guest_email", nullable = false, unique = true)
   private String guestEmail;
 
-  @Column(name = "start_date")
-  private Date startDate;
 
-  @Column(name = "end_date")
-  private Date endDate;
+  @Column(name = "start_date", nullable = false)
+  private LocalDate startDate;
+
+  @Column(name = "end_date", nullable = false)
+  private LocalDate endDate;
 
   @ManyToOne(targetEntity = Property.class)
   @JoinColumn(name = "property_id", referencedColumnName = "id")
   private Property property;
 
+  @Min(0)
   @Column(name = "total_price")
   private BigDecimal totalPrice;
 
@@ -46,19 +54,19 @@ public class ReservationWithoutUser extends BaseEntity {
     this.guestEmail = guestEmail;
   }
 
-  public Date getStartDate() {
+  public LocalDate getStartDate() {
     return startDate;
   }
 
-  public void setStartDate(Date startDate) {
+  public void setStartDate(LocalDate startDate) {
     this.startDate = startDate;
   }
 
-  public Date getEndDate() {
+  public LocalDate getEndDate() {
     return endDate;
   }
 
-  public void setEndDate(Date endDate) {
+  public void setEndDate(LocalDate endDate) {
     this.endDate = endDate;
   }
 

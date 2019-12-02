@@ -3,6 +3,9 @@ package com.localbandb.localbandb.data.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 
@@ -10,22 +13,30 @@ import java.util.List;
 @Table(name = "users")
 public class User extends BaseEntity {
 
+  @NotEmpty
+  @Size(min = 3, max = 25)
   @Column(name = "username", unique = true, nullable = false)
   private String username;
 
+  @Size(min = 4)
   @Column(name = "password", nullable = false)
   private String password;
 
-  @Column(name = "email", nullable = false)
+  @Column(name = "email", nullable = false, unique = true)
   @Email
   private String email;
 
+  @NotEmpty
+  @Size(min = 2, max = 15)
   @Column(name = "first_name", nullable = false)
   private String firstName;
 
+  @NotEmpty
+  @Size(min = 2, max = 15)
   @Column(name = "last_name", nullable = false)
   private String lastName;
 
+  @Min(18)
   @Column(name = "age", nullable = false)
   private String age;
 

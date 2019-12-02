@@ -31,20 +31,13 @@
                             <a th:href="@{/search/country}"><h2 class="text-center">Search for other properties!</h2></a>
                         </th:block>
                         <th:block th:if="${cities.size() != 0}">
-                        <h4>
                             <div class=" dropdown">
-                                <h3><a class="dropdown-toggle text-black-50" href="#" id="dropdownCity"
-                                   data-toggle="dropdown"
-                                   aria-haspopup="true" aria-expanded="false">
-                                    Cities
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="dropdownCity">
+                                <div class="dropdown-menu-lg-right" aria-labelledby="dropdownCity">
                                     <a class="dropdown-item" th:each="city : ${cities}"
-                                       th:href="@{'/search/country/' + ${country} + '/' + ${city.getName()}}"
-                                       th:text="${city.getName()}"></a>
-                                </div></h3>
+                                       th:href="@{'/search/country/' + ${country} + '/' + ${city}}"
+                                       th:text="${city}"></a>
+                                </div>
                             </div>
-                        </h4>
                         </th:block>
                     </div>
                 </div>

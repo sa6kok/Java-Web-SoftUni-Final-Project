@@ -3,16 +3,22 @@ package com.localbandb.localbandb.data.models;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 
 @Entity
 @Table(name = "reviews")
 public class Review extends BaseEntity {
 
+  @Min(0)
+  @Max(10)
   @Column(name = "level")
   private Integer level;
 
-  @Column(name = "description")
+  @Size(min = 15)
+  @Column(name = "description", columnDefinition = "TEXT", nullable = false)
   private String description;
 
   @OneToOne(targetEntity = Reservation.class)

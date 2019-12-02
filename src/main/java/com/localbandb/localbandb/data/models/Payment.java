@@ -1,14 +1,15 @@
 package com.localbandb.localbandb.data.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "payments")
 public class Payment extends BaseEntity {
 
-  @Column(name = "amount")
+  @Column(name = "amount", nullable = false)
   private BigDecimal amount;
 
   @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL)
@@ -19,8 +20,9 @@ public class Payment extends BaseEntity {
   @JoinColumn(name = "host_id", referencedColumnName = "id")
   private Host host;
 
-  @Column(name = "payment_date")
-  private Date paymentDate;
+  @Min(0)
+  @Column(name = "payment_date", nullable = false)
+  private LocalDate paymentDate;
 
   public Payment() {
   }
@@ -50,11 +52,12 @@ public class Payment extends BaseEntity {
     this.host = host;
   }
 
-  public Date getPaymentDate() {
+
+  public LocalDate getPaymentDate() {
     return paymentDate;
   }
 
-  public void setPaymentDate(Date paymentDate) {
+  public void setPaymentDate(LocalDate paymentDate) {
     this.paymentDate = paymentDate;
   }
 }

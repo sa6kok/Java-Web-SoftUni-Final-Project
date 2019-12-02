@@ -2,12 +2,15 @@ package com.localbandb.localbandb.services.services.implementations;
 
 import com.localbandb.localbandb.data.models.User;
 import com.localbandb.localbandb.data.repositories.UserRepository;
+import com.localbandb.localbandb.services.models.UserCheckServiceModel;
 import com.localbandb.localbandb.services.models.UserServiceModel;
 import com.localbandb.localbandb.services.services.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 
 @Service
@@ -22,13 +25,20 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public boolean save(UserServiceModel user) {
-    if (!user.getPassword().equals(user.getConfirmPassword())) {
+  public boolean save(UserServiceModel userServiceModel) {
+    if (!userServiceModel.getPassword().equals(userServiceModel.getConfirmPassword())) {
       return false;
     }
     try {
-      user.setPassword(DigestUtils.sha256Hex(user.getPassword()));
-      userRepository.save(modelMapper.map(user, User.class));
+      userServiceModel.setPassword(DigestUtils.sha256Hex(userServiceModel.getPassword()));
+      User user = modelMapper.map(userServiceModel, User.class);
+      if(user.getReservations() == null) {
+        user.setReservations(new ArrayList<>());
+      }
+      if(user.getPayments() == null) {
+        user.setPayments(new ArrayList<>());
+      }
+      userRepository.save(user);
       return true;
     } catch (Exception ex) {
       return false;
@@ -39,10 +49,22 @@ public class UserServiceImpl implements UserService {
   public boolean login(String username, String password) {
     System.out.println();
     try {
-    User user = userRepository.findByUsernameAndPassword(username, DigestUtils.sha256Hex(password));
+      User user = userRepository.findByUsernameAndPassword(username, DigestUtils.sha256Hex(password));
       return user != null;
     } catch (Exception ex) {
       return false;
     }
+  }
+
+  @Override
+  public UserCheckServiceModel checkIfUserExist(String username) {
+    UserCheckServiceModel user = modelMapper.map( userRepository.findByUsername(username), UserCheckServiceModel.class);
+    return user;
+  }
+
+  @Override
+  public UserCheckServiceModel checkIfUserWithEmailExist(String email) {
+    UserCheckServiceModel user = modelMapper.map( userRepository.findByEmail(email), UserCheckServiceModel.class);
+    return user;
   }
 }

@@ -4,78 +4,115 @@
 <th:block th:replace="fragments/head"/>
 <body>
 <th:block th:replace="fragments/navigation"/>
-<th:block th:replace="fragments/header"/>
 <div class="container">
     <div class="row">
-        <div class="col-lg-10 col-xl-9 mx-auto">
-            <div class="card card-signin flex-row my-5">
-                <div class="card-img-left d-none d-md-flex">
-                    <!-- Background image for card set in CSS! -->
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title text-center">Create Property</h5>
-                    <form class="form-signin" th:action="@{/property/create}" th:method="post">
-                        <div class="form-label-group">
-                            <input type="text" id="inputPropertyName" class="form-control" name="name" placeholder="Name"  required autofocus>
-                            <label for="inputPropertyName">Name</label>
+        <th:block class="col-lg-10 col-xl-9 mx-auto">
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <!--Shown if there is a country to pick-->
+                <th:block th:if="${countries != null}">
+                    <div class="card card-signin my-5 align-items-center">
+                        <div class="card-body">
+                            <h5 class="card-title">Pick a Country to create a property in:</h5>
+                            <div class="dropdown">
+                                <div class="dropdown-menu-lg-right" aria-labelledby="dropdownCountry">
+                                    <a class="dropdown-item" th:each="country : ${countries}"
+                                       th:href="@{'/property/create/' + ${country}}"
+                                       th:value="${country}" th:text="${country}"></a>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                </th:block>
+               <!-- The form to create the property-->
+                <th:block th:if="${cities != null}">
+                    <div class="card card-signin flex-row my-5">
+                        <div class="card-body">
+                            <h5 class="card-title text-center" th:text="|Create Property in ${country}|"></h5>
+                            <form class="form-signin" th:action="@{/property/create/{country}(country=${country})}" th:method="post"  th:object="${propertyCreateModel}">
+                                <div class="form-label-group" th:classappend="${#fields.hasErrors('name')}? 'text-danger'">
+                                    <input type="text" th:field="*{name}" id="inputPropertyName" class="form-control" name="name"
+                                           placeholder="Name"  required autofocus>
+                                    <label for="inputPropertyName">Name <label th:each="error : ${#fields.errors('name')}" th:text="${error}"></label></label>
+                                </div>
 
-                        <div class="form-label-group">
-                            <input type="text" id="inputDescription" class="form-control" name="description" placeholder="Description"  required>
-                            <label for="inputDescription">Description</label>
+                                <div class="form-label-group" th:classappend="${#fields.hasErrors('description')}? 'text-danger'">
+                                    <input type="text" th:field="*{description}" id="inputDescription" class="form-control" name="description"
+                                           placeholder="Description" required>
+                                    <label for="inputDescription">Description <label th:each="error : ${#fields.errors('description')}" th:text="${error}"></label></label>
+                                </div>
+
+                                <div class="form-label-group" th:classappend="${#fields.hasErrors('price')}? 'text-danger'">
+                                    <input type="number" th:field="*{price}" step="0.1" id="inputPrice" class="form-control" name="price"
+                                           placeholder="Price" required autofocus>
+                                    <label for="inputPrice">Price <label th:each="error : ${#fields.errors('price')}" th:text="${error}"></label></label>
+                                </div>
+
+                                <div class="form-label-group" th:classappend="${#fields.hasErrors('pictureUrl')}? 'text-danger'">
+                                    <input type="text" th:field="*{pictureUrl}" id="inputPictureUrl" class="form-control" name="pictureUrl"
+                                           placeholder="Picture URL" >
+                                    <label for="inputPictureUrl">Picture URL</label>
+                                </div>
+
+                                <div class="form-label-group" th:classappend="${#fields.hasErrors('city')}? 'text-danger'">
+                                    <select class="browser-default custom-select" id="selectCity" name="city">
+                                        <option selected value="">Select City</option>
+                                        <option th:each="city : ${cities}" th:value="${city.getName()}"
+                                                th:text="${city.getName()}">Options
+                                        </option>
+                                    </select>
+                                    <label for="selectCity">City <label th:each="error : ${#fields.errors('city')}" th:text="${error}"></label>
+                                        <a th:href="@{'city/' +  ${country}}" th:text="| ( Add a city in ${country} )|"></a></label>
+                                </div>
+
+                                <div class="form-label-group" th:classappend="${#fields.hasErrors('street')}? 'text-danger'">
+                                    <input type="text" th:field="*{street}" id="inputStreet" class="form-control" name="street"
+                                           placeholder="Street" required autofocus>
+                                    <label for="inputStreet">Street <label th:each="error : ${#fields.errors('street')}" th:text="${error}"></label></label>
+                                </div>
+
+                                <div class="form-label-group" th:classappend="${#fields.hasErrors('streetNumber')}? 'text-danger'">
+                                    <input type="number" th:field="*{streetNumber}" id="inputStreetNumber" class="form-control" name="streetNumber"
+                                           placeholder="Street Number" required autofocus>
+                                    <label for="inputStreetNumber">Street Number <label th:each="error : ${#fields.errors('streetNumber')}" th:text="${error}"></label></label>
+                                </div>
+
+                                <div class="form-label-group" th:classappend="${#fields.hasErrors('streetNumberAddition')}? 'text-danger'">
+                                    <input type="text" th:field="*{streetNumberAddition}" id="inputsStreetNumberAddition" class="form-control"
+                                           name="streetNumberAddition" placeholder="Street Number Addition" autofocus>
+                                    <label for="inputsStreetNumberAddition">Street Number Addition</label>
+                                </div>
+
+                                <div class="form-label-group" th:classappend="${#fields.hasErrors('floor')}? 'text-danger'">
+                                    <input type="number" th:field="*{floor}" id="inputFloor" class="form-control" name="floor"
+                                           placeholder="Floor" required    >
+                                    <label for="inputFloor">Floor <label th:each="error : ${#fields.errors('floor')}" th:text="${error}"></label></label>
+                                </div>
+
+                                <div class="form-label-group"  th:classappend="${#fields.hasErrors('apartment')}? 'text-danger'">
+                                    <input type="number" th:field="*{apartment}" id="inputApartment" class="form-control" name="apartment"
+                                           placeholder="Apartment" required>
+                                    <label for="inputApartment">Apartment <label th:each="error : ${#fields.errors('apartment')}" th:text="${error}"></label></label>
+                                </div>
+
+                                <div class="form-label-group" th:classappend="${#fields.hasErrors('maxOccupancy')}? 'text-danger'">
+                                    <input type="number" th:field="*{maxOccupancy}" id="inputMaxOccupancy" class="form-control" name="maxOccupancy"
+                                           placeholder="Max Occupancy" required autofocus>
+                                    <label for="inputMaxOccupancy">Max Occupancy <label th:each="error : ${#fields.errors('maxOccupancy')}" th:text="${error}"></label></label>
+                                </div>
+
+                                <button class="btn btn-lg btn-dark btn-block text-uppercase" type="submit">Create
+                                    Property
+                                </button>
+                                <hr class="my-4">
+                            </form>
                         </div>
+                    </div>
+                </th:block>
 
-                        <div class="form-label-group">
-                            <input type="number"  step="0.1" id="inputPrice" class="form-control" name="price" placeholder="Price" required autofocus>
-                            <label for="inputPrice">Price</label>
-                        </div>
-
-                        <div class="form-label-group">
-                            <input type="text" id="inputPicture" class="form-control" name="picture" placeholder="Picture"  required>
-                            <label for="inputPicture">Picture URL</label>
-                        </div>
-
-                        <div class="form-label-group" th:object="${cities}">
-                        <select class="browser-default custom-select" id="selectCity" name="city">
-                            <option selected>Select City</option>
-                            <option th:each="city : ${cities}" th:value="${city.getName()}"
-                                    th:text="${city.getName()}">Options</option>
-                        </select>
-                            <label for="selectCity">City</label>
-                        </div>
-
-                        <div class="form-label-group">
-                            <input type="text" id="inputStreet" class="form-control" name="street" placeholder="Street"  required autofocus>
-                            <label for="inputStreet">Street</label>
-                        </div>
-
-                        <div class="form-label-group">
-                            <input type="number" id="inputStreetNumber" class="form-control" name="streetNumber" placeholder="Street Number"  required autofocus>
-                            <label for="inputStreetNumber">Street Number</label>
-                        </div>
-
-                        <div class="form-label-group">
-                            <input type="text" id="inputStreetNumberLetter" class="form-control" name="streetNumberLetter" placeholder="Street Number Addition" autofocus>
-                            <label for="inputStreetNumberLetter">Street Number Addition</label>
-                        </div>
-
-                        <div class="form-label-group">
-                            <input type="number" id="inputFloor" class="form-control" name="floor" placeholder="Floor" required>
-                            <label for="inputFloor">Floor</label>
-                        </div>
-
-                        <div class="form-label-group">
-                            <input type="number" id="inputApartment" class="form-control" name="apartment" placeholder="Apartment" required>
-                            <label for="inputApartment">Apartment</label>
-                        </div>
-
-                        <button class="btn btn-lg btn-dark btn-block text-uppercase" type="submit">Create Property</button>
-                        <hr class="my-4">
-                    </form>
-                </div>
             </div>
-        </div>
+        </th:block>
     </div>
+</div>
 </div>
 <th:block th:replace="fragments/footer"/>
 </body>

@@ -6,5 +6,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface HostRepository extends JpaRepository<Host, String> {
+
   Host findByUsernameAndPassword(String username, String password);
+
+  Host findByUsername(String username);
+
+  Host findByEmail(String email);
 }

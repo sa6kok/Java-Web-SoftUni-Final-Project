@@ -1,7 +1,13 @@
-package com.localbandb.localbandb.web.models;
+package com.localbandb.localbandb.web.view.models;
+
+import javax.validation.constraints.NotEmpty;
 
 public class UserLoginModel {
+
+  @NotEmpty(message = " should not be empty!")
   private String username;
+
+  @NotEmpty(message = " should not be empty!")
   private String password;
 
   public UserLoginModel() {

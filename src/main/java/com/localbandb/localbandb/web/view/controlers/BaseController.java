@@ -1,4 +1,4 @@
-package com.localbandb.localbandb.web.controlers;
+package com.localbandb.localbandb.web.view.controlers;
 
 import org.springframework.web.servlet.ModelAndView;
 

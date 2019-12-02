@@ -1,14 +1,34 @@
-package com.localbandb.localbandb.web.models;
+package com.localbandb.localbandb.web.view.models;
 
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class UserRegisterModel {
+
+  @Size(min = 3, max = 25, message = "should be between 3 and 15 symbols!")
   private String username;
-  private String email;
-  private String firstName;
-  private String lastName;
-  private Integer age;
+
+  @Size(min = 4, message = "should be at least 4 symbols!")
   private String password;
+
+  @Size(min = 4, message = "should be at least 4 symbols!")
   private String confirmPassword;
+
+  @Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
+      , message = " is not valid!")
+  private String email;
+
+  @Size(min = 2, max = 15, message = "should be between 2 and 15 symbols!")
+  private String firstName;
+
+  @Size(min = 2, max = 15, message = "should be between 2 and 15 symbols!")
+  private String lastName;
+
+  @Min(value = 18, message = " should be at least 18 years old!")
+  private Integer age;
+
 
   public UserRegisterModel() {
   }

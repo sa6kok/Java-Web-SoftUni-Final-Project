@@ -1,19 +1,27 @@
 package com.localbandb.localbandb.data.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
 @Table(name = "countries")
 public class Country extends BaseEntity {
 
-  @Column(name = "name")
+  @NotEmpty
+  @Size(min = 3, max = 25)
+  @Column(name = "name", unique = true)
   private String name;
 
   @OneToMany(targetEntity = City.class, mappedBy = "country", cascade = CascadeType.ALL)
   private List<City> cities;
 
   public Country() {
+  }
+
+  public Country(@NotEmpty @Size(min = 3, max = 25) String name) {
+    this.name = name;
   }
 
   public String getName() {

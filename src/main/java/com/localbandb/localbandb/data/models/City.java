@@ -3,12 +3,16 @@ package com.localbandb.localbandb.data.models;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 
 @Entity
 @Table(name = "cities")
 public class City extends BaseEntity{
+  @NotEmpty
+  @Size(min = 3, max = 25)
   @Column(name = "name")
   private String name;
 
@@ -16,8 +20,8 @@ public class City extends BaseEntity{
   @JoinColumn(name = "country_id", referencedColumnName = "id")
   private Country country;
 
-  @OneToMany(targetEntity = Address.class, mappedBy = "city", cascade = CascadeType.ALL)
-  private List<Address> addresses;
+  @OneToMany(targetEntity = Property.class, mappedBy = "city", cascade = CascadeType.ALL)
+  private List<Property> properties;
 
   public City() {
   }
@@ -38,11 +42,11 @@ public class City extends BaseEntity{
     this.country = country;
   }
 
-  public List<Address> getAddresses() {
-    return addresses;
+  public List<Property> getProperties() {
+    return properties;
   }
 
-  public void setAddresses(List<Address> addresses) {
-    this.addresses = addresses;
+  public void setProperties(List<Property> properties) {
+    this.properties = properties;
   }
 }
