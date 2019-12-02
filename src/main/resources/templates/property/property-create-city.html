@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/head"/>
+<body>
+<th:block th:replace="fragments/navigation"/>
+<th:block th:replace="fragments/header"/>
+<div class="container">
+    <div class="row">
+        <th:block class="col-lg-10 col-xl-9 mx-auto">
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <!--Shown if there is a country to pick-->
+                <th:block>
+                    <div class="card card-signin my-5 align-items-center">
+                        <div class="card-body">
+                            <h4 class="card-title text-center" th:text="|No cities in ${country}|"></h4>
+                            <h4 class="card-title text-center" th:text="|Add a  citiy in ${country}|"></h4>
+                        </div>
+                        <form class="form-signin" th:action="@{/property/create/city/{country}(country=${country})} " th:method="post">
+                            <div class="form-label-group">
+                                <input type="text" id="inputCity" class="form-control" name="name" placeholder="City"  required autofocus>
+                                <label for="inputCity">Name of the city</label>
+                            </div>
+                            <button class="btn btn-lg btn-dark btn-block text-uppercase" type="submit">Add the city</button>
+                        </form>
+                    </div>
+                </th:block>
+                <!-- The form to create the property-->
+                <!--  <div class="form-label-group" th:classappend="${#fields.hasErrors('username')}? 'text-danger'">
+                      <input type="text" th:field="*{username}" id="inputUsername" class="form-control" name="username" placeholder="Username"  required autofocus>
+                      <label for="inputUsername">Username <label  th:each="error : ${#fields.errors('username')}" th:text="${error}"></label></label>
+                  </div>-->
+            </div>
+        </th:block>
+    </div>
+</div>
+</div>
+<th:block th:replace="fragments/footer"/>
+</body>
+</html>
