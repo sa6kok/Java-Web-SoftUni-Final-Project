@@ -7,7 +7,7 @@ function checkUsername () {
     fetch(`/host/register/username/${username}`)
         .then(response => response.json())
         .then(response => {
-            if(!response) {
+            if(!response['username']) {
                 return;
             }
             usernameLabel.show();
@@ -24,7 +24,7 @@ function checkEmail () {
     fetch(`/host/register/email/${email}`)
         .then(response => response.json())
         .then(response => {
-            if(!response) {
+            if(!response['username']) {
                 return;
             }
             emailLabel.show();

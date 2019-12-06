@@ -10,26 +10,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserApiController {
- private final  UserService userService;
+  private final UserService userService;
 
- @Autowired
+  @Autowired
   public UserApiController(UserService userService) {
     this.userService = userService;
   }
 
   @GetMapping("user/register/{username}")
   public UserCheckServiceModel checkIfUSerExist(@PathVariable String username) {
-
-
-    UserCheckServiceModel user = userService.checkIfUserExist(username);
-    return user;
+    return userService.checkIfUserExist(username);
   }
 
   @GetMapping("user/registerWithEmail/{email}")
   public UserCheckServiceModel checkIfEmailExist(@PathVariable String email) {
-
-
-    UserCheckServiceModel user = userService.checkIfUserWithEmailExist(email);
-    return user;
+    return userService.checkIfUserWithEmailExist(email);
   }
 }

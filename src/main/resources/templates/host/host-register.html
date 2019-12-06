@@ -12,6 +12,9 @@
                     <!-- Background image for card set in CSS! -->
                 </div>
                 <div class="card-body">
+                    <th:block th:if="${message != null}">
+                    <h2 class="card-title text-center text-danger">It did not work. Please try again.</h2>
+                    </th:block>
                     <h5 class="card-title text-center">Register as Host</h5>
                     <form class="form-signin" th:action="@{/host/register}" th:method="post" th:object="${hostRegisterModel}"
                           oninput='confirmPassword.setCustomValidity(confirmPassword.value !== password.value ? "Passwords do not match." : "")'>

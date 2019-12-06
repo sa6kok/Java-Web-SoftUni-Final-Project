@@ -3,6 +3,7 @@ package com.localbandb.localbandb.services.services.implementations;
 import com.localbandb.localbandb.data.models.City;
 import com.localbandb.localbandb.data.models.Country;
 import com.localbandb.localbandb.data.repositories.CountryRepository;
+import com.localbandb.localbandb.services.models.CityServiceModel;
 import com.localbandb.localbandb.services.models.CountryServiceModel;
 import com.localbandb.localbandb.services.services.CityService;
 import com.localbandb.localbandb.services.services.CountryService;
@@ -36,25 +37,35 @@ public class CountryServiceImpl implements CountryService {
   }
 
   @Override
-  public CountryServiceModel findByName(String name) throws PropertyReferenceException {
-    Country country = countryRepository.findByName(name);
-    return modelMapper.map(country, CountryServiceModel.class);
+  public CountryServiceModel findByName(String name) throws NotFoundException {
+
+      Country country = countryRepository.findByName(name);
+      if(country == null) {
+        throw new NotFoundException("Country not Found!");
+      }
+     return modelMapper.map(country, CountryServiceModel.class);
+
+
   }
 
 
   @Override
-  public void addCityToCountry(String country, String name) {
+  public void addCityToCountry(String country, String name) throws NotFoundException {
     Country countryFromDB = countryRepository.findByName(country);
+    if(country == null) {
+      throw new NotFoundException("Country not Found!");
+    }
     City city = new City();
     city.setCountry(countryFromDB);
     city.setName(name);
-    cityService.save(city);
+    countryFromDB.getCities().add(city);
+    countryRepository.saveAndFlush(countryFromDB);
 
   }
 
   @Override
-  public List<String> getOrderedCitiesForCountry(String name) {
-    return countryRepository.findByName(name).getCities().stream().sorted(Comparator.comparing(City::getName))
-        .map(City::getName).collect(Collectors.toList());
+  public List<String> getOrderedCitiesForCountry(String name) throws NotFoundException {
+    return this.findByName(name).getCities().stream().sorted(Comparator.comparing(CityServiceModel::getName))
+        .map(CityServiceModel::getName).collect(Collectors.toList());
   }
 }

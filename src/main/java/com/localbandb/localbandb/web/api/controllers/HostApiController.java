@@ -27,6 +27,6 @@ public class HostApiController {
 
   @GetMapping("host/register/email/{email}")
   public HostCheckModel checkIfUserWithEmailExist(@PathVariable String email) {
-    return this.mapper.map( hostService.findUserWitHEmail(email), HostCheckModel.class);
+    return this.mapper.map( hostService.findUserWithEmail(email), HostCheckModel.class);
   }
 }

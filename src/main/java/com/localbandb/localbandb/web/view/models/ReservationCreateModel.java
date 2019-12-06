@@ -6,6 +6,8 @@ public class ReservationCreateModel {
   private Integer occupancy;
   private String startDate;
   private String endDate;
+  private PropertyViewModel propertyViewModel;
+  private String totalPrice;
 
   public ReservationCreateModel() {
   }
@@ -48,5 +50,23 @@ public class ReservationCreateModel {
 
   public void setEndDate(String endDate) {
     this.endDate = endDate;
+  }
+
+  public PropertyViewModel getPropertyViewModel() {
+    return propertyViewModel;
+  }
+
+  public void setPropertyViewModel(PropertyViewModel propertyViewModel) {
+    this.propertyViewModel = propertyViewModel;
+  }
+
+  public String getTotalPrice() {
+    return totalPrice;
+  }
+
+  public void setTotalPrice(String totalPrice) {
+
+
+    this.totalPrice = totalPrice;
   }
 }

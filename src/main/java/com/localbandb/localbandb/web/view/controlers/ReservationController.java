@@ -6,14 +6,12 @@ import com.localbandb.localbandb.services.services.PropertyService;
 import com.localbandb.localbandb.services.services.ReservationService;
 import com.localbandb.localbandb.web.view.models.PropertyViewModel;
 import com.localbandb.localbandb.web.view.models.ReservationCreateModel;
+import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -51,16 +49,27 @@ public class ReservationController extends BaseController {
 
   @PostMapping("/create")
   public ModelAndView createConfirm(@ModelAttribute ReservationCreateModel model, ModelAndView modelAndView, RedirectAttributes attributes) {
-    LocalDate start = LocalDate.parse(model.getStartDate(), DateTimeFormatter.ofPattern("d.MM.yyyy"));
-    LocalDate end = LocalDate.parse(model.getEndDate(), DateTimeFormatter.ofPattern("d.MM.yyyy"));
-    List<LocalDate> busyDates = reservationService.datesBetween(start, end);
 
-    List<PropertyViewModel> properties = propertyService.getAllByCity(model.getCity()).stream()
-        .filter(p -> !p.getBusyDates().containsAll(busyDates))
-        .filter(prop -> Integer.parseInt(prop.getMaxOccupancy()) >=  model.getOccupancy())
-        .collect(Collectors.toList());
+    List<PropertyViewModel> properties = propertyService.getAllByCityAndFilterBusyDatesAndOccupancy(model.getCity(), model.getStartDate(), model.getEndDate(), model.getOccupancy());
+
+    attributes.addFlashAttribute("city", model.getCity());
+    attributes.addFlashAttribute("model", model);
     attributes.addFlashAttribute("cityProperties", properties);
     System.out.println();
     return this.redirect("property/show", modelAndView);
+  }
+
+
+  @GetMapping("/details/{id}/{start}/{end}/{pax}")
+  public ModelAndView showPropertyDetails(@PathVariable String id, @PathVariable String start,
+                                          @PathVariable String end, @PathVariable String pax,
+                                          ModelAndView modelAndView){
+    modelAndView.addObject("id", id);
+    modelAndView.addObject("start", start);
+    modelAndView.addObject("end", end);
+    modelAndView.addObject("pax", pax);
+
+    System.out.println();
+    return this.view("reservation/reservation-details", modelAndView);
   }
 }

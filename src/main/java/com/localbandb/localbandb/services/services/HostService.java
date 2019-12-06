@@ -11,5 +11,5 @@ public interface HostService {
 
   HostCheckServiceModel findUserWithUsername(String username);
 
-  HostCheckServiceModel findUserWitHEmail(String email);
+  HostCheckServiceModel findUserWithEmail(String email);
 }

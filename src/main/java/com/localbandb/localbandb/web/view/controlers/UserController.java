@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -56,12 +57,13 @@ public class UserController extends BaseController {
   }
 
   @PostMapping("/register")
-  public ModelAndView registerConfirm(@Valid @ModelAttribute UserRegisterModel model, BindingResult bindingResult) {
+  public ModelAndView registerConfirm(@Valid @ModelAttribute UserRegisterModel model, BindingResult bindingResult, RedirectAttributes attributes) {
     if(bindingResult.hasErrors()) {
       return view("user/user-register");
     }
 
     if (!userService.save(mapper.map(model, UserServiceModel.class))) {
+      attributes.addFlashAttribute("message", "message");
       return redirect("user/register");
     }
     return this.redirect("user/login");

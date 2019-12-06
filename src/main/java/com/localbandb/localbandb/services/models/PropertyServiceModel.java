@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 public class PropertyServiceModel {
+  private String id;
   private String name;
   private String description;
   private Integer maxOccupancy;

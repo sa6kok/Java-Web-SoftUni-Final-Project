@@ -32,10 +32,10 @@ public class UserServiceImpl implements UserService {
     try {
       userServiceModel.setPassword(DigestUtils.sha256Hex(userServiceModel.getPassword()));
       User user = modelMapper.map(userServiceModel, User.class);
-      if(user.getReservations() == null) {
+      if (user.getReservations() == null) {
         user.setReservations(new ArrayList<>());
       }
-      if(user.getPayments() == null) {
+      if (user.getPayments() == null) {
         user.setPayments(new ArrayList<>());
       }
       userRepository.save(user);
@@ -58,13 +58,21 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserCheckServiceModel checkIfUserExist(String username) {
-    UserCheckServiceModel user = modelMapper.map( userRepository.findByUsername(username), UserCheckServiceModel.class);
+    UserCheckServiceModel user = new UserCheckServiceModel();
+    User byUsername = userRepository.findByUsername(username);
+    if(byUsername != null) {
+      user = modelMapper.map(byUsername, UserCheckServiceModel.class);
+    }
     return user;
   }
 
   @Override
   public UserCheckServiceModel checkIfUserWithEmailExist(String email) {
-    UserCheckServiceModel user = modelMapper.map( userRepository.findByEmail(email), UserCheckServiceModel.class);
+    UserCheckServiceModel user = new UserCheckServiceModel();
+    User byEmail = userRepository.findByEmail(email);
+    if(byEmail != null) {
+      user = modelMapper.map(byEmail, UserCheckServiceModel.class);
+    }
     return user;
   }
 }

@@ -1,6 +1,5 @@
 package com.localbandb.localbandb.web.view.controlers;
 
-import com.localbandb.localbandb.data.models.City;
 import com.localbandb.localbandb.services.models.CityServiceModel;
 import com.localbandb.localbandb.services.models.PropertyServiceModel;
 import com.localbandb.localbandb.web.view.models.CountryViewModel;
@@ -8,6 +7,8 @@ import com.localbandb.localbandb.web.view.models.PropertyViewModel;
 import com.localbandb.localbandb.services.services.CountryService;
 import com.localbandb.localbandb.services.services.PropertyService;
 import com.localbandb.localbandb.web.view.models.PropertyCreateModel;
+import com.localbandb.localbandb.web.view.models.ReservationCreateModel;
+import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,7 +46,7 @@ public class PropertyController extends BaseController {
 
 
   @GetMapping("/create/{country}")
-  public ModelAndView getCreateProperty(@PathVariable("country") String country,@ModelAttribute PropertyCreateModel model, ModelAndView modelAndView) {
+  public ModelAndView getCreateProperty(@PathVariable("country") String country,@ModelAttribute PropertyCreateModel model, ModelAndView modelAndView) throws NotFoundException {
 
     List<CityServiceModel> cities = countryService.findByName(country).getCities().stream()
         .sorted(Comparator.comparing(CityServiceModel::getName)).collect(Collectors.toList());
@@ -61,7 +62,7 @@ public class PropertyController extends BaseController {
   public ModelAndView postCreateProperty(@Valid @ModelAttribute PropertyCreateModel model,
                                          BindingResult bindingResult,
                                          @PathVariable("country") String country,
-                                         ModelAndView modelAndView) {
+                                         ModelAndView modelAndView) throws NotFoundException {
     if(bindingResult.hasErrors()) {
       List<CityServiceModel> cities = countryService.findByName(country).getCities().stream()
           .sorted(Comparator.comparing(CityServiceModel::getName)).collect(Collectors.toList());
@@ -84,7 +85,7 @@ public class PropertyController extends BaseController {
 
 
   @PostMapping("/create/city/{country}")
-  public ModelAndView createCityConfirm(@PathVariable("country") String country, ModelAndView modelAndView, @ModelAttribute CountryViewModel countryViewModel) {
+  public ModelAndView createCityConfirm(@PathVariable("country") String country, ModelAndView modelAndView, @ModelAttribute CountryViewModel countryViewModel) throws NotFoundException {
 
     countryService.addCityToCountry(country, countryViewModel.getName());
 
@@ -94,10 +95,13 @@ public class PropertyController extends BaseController {
 
   @GetMapping("/show")
   public ModelAndView showProperties(@ModelAttribute("cityProperties") List<PropertyViewModel> propertyViewModels,
+                                     @ModelAttribute("model") ReservationCreateModel reservationCreateModel,
                                      ModelAndView modelAndView) {
     modelAndView.addObject("properties", propertyViewModels);
+    modelAndView.addObject("model", reservationCreateModel);
     return this.view("property/property-show", modelAndView);
   }
+
 
   @GetMapping("/show/all")
   public ModelAndView showProperties(ModelAndView modelAndView) {
@@ -105,5 +109,4 @@ public class PropertyController extends BaseController {
     modelAndView.addObject("properties", properties);
     return this.view("property/property-show", modelAndView);
   }
-
 }

@@ -14,6 +14,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class PropertyViewModel {
+  private String id;
   private String name;
   private String description;
   private BigDecimal price;
@@ -22,6 +23,14 @@ public class PropertyViewModel {
   private List<String> pictures;
   private List<LocalDate> busyDates;
 
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
 
   public String getName() {
     return name;

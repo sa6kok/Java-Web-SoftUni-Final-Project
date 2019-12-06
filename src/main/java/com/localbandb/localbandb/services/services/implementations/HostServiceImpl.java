@@ -58,12 +58,22 @@ public class HostServiceImpl implements HostService {
 
   @Override
   public HostCheckServiceModel findUserWithUsername(String username) {
-    return this.mapper.map(hostRepository.findByUsername(username), HostCheckServiceModel.class);
+    HostCheckServiceModel host = new HostCheckServiceModel();
+    Host byUsername = hostRepository.findByUsername(username);
+    if(byUsername != null) {
+     host = this.mapper.map(byUsername, HostCheckServiceModel.class);
+    }
+    return host;
   }
 
   @Override
-  public HostCheckServiceModel findUserWitHEmail(String email) {
-    return this.mapper.map(hostRepository.findByEmail(email), HostCheckServiceModel.class);
+  public HostCheckServiceModel findUserWithEmail(String email) {
+    HostCheckServiceModel host = new HostCheckServiceModel();
+    Host byEmail = hostRepository.findByEmail(email);
+    if(byEmail != null) {
+      host = this.mapper.map(byEmail, HostCheckServiceModel.class);
+    }
+    return host;
   }
 
 

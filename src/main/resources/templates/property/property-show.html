@@ -5,7 +5,7 @@
 <body>
 <th:block th:replace="fragments/navigation"/>
 <div class="container">
-    <h2 class="text-center pt-5">Available properties for Your search!</h2>
+    <h2 class="text-center pt-5" th:text="|Available properties in ${city}|">Available properties for Your search!</h2>
     <th:block th:if="${properties.size() == 0}" th:class="align-items-center">
         <h2 th:text="|No properties in ${city}!|" class="text-center"></h2>
         <a th:href="@{/search/country}"><h2 class="text-center">Search for other properties!</h2></a>
@@ -13,16 +13,25 @@
     <div class="row">
         <div class="col-lg-4 col-sm-6 portfolio-item" th:each="property : ${properties}">
             <div class="card h-100">
-                <a href="#"><img class="card-img-top" th:src="${property.getPictures().get(0)}" th:alt="${property.getName()}"></a>
+                <th:block th:if="${model.getStartDate()} != null">
+                    <a th:href="|/reservation/details/${property.getId()}/${model.getStartDate()}/${model.getEndDate()}/${model.getOccupancy()}|"><img
+                            class="card-img-top" th:src="${property.getPictures().get(0)}"
+                            th:alt="${property.getName()}"></a>
+                </th:block>
+                <th:block th:unless="${model.getStartDate()} != null">
+                    <a th:href="|/reservation/show/${property.getId()}|"><img
+                            class="card-img-top" th:src="${property.getPictures().get(0)}"
+                            th:alt="${property.getName()}"></a>
+                </th:block>
                 <div class="card-body">
                     <h4 class="card-title">
-                        <a href="#" th:text="${property.getName()}"></a>
+                        <p th:text="${property.getName()}"></p>
                     </h4>
                     <h4 class="card-title">
-                        <a href="#" th:text="|Price per night: ${property.getPrice()}|"></a>
+                        <p th:text="|Price per night: ${property.getPrice()}|"></p>
                     </h4>
                     <h4 class="card-title">
-                        <a href="#" th:text="|Max Occupancy: ${property.getMaxOccupancy()}|"></a>
+                        <p th:text="|Max Occupancy: ${property.getMaxOccupancy()}|"></p>
                     </h4>
                     <p class="card-text" th:text="${property.getShortDescription()}"></p>
                 </div>
