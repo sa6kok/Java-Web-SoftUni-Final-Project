@@ -1,6 +1,6 @@
 function renderAllCities() {
     let country = $("#selectCountry").val();
-    let url = `/reservation/create/${country}`;
+    let url = `/reservation/api/create/${country}`;
 
     let selectCity ='<select class="browser-default custom-select" id="selectCity" name="city">\n                                    <option selected value="">Select City</option>';
     fetch(url).then(response => response.json())

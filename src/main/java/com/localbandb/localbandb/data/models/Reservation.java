@@ -30,7 +30,7 @@ public class Reservation extends BaseEntity {
 
   @ManyToOne(targetEntity = User.class)
   @JoinColumn(name = "user_id", referencedColumnName = "id")
-  private User user;
+  private User guest;
 
   @Min(0)
   @Column(name = "total_price")
@@ -79,12 +79,12 @@ public class Reservation extends BaseEntity {
     this.review = review;
   }
 
-  public User getUser() {
-    return user;
+  public User getGuest() {
+    return guest;
   }
 
-  public void setUser(User user) {
-    this.user = user;
+  public void setGuest(User guest) {
+    this.guest = guest;
   }
 
   public BigDecimal getTotalPrice() {

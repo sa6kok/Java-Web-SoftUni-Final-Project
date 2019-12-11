@@ -16,7 +16,7 @@
                         <h2 class="card-title text-center text-danger">It did not work. Please try again.</h2>
                     </th:block>
                     <h5 class="card-title text-center">Register as Guest</h5>
-                    <form class="form-signin" th:action="@{/user/register}" th:method="post" th:object="${userRegisterModel}"
+                    <form class="form-signin" th:action="@{/user/register/{role}(role=${role})}" th:method="post" th:object="${userRegisterModel}"
                           oninput='confirmPassword.setCustomValidity(confirmPassword.value != password.value ? "Passwords do not match." : "")'>
                         <div class="form-label-group" th:classappend="${#fields.hasErrors('username')}? 'text-danger'">
                             <label id="usernameCheckUser" class="text-danger" style="display: none">Username already exist. Please pick another!</label>
@@ -59,8 +59,8 @@
 
                         <button class="btn btn-lg btn-dark btn-block text-uppercase" type="submit">Register</button>
                         <hr class="my-4">
-                        <a class="d-block text-center mt-2 " th:href="@{/user/login}">Log In as Guest</a>
-                     </form>
+                        <a class="d-block text-center mt-2 " th:href="@{/user/login}">Log In</a>
+                    </form>
                 </div>
             </div>
         </div>

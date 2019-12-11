@@ -1,12 +1,12 @@
 package com.localbandb.localbandb.data.models;
 
+import org.hibernate.validator.constraints.Email;
+
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Table(name = "reservations_without_user")

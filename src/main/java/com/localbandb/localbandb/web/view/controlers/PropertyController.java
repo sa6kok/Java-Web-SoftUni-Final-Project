@@ -51,7 +51,7 @@ public class PropertyController extends BaseController {
     List<CityServiceModel> cities = countryService.findByName(country).getCities().stream()
         .sorted(Comparator.comparing(CityServiceModel::getName)).collect(Collectors.toList());
     if (cities.size() == 0) {
-     return this.redirect("property/create/city/{country}");
+      return this.redirect("property/create/city/{country}");
     }
     modelAndView.addObject("cities", cities);
     modelAndView.addObject("country", country);
@@ -97,6 +97,9 @@ public class PropertyController extends BaseController {
   public ModelAndView showProperties(@ModelAttribute("cityProperties") List<PropertyViewModel> propertyViewModels,
                                      @ModelAttribute("model") ReservationCreateModel reservationCreateModel,
                                      ModelAndView modelAndView) {
+    if(reservationCreateModel.getStartDate() == null) {
+      reservationCreateModel = null;
+    }
     modelAndView.addObject("properties", propertyViewModels);
     modelAndView.addObject("model", reservationCreateModel);
     return this.view("property/property-show", modelAndView);
@@ -107,6 +110,7 @@ public class PropertyController extends BaseController {
   public ModelAndView showProperties(ModelAndView modelAndView) {
     List<PropertyViewModel> properties = propertyService.getAll();
     modelAndView.addObject("properties", properties);
+    modelAndView.addObject("city", "all over Europe!");
     return this.view("property/property-show", modelAndView);
   }
 }

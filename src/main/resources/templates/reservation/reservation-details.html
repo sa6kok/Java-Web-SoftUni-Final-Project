@@ -4,64 +4,146 @@
 <th:block th:replace="fragments/head"/>
 <body>
 <th:block th:replace="fragments/navigation"/>
-<header>
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
-        </ol>
-        <div class="carousel-inner" role="listbox">
-            <!-- Slide One - Set the background image for this slide in the line below -->
-            <div class="carousel-item active"
-                 style="background-image: url('https://la-bulgarie.fr/media/pages/266/big/cdce3b86bbf1b118acd10f50a6810500.jpg')">
-                <div class="carousel-caption d-none d-md-block">
-                    <h3>Assenovgrad</h3>
-                    <p>Where the history meets the nature!</p>
-                </div>
+<th:block th:object="${model}">
+<div id="multi-item-example" class="carousel slide carousel-multi-item carousel-multi-item-2" data-ride="carousel">
+    <div class="carousel-inner" role="listbox" >
+        <div class="col-md-3 mb-3" th:each="picture : *{getPropertyViewModel().getPictures()}">
+            <div class="card">
+                <img class="img-fluid"
+                     th:src="${picture}"
+                     alt="Card image cap">
             </div>
         </div>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-    </div>
-</header>
-<div class="container">
-    <div class="row">
-        <th:block class="col-lg-10 col-xl-9 mx-auto">
-            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-                <!--Shown if there is a country to pick-->
-                <th:block>
-                    <div class="card card-signin my-5 align-items-center">
-                        <div class="card-body">
-                            <h4 class="card-title text-center" th:text="|No cities in ${country}|"></h4>
-                            <h4 class="card-title text-center" th:text="|Add a  citiy in ${country}|"></h4>
-                        </div>
-                        <form class="form-signin" th:action="@{/property/create/city/{country}(country=${country})} " th:method="post">
-                            <div class="form-label-group">
-                                <input type="text" id="inputCity" class="form-control" name="name" placeholder="City"  required autofocus>
-                                <label for="inputCity">Name of the city</label>
-                            </div>
-                            <button class="btn btn-lg btn-dark btn-block text-uppercase" type="submit">Add the city</button>
-                        </form>
-                    </div>
-                </th:block>
-                <!-- The form to create the property-->
-                <!--  <div class="form-label-group" th:classappend="${#fields.hasErrors('username')}? 'text-danger'">
-                      <input type="text" th:field="*{username}" id="inputUsername" class="form-control" name="username" placeholder="Username"  required autofocus>
-                      <label for="inputUsername">Username <label  th:each="error : ${#fields.errors('username')}" th:text="${error}"></label></label>
-                  </div>-->
+        <div class="col-md-3 mb-3">
+            <div class="card">
+                <img class="img-fluid"
+                     src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(38).jpg"
+                     alt="Card image cap">
             </div>
-        </th:block>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card">
+                <img class="img-fluid"
+                     src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(38).jpg"
+                     alt="Card image cap">
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card">
+                <img class="img-fluid"
+                     src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(38).jpg"
+                     alt="Card image cap">
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card">
+                <img class="img-fluid"
+                     src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(38).jpg"
+                     alt="Card image cap">
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card">
+                <img class="img-fluid"
+                     src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(38).jpg"
+                     alt="Card image cap">
+            </div>
+        </div>
     </div>
 </div>
+<div class="col-sm-7 col-md-8 col-lg-6 mx-auto">
+    <div class="card card-signin my-5">
+        <div class="card-body">
+            <legend>Reservation details</legend>
+            <form th:action="@{/reservation/create}" class="form-horizontal" method="post">
+                <fieldset>
+                    <div class="form-label-group">
+                        <div class="form-label-group" >
+                            <input type="text" id="selectedCountry" class="form-control" name="country"
+                                   th:value="*{getPropertyViewModel().getCity().getCountry().getName()}" readonly required >
+                        </div>
+                        <label for="selectedCountry">Country </label>
+                    </div>
+                    <div class="form-label-group">
+                        <div class="form-label-group" >
+                            <input type="text" id="selectedCity" class="form-control" name="country"
+                                   th:value="*{getPropertyViewModel().getCity().getName()}" readonly required >
+                        </div>
+                        <label for="selectedCity">City </label>
+                    </div>
+                    <div class="form-label-group">
+                        <div class="form-label-group" >
+                            <input type="text" id="selectedPropertyName" class="form-control" name="country"
+                                   th:value="*{getPropertyViewModel().getName()}" readonly required >
+                        </div>
+                        <label for="selectedPropertyName">Property name </label>
+                    </div>
+                    <div class="form-label-group">
+                        <div class="form-label-group" >
+                            <textarea type="text" id="selectedPropertyDescription" rows="5" class="form-control"  name="description"
+                                   th:text="*{getPropertyViewModel().getDescription()}" readonly required ></textarea>
+                        </div>
+                        <label for="selectedPropertyDescription">Description </label>
+                    </div>
+                    <div class="form-label-group">
+                        <div class="form-label-group" >
+                            <input type="text" id="selectedPropertyPrice" class="form-control" name="country"
+                                   th:value="*{getPropertyViewModel().getPrice()}" readonly required >
+                        </div>
+                        <label for="selectedPropertyPrice">Price per night </label>
+                    </div>
+                    <h5 class="card-title">Reservation dates:</h5>
+                    <div class="form-group">
+                        <div class="input-group date form_date col-md-5" id="startDate" data-date=""
+                             data-date-format="d.mm.yyyy"
+                             data-link-field="dtp_input2" data-link-format="dd.mm.yyyy">
+                            <input id="startDatePickInput" class="form-control" size="16" type="text" name="startDate"
+                                   readonly required>
+                            <span class="input-group-addon"><span
+                                    class="glyphicon glyphicon-remove"></span></span>
+                            <span class="input-group-addon"><span
+                                    class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                        <label for="dtp_inputCheckIn" class="col-md-3 control-label">Check-In</label>
+                        <input type="hidden" id="dtp_inputCheckIn"/><br/>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group date form_date col-md-5" id="endDate" data-date=""
+                             data-date-format="d.mm.yyyy"
+                             data-link-field="dtp_input2" data-link-format="dd.mm.yyyy">
+                            <input id="endDatePickInput" class="form-control" size="16" type="text" name="endDate" readonly>
+                            <span class="input-group-addon"><span
+                                    class="glyphicon glyphicon-remove"></span></span>
+                            <span class="input-group-addon"><span
+                                    class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                        <label for="dtp_inputCheckOut" class="col-md-3 control-label">Check-Out</label>
+                        <input type="hidden" id="dtp_inputCheckOut" required/><br/>
+                    </div>
+                    <div class="form-label-group" id="totalPrice">
+                    </div>
+                    <div class="form-label-group">
+                        <div class="form-label-group" >
+                            <input type="text" id="totalAmount" class="form-control" name="country"
+                                   readonly required  >
+                        </div>
+                        <label for="selectedPropertyPrice">Price per night </label>
+                    </div>
+
+                    <button class="btn btn-lg btn-dark btn-block text-uppercase">Search</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
 </div>
+</th:block>
+
 <th:block th:replace="fragments/footer"/>
 </body>
+<link media="screen" rel="stylesheet" th:href="@{/vendor/bootstrap/css/bootstrap-datetimepicker.min.css}">
+<script type="text/javascript" src="/vendor/calender/jquery-1.8.3.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/vendor/calender/bootstrap.min.js"></script>
+<script type="text/javascript" src="/vendor/calender/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/js/calender.js"></script>
+<script type="text/javascript" src="/js/calculatePrice.js"></script>
 </html>

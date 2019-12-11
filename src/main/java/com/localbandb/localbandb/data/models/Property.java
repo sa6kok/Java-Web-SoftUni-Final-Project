@@ -1,9 +1,10 @@
 package com.localbandb.localbandb.data.models;
 
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,15 +15,14 @@ import java.util.List;
 @Table(name = "properties")
 public class Property extends BaseEntity {
 
-  @NotEmpty
+
   @Size(min = 3, max = 25)
   @Column(name = "name", nullable = false)
   private String name;
 
-  @ManyToOne(targetEntity = Host.class)
-  private Host host;
+  @ManyToOne(targetEntity = User.class)
+  private User host;
 
-  @NotEmpty
   @Size(min = 15)
   @Column(name = "description",columnDefinition = "TEXT")
   private String description;
@@ -85,14 +85,13 @@ public class Property extends BaseEntity {
     this.name = name;
   }
 
-  public Host getHost() {
+  public User getHost() {
     return host;
   }
 
-  public void setHost(Host host) {
+  public void setHost(User host) {
     this.host = host;
   }
-
 
   public String getDescription() {
     return description;

@@ -1,12 +1,14 @@
 package com.localbandb.localbandb.services.services.implementations;
 
+import com.localbandb.localbandb.config.authentication.AuthenticationFacade;
 import com.localbandb.localbandb.data.models.City;
 import com.localbandb.localbandb.data.models.Property;
+import com.localbandb.localbandb.data.models.User;
 import com.localbandb.localbandb.data.repositories.PropertyRepository;
 import com.localbandb.localbandb.services.models.PropertyServiceModel;
 import com.localbandb.localbandb.services.services.CityService;
 import com.localbandb.localbandb.services.services.PropertyService;
-import com.localbandb.localbandb.services.services.ReservationService;
+import com.localbandb.localbandb.services.services.UserService;
 import com.localbandb.localbandb.web.view.models.PropertyViewModel;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
@@ -24,20 +26,26 @@ import java.util.stream.Collectors;
 public class PropertyServiceImpl implements PropertyService {
   private final PropertyRepository propertyRepository;
   private final CityService cityService;
+  private final UserService userService;
   private final ModelMapper modelMapper;
+  private final AuthenticationFacade authenticationFacade;
 
   @Autowired
-  public PropertyServiceImpl(PropertyRepository propertyRepository, CityService cityService, ModelMapper modelMapper) {
+  public PropertyServiceImpl(PropertyRepository propertyRepository, CityService cityService, UserService userService, ModelMapper modelMapper, AuthenticationFacade authenticationFacade) {
     this.propertyRepository = propertyRepository;
     this.cityService = cityService;
+    this.userService = userService;
     this.modelMapper = modelMapper;
+    this.authenticationFacade = authenticationFacade;
   }
 
   @Override
-  public boolean save(PropertyServiceModel propertyServiceModel) {
+  public boolean save(PropertyServiceModel propertyServiceModel) throws NotFoundException {
     City city = cityService.findCityByName(propertyServiceModel.getCity());
 
     Property property = modelMapper.map(propertyServiceModel, Property.class);
+    User user = userService.findByUsername(authenticationFacade.getAuthentication().getName());
+    property.setHost(user);
     property.setCity(city);
     if(property.getPictures() == null) {
       property.setPictures(new ArrayList<>());
@@ -75,13 +83,13 @@ public class PropertyServiceImpl implements PropertyService {
   }
 
   @Override
-  public PropertyServiceModel findById(String id) throws NotFoundException {
+  public PropertyViewModel findById(String id) throws NotFoundException {
     Optional<Property> byId = propertyRepository.findById(id);
     if(byId.isEmpty()) {
       throw new NotFoundException("Property not found");
     }
     Property property = byId.get();
-    return modelMapper.map(property, PropertyServiceModel.class);
+    return modelMapper.map(property, PropertyViewModel.class);
   }
 
   @Override

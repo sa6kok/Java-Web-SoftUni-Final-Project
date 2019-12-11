@@ -14,11 +14,11 @@ public class Payment extends BaseEntity {
 
   @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id", referencedColumnName = "id")
-  private User user;
+  private User guest;
 
-  @ManyToOne(targetEntity = Host.class, cascade = CascadeType.ALL)
+  @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL)
   @JoinColumn(name = "host_id", referencedColumnName = "id")
-  private Host host;
+  private User host;
 
   @Min(0)
   @Column(name = "payment_date", nullable = false)
@@ -36,22 +36,21 @@ public class Payment extends BaseEntity {
     this.amount = amount;
   }
 
-  public User getUser() {
-    return user;
+  public User getGuest() {
+    return guest;
   }
 
-  public void setUser(User user) {
-    this.user = user;
+  public void setGuest(User guest) {
+    this.guest = guest;
   }
 
-  public Host getHost() {
+  public User getHost() {
     return host;
   }
 
-  public void setHost(Host host) {
+  public void setHost(User host) {
     this.host = host;
   }
-
 
   public LocalDate getPaymentDate() {
     return paymentDate;

@@ -3,6 +3,7 @@ package com.localbandb.localbandb.services.services.implementations;
 import ch.qos.logback.core.util.LocationUtil;
 import com.localbandb.localbandb.data.models.Reservation;
 import com.localbandb.localbandb.data.repositories.ReservationRepository;
+import com.localbandb.localbandb.services.models.PropertyServiceModel;
 import com.localbandb.localbandb.services.models.ReservationServiceModel;
 import com.localbandb.localbandb.services.services.PropertyService;
 import com.localbandb.localbandb.services.services.ReservationService;
@@ -11,6 +12,7 @@ import com.localbandb.localbandb.web.view.models.ReservationCreateModel;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -45,13 +47,23 @@ public class ReservationServiceImpl implements ReservationService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public ReservationCreateModel fillUpModel(String id, String start, String end, String pax) throws NotFoundException {
-    PropertyViewModel propertyViewModel = mapper.map(propertyService.findById(id), PropertyViewModel.class);
+    PropertyViewModel propertyServiceById = propertyService.findById(id);
     ReservationCreateModel reservationCreateModel = new ReservationCreateModel();
     reservationCreateModel.setStartDate(start);
     reservationCreateModel.setEndDate(end);
     reservationCreateModel.setOccupancy(Integer.parseInt(pax));
-    reservationCreateModel.setPropertyViewModel(propertyViewModel);
+    reservationCreateModel.setPropertyViewModel(propertyServiceById);
+    return reservationCreateModel;
+  }
+
+  @Override
+  @PreAuthorize("isAuthenticated()")
+  public ReservationCreateModel fillUpModel(String id) throws NotFoundException {
+    PropertyViewModel propertyServiceById = propertyService.findById(id);
+    ReservationCreateModel reservationCreateModel = new ReservationCreateModel();
+    reservationCreateModel.setPropertyViewModel(propertyServiceById);
     return reservationCreateModel;
   }
 

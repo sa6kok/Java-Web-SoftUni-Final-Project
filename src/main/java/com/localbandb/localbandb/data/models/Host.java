@@ -8,7 +8,6 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 
-@Entity
 @Table(name = "hosts")
 public class Host extends BaseEntity {
 

@@ -1,5 +1,6 @@
 package com.localbandb.localbandb.services.models;
 
+
 public class UserServiceModel {
   private String username;
   private String email;
@@ -8,6 +9,7 @@ public class UserServiceModel {
   private Integer age;
   private String password;
   private String confirmPassword;
+  private String role;
 
   public UserServiceModel() {
   }
@@ -66,5 +68,13 @@ public class UserServiceModel {
 
   public void setConfirmPassword(String confirmPassword) {
     this.confirmPassword = confirmPassword;
+  }
+
+  public String getRole() {
+    return role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
   }
 }

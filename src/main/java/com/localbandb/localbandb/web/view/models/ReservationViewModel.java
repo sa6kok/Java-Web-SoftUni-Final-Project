@@ -1,6 +1,6 @@
 package com.localbandb.localbandb.web.view.models;
 
-public class ReservationCreateModel {
+public class ReservationViewModel {
   private String country;
   private String city;
   private Integer occupancy;
@@ -9,18 +9,7 @@ public class ReservationCreateModel {
   private PropertyViewModel propertyViewModel;
   private String totalPrice;
 
-  public ReservationCreateModel() {
-  }
-
-  public ReservationCreateModel(Integer occupancy, String startDate, String endDate, PropertyViewModel propertyViewModel) {
-    this.occupancy = occupancy;
-    this.startDate = startDate;
-    this.endDate = endDate;
-    this.propertyViewModel = propertyViewModel;
-  }
-
-  public ReservationCreateModel(PropertyViewModel propertyViewModel) {
-    this.propertyViewModel = propertyViewModel;
+  public ReservationViewModel() {
   }
 
   public String getCountry() {
@@ -76,8 +65,6 @@ public class ReservationCreateModel {
   }
 
   public void setTotalPrice(String totalPrice) {
-
-
     this.totalPrice = totalPrice;
   }
 }

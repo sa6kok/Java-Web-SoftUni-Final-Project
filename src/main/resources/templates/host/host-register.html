@@ -16,7 +16,7 @@
                     <h2 class="card-title text-center text-danger">It did not work. Please try again.</h2>
                     </th:block>
                     <h5 class="card-title text-center">Register as Host</h5>
-                    <form class="form-signin" th:action="@{/host/register}" th:method="post" th:object="${hostRegisterModel}"
+                    <form class="form-signin" th:action="@{/host/register}" th:method="post" th:object="${userRegisterModel}"
                           oninput='confirmPassword.setCustomValidity(confirmPassword.value !== password.value ? "Passwords do not match." : "")'>
                         <div class="form-label-group" th:classappend="${#fields.hasErrors('username')}? 'text-danger'">
                             <label id="usernameCheckHost" class="text-danger" style="display: none">Username already exist. Please pick another!</label>
@@ -40,6 +40,11 @@
                             <label for="inputLastName">Last name <label th:each="error : ${#fields.errors('lastName')}" th:text="${error}"></label></label>
                         </div>
 
+                        <div class="form-label-group" th:classappend="${#fields.hasErrors('age')}? 'text-danger'">
+                            <input type="number" th:field="*{age}" id="inputAge" class="form-control" name="age" placeholder="Age"  required autofocus>
+                            <label for="inputAge">Age <label th:each="error : ${#fields.errors('age')}" th:text="${error}" ></label></label>
+                        </div>
+
                         <hr>
 
                         <div class="form-label-group">
@@ -54,7 +59,7 @@
 
                         <button class="btn btn-lg btn-dark btn-block text-uppercase" type="submit">Register</button>
                         <hr class="my-4">
-                        <a class="d-block text-center mt-2 " th:href="@{/host/login}">Log In as Host</a>
+                        <a class="d-block text-center mt-2 " th:href="@{/user/login}">Log</a>
                     </form>
                 </div>
             </div>
@@ -63,6 +68,6 @@
 </div>
 <th:block th:replace="fragments/footer"/>
 <script src="/vendor/jquery/jquery.js"></script>
-<script src="/js/hostRegistration.js"></script>
+<script type="text/javascript" src="/js/userRegistration.js"></script>
 </body>
 </html>

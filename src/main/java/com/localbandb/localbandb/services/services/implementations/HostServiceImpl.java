@@ -1,3 +1,4 @@
+/*
 package com.localbandb.localbandb.services.services.implementations;
 
 import com.localbandb.localbandb.data.models.Host;
@@ -78,3 +79,4 @@ public class HostServiceImpl implements HostService {
 
 
 }
+*/

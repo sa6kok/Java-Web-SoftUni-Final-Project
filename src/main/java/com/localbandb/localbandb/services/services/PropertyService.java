@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface PropertyService {
 
-  boolean save(PropertyServiceModel propertyServiceModel);
+  boolean save(PropertyServiceModel propertyServiceModel) throws NotFoundException;
 
   List<PropertyViewModel> getAll();
 
   List<PropertyViewModel> getAllByCity(String city);
 
-  PropertyServiceModel findById(String id) throws NotFoundException;
+  PropertyViewModel findById(String id) throws NotFoundException;
 
   List<LocalDate> datesBetween(String start, String end);
 

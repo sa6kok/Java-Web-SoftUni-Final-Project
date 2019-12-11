@@ -1,3 +1,4 @@
+/*
 package com.localbandb.localbandb.services.services;
 
 import com.localbandb.localbandb.services.models.HostCheckServiceModel;
@@ -13,3 +14,4 @@ public interface HostService {
 
   HostCheckServiceModel findUserWithEmail(String email);
 }
+*/

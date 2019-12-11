@@ -1,3 +1,4 @@
+/*
 package com.localbandb.localbandb.data.repositories;
 
 import com.localbandb.localbandb.data.models.Host;
@@ -13,3 +14,4 @@ public interface HostRepository extends JpaRepository<Host, String> {
 
   Host findByEmail(String email);
 }
+*/

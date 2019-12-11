@@ -11,6 +11,7 @@ import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.PropertyReferenceException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -32,11 +33,13 @@ public class CountryServiceImpl implements CountryService {
   }
 
   @Override
+  @PreAuthorize("permitAll")
   public List<String> getAllCountryNames() {
     return countryRepository.findAllByOrderByName().stream().map(Country::getName).collect(Collectors.toList());
   }
 
   @Override
+  @PreAuthorize("permitAll")
   public CountryServiceModel findByName(String name) throws NotFoundException {
 
       Country country = countryRepository.findByName(name);

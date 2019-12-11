@@ -20,7 +20,7 @@ public class City extends BaseEntity{
   @JoinColumn(name = "country_id", referencedColumnName = "id")
   private Country country;
 
-  @OneToMany(targetEntity = Property.class, mappedBy = "city", cascade = CascadeType.ALL)
+  @OneToMany(targetEntity = Property.class, mappedBy = "city")
   private List<Property> properties;
 
   public City() {

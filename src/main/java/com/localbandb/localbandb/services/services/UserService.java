@@ -1,13 +1,16 @@
 package com.localbandb.localbandb.services.services;
 
+import com.localbandb.localbandb.data.models.User;
 import com.localbandb.localbandb.services.models.UserCheckServiceModel;
 import com.localbandb.localbandb.services.models.UserServiceModel;
+import javassist.NotFoundException;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
-  boolean save(UserServiceModel user);
+  boolean saveUser(UserServiceModel user);
 
-  boolean login(String username, String password);
+  User findByUsername(String username) throws NotFoundException;
 
   UserCheckServiceModel checkIfUserExist(String username);
 

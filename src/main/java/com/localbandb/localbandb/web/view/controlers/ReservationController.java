@@ -61,15 +61,26 @@ public class ReservationController extends BaseController {
 
 
   @GetMapping("/details/{id}/{start}/{end}/{pax}")
-  public ModelAndView showPropertyDetails(@PathVariable String id, @PathVariable String start,
-                                          @PathVariable String end, @PathVariable String pax,
-                                          ModelAndView modelAndView){
-    modelAndView.addObject("id", id);
-    modelAndView.addObject("start", start);
-    modelAndView.addObject("end", end);
-    modelAndView.addObject("pax", pax);
+  public ModelAndView showPropertyDetailsWithDates(@PathVariable String id, @PathVariable String start,
+                                                   @PathVariable String end, @PathVariable String pax,
+                                                   ModelAndView modelAndView) throws NotFoundException {
 
+    ReservationCreateModel reservationCreateModel = reservationService.fillUpModel(id, start, end, pax);
+    modelAndView.addObject("model", reservationCreateModel);
     System.out.println();
+    return this.view("reservation/reservation-details", modelAndView);
+  }
+
+
+  @GetMapping("/details/{id}")
+  public ModelAndView showPropertyDetails(@PathVariable String id,
+                                          ModelAndView modelAndView) throws NotFoundException {
+
+    ReservationCreateModel reservationCreateModel = reservationService.fillUpModel(id);
+    System.out.println();
+    modelAndView.addObject("model", reservationCreateModel);
+
+
     return this.view("reservation/reservation-details", modelAndView);
   }
 }

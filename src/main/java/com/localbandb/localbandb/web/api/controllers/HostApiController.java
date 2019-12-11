@@ -1,3 +1,4 @@
+/*
 package com.localbandb.localbandb.web.api.controllers;
 
 import com.localbandb.localbandb.services.services.HostService;
@@ -30,3 +31,4 @@ public class HostApiController {
     return this.mapper.map( hostService.findUserWithEmail(email), HostCheckModel.class);
   }
 }
+*/

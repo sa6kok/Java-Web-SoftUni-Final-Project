@@ -1,10 +1,15 @@
-<th:block th:fragment="footer" xmlns:th="http://www.w3.org/1999/xhtml" />
-<footer class="py-5 bg-dark">
-    <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; ALEKS</p>
-        <div class="m-0 text-center text-white" th:text="${#dates.createNow()}"></div>
-    </div>
-    <script th:src="@{/vendor/jquery/jquery.js}"></script>
-    <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.js}"></script>
-</footer>
+<th:block th:fragment="footer" xmlns:th="http://www.w3.org/1999/xhtml"
+          xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <div class="text-center text-white"sec:authorize="isAuthenticated()">
+                <h3 sec:authentication="name"></h3>
+               <h3><a class="text-center text-white" href="/user/logout">Logout</a></h3>
+            </div>
+            <div class="m-0 text-center text-white" th:text="${#dates.createNow()}"></div>
+            <p class="m-0 text-center text-white">Copyright &copy; ALEKS</p>
+        </div>
+        <script th:src="@{/vendor/jquery/jquery.js}"></script>
+        <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.js}"></script>
+    </footer>
 </th:block>
