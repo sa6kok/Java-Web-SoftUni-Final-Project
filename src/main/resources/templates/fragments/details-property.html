@@ -1,0 +1,53 @@
+<th:block th:fragment="property" xmlns:th="http://www.w3.org/1999/xhtml"
+          xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <div class="form-label-group">
+        <div class="form-label-group">
+            <input type="text" id="selectedCountry" class="form-control" name="country"
+                   th:value="*{getPropertyViewModel().getCity().getCountry().getName()}" readonly required>
+        </div>
+        <label for="selectedCountry">Country </label>
+    </div>
+    <div class="form-label-group">
+        <div class="form-label-group">
+            <input type="text" id="selectedCity" class="form-control" name="city"
+                   th:value="*{getPropertyViewModel().getCity().getName()}" readonly required>
+        </div>
+        <label for="selectedCity">City </label>
+    </div>
+    <div class="form-label-group">
+        <div class="form-label-group">
+            <input type="text" id="selectedPropertyName" class="form-control" name="propertyName"
+                   th:value="*{getPropertyViewModel().getName()}" readonly required>
+        </div>
+        <label for="selectedPropertyName">Property name </label>
+    </div>
+    <div class="form-label-group">
+        <div class="form-label-group">
+                            <textarea type="text" id="selectedPropertyDescription" rows="5" class="form-control"
+                                      name="description"
+                                      th:text="*{getPropertyViewModel().getDescription()}" readonly required></textarea>
+        </div>
+        <label for="selectedPropertyDescription">Description </label>
+    </div>
+    <div class="form-label-group">
+        <div class="form-label-group">
+            <input type="text" id="selectedPropertyOccupancy" class="form-control" name="maxOccupancy"
+                   th:value="*{getPropertyViewModel().getMaxOccupancy()}" readonly required>
+        </div>
+        <label for="selectedPropertyOccupancy">Max Occupancy </label>
+    </div>
+    <div class="form-label-group">
+        <div class="form-label-group">
+                            <textarea type="text" id="selectedPropertyFullStreet" class="form-control" name="fullStreet"
+                                      th:text="*{getPropertyViewModel().getFullStreet()}" readonly required></textarea>
+        </div>
+        <label for="selectedPropertyFullStreet">Address </label>
+    </div>
+    <div class="form-label-group">
+        <div class="form-label-group">
+            <input type="text" id="selectedPropertyPrice" class="form-control" name="price"
+                   th:value="*{getPropertyViewModel().getPrice()}" readonly required>
+        </div>
+        <label for="selectedPropertyPrice">Price per night </label>
+    </div>
+</th:block>
