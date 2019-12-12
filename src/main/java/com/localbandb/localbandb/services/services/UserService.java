@@ -1,5 +1,6 @@
 package com.localbandb.localbandb.services.services;
 
+import com.localbandb.localbandb.data.models.Reservation;
 import com.localbandb.localbandb.data.models.User;
 import com.localbandb.localbandb.services.models.UserCheckServiceModel;
 import com.localbandb.localbandb.services.models.UserServiceModel;
@@ -15,4 +16,6 @@ public interface UserService extends UserDetailsService {
   UserCheckServiceModel checkIfUserExist(String username);
 
   UserCheckServiceModel checkIfUserWithEmailExist(String email);
+
+    void addUserToReservation(Reservation reservation) throws NotFoundException;
 }

@@ -11,10 +11,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -82,5 +84,18 @@ public class ReservationController extends BaseController {
 
 
     return this.view("reservation/reservation-details", modelAndView);
+  }
+
+  @PostMapping("/details/{id}")
+  public ModelAndView createReservationConfirm(@PathVariable String id,
+                                               @Valid @ModelAttribute ReservationCreateModel model,
+                                               ModelAndView modelAndView, BindingResult bindingResult){
+    if(bindingResult.hasErrors()) {
+      return this.view("reservation/{id}", modelAndView);
+    }
+    reservationService.create(id, model);
+
+    System.out.println();
+    return this.redirect("reservation/mine", modelAndView);
   }
 }

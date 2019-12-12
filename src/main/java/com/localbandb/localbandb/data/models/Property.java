@@ -48,7 +48,6 @@ public class Property extends BaseEntity {
   @Column(name = "price", nullable = false)
   private BigDecimal price;
 
-  @NotEmpty
   @Size(min = 3, max = 25)
   @Column(name = "street", nullable = false)
   private String street;

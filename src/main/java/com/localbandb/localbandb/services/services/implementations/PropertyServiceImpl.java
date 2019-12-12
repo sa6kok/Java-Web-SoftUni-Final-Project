@@ -3,10 +3,12 @@ package com.localbandb.localbandb.services.services.implementations;
 import com.localbandb.localbandb.config.authentication.AuthenticationFacade;
 import com.localbandb.localbandb.data.models.City;
 import com.localbandb.localbandb.data.models.Property;
+import com.localbandb.localbandb.data.models.Reservation;
 import com.localbandb.localbandb.data.models.User;
 import com.localbandb.localbandb.data.repositories.PropertyRepository;
 import com.localbandb.localbandb.services.models.PropertyServiceModel;
 import com.localbandb.localbandb.services.services.CityService;
+import com.localbandb.localbandb.services.services.DateService;
 import com.localbandb.localbandb.services.services.PropertyService;
 import com.localbandb.localbandb.services.services.UserService;
 import com.localbandb.localbandb.web.view.models.PropertyViewModel;
@@ -27,14 +29,16 @@ public class PropertyServiceImpl implements PropertyService {
   private final PropertyRepository propertyRepository;
   private final CityService cityService;
   private final UserService userService;
+  private final DateService dateService;
   private final ModelMapper modelMapper;
   private final AuthenticationFacade authenticationFacade;
 
   @Autowired
-  public PropertyServiceImpl(PropertyRepository propertyRepository, CityService cityService, UserService userService, ModelMapper modelMapper, AuthenticationFacade authenticationFacade) {
+  public PropertyServiceImpl(PropertyRepository propertyRepository, CityService cityService, UserService userService, DateService dateService, ModelMapper modelMapper, AuthenticationFacade authenticationFacade) {
     this.propertyRepository = propertyRepository;
     this.cityService = cityService;
     this.userService = userService;
+    this.dateService = dateService;
     this.modelMapper = modelMapper;
     this.authenticationFacade = authenticationFacade;
   }
@@ -94,7 +98,7 @@ public class PropertyServiceImpl implements PropertyService {
 
   @Override
   public List<PropertyViewModel> getAllByCityAndFilterBusyDatesAndOccupancy(String city, String startDate, String endDate, Integer occupancy) {
-    List<LocalDate> busyDates = this.datesBetween(startDate, endDate);
+    List<LocalDate> busyDates = this.getDatesBetweenStartAndEndFromString(startDate, endDate);
 
     List<PropertyViewModel> properties = propertyRepository.findByCity_Name(city).stream()
         .map(property -> modelMapper.map(property, PropertyViewModel.class))
@@ -104,13 +108,27 @@ public class PropertyServiceImpl implements PropertyService {
     return properties;
   }
 
+  @Override
+  public void addPropertyToReservation(String propertyId, Reservation model) throws NotFoundException {
+    Property property = propertyRepository.findById(propertyId).orElseThrow(() -> new NotFoundException("Property not found"));
+    List<LocalDate> dates = this.getDatesBetweenStartAndEnd(model.getStartDate(), model.getEndDate());
+    property.getBusyDates().addAll(dates);
+    Property savedProperty = propertyRepository.saveAndFlush(property);
+    model.setProperty(savedProperty);
+  }
+
 
   @Override
-  public List<LocalDate> datesBetween(String start, String end) {
-    LocalDate startDate = LocalDate.parse(start, DateTimeFormatter.ofPattern("d.MM.yyyy"));
-    LocalDate endDate = LocalDate.parse(end, DateTimeFormatter.ofPattern("d.MM.yyyy"));
+  public List<LocalDate> getDatesBetweenStartAndEndFromString(String start, String end) {
+    LocalDate startDate = dateService.getDateFromString(start);
+    LocalDate endDate = dateService.getDateFromString(end);
+    return getDatesBetweenStartAndEnd(startDate, endDate);
+  }
+
+  @Override
+  public List<LocalDate> getDatesBetweenStartAndEnd(LocalDate start, LocalDate end) {
     List<LocalDate> ret = new ArrayList<>();
-    for (LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1)) {
+    for (LocalDate date = start; date.isBefore(end); date = date.plusDays(1)) {
       ret.add(date);
     }
     return ret;

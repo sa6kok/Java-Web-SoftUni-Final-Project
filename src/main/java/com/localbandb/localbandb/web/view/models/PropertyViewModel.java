@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
@@ -19,6 +22,11 @@ public class PropertyViewModel {
   private String description;
   private BigDecimal price;
   private String maxOccupancy;
+  private String street;
+  private Integer streetNumber;
+  private String streetNumberAddition;
+  private Integer floor;
+  private Integer apartment;
   private City city;
   private List<String> pictures;
   private List<LocalDate> busyDates;
@@ -48,6 +56,15 @@ public class PropertyViewModel {
     return description.length() > 75 ?  description.substring(0, 75) + "..." : description;
   }
 
+  public String getFullStreet() {
+    StringBuilder sb = new StringBuilder(this.street);
+   sb.append(" ").append(this.streetNumber).append(this.streetNumberAddition == null ? "" : this.streetNumberAddition )
+           .append(", Floor: ").append(this.floor == null ? "" : this.floor).append(", Apartment: ")
+           .append(this.apartment == null ? "" : this.apartment);
+
+   return sb.toString();
+  }
+
   public void setDescription(String description) {
     this.description = description;
   }
@@ -66,6 +83,46 @@ public class PropertyViewModel {
 
   public void setMaxOccupancy(String maxOccupancy) {
     this.maxOccupancy = maxOccupancy;
+  }
+
+  public String getStreet() {
+    return street;
+  }
+
+  public void setStreet(String street) {
+    this.street = street;
+  }
+
+  public Integer getStreetNumber() {
+    return streetNumber;
+  }
+
+  public void setStreetNumber(Integer streetNumber) {
+    this.streetNumber = streetNumber;
+  }
+
+  public String getStreetNumberAddition() {
+    return streetNumberAddition;
+  }
+
+  public void setStreetNumberAddition(String streetNumberAddition) {
+    this.streetNumberAddition = streetNumberAddition;
+  }
+
+  public Integer getFloor() {
+    return floor;
+  }
+
+  public void setFloor(Integer floor) {
+    this.floor = floor;
+  }
+
+  public Integer getApartment() {
+    return apartment;
+  }
+
+  public void setApartment(Integer apartment) {
+    this.apartment = apartment;
   }
 
   public City getCity() {

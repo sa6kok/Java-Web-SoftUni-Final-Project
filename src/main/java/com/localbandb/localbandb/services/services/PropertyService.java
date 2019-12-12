@@ -1,7 +1,9 @@
 package com.localbandb.localbandb.services.services;
 
+import com.localbandb.localbandb.data.models.Reservation;
 import com.localbandb.localbandb.services.models.PropertyServiceModel;
 import com.localbandb.localbandb.web.view.models.PropertyViewModel;
+import com.localbandb.localbandb.web.view.models.ReservationCreateModel;
 import javassist.NotFoundException;
 
 import java.time.LocalDate;
@@ -17,7 +19,12 @@ public interface PropertyService {
 
   PropertyViewModel findById(String id) throws NotFoundException;
 
-  List<LocalDate> datesBetween(String start, String end);
+  void addPropertyToReservation(String propertyId, Reservation model) throws NotFoundException;
+
+  List<LocalDate> getDatesBetweenStartAndEndFromString(String start, String end);
 
   List<PropertyViewModel> getAllByCityAndFilterBusyDatesAndOccupancy(String city, String startDate, String endDate, Integer occupancy);
+
+  List<LocalDate> getDatesBetweenStartAndEnd(LocalDate start, LocalDate end);
 }
+

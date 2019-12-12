@@ -1,5 +1,7 @@
 package com.localbandb.localbandb.services.services.implementations;
 
+import com.localbandb.localbandb.config.authentication.AuthenticationFacade;
+import com.localbandb.localbandb.data.models.Reservation;
 import com.localbandb.localbandb.data.models.Role;
 import com.localbandb.localbandb.data.models.User;
 import com.localbandb.localbandb.data.repositories.UserRepository;
@@ -26,13 +28,15 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
   private final RoleService roleService;
+  private final AuthenticationFacade facade;
   private final ModelMapper modelMapper;
   private final BCryptPasswordEncoder encoder;
 
   @Autowired
-  public UserServiceImpl(UserRepository userRepository, RoleService roleService, ModelMapper modelMapper, BCryptPasswordEncoder encoder) {
+  public UserServiceImpl(UserRepository userRepository, RoleService roleService, AuthenticationFacade facade, ModelMapper modelMapper, BCryptPasswordEncoder encoder) {
     this.userRepository = userRepository;
     this.roleService = roleService;
+    this.facade = facade;
     this.modelMapper = modelMapper;
     this.encoder = encoder;
   }
@@ -100,6 +104,12 @@ public class UserServiceImpl implements UserService {
       user = modelMapper.map(byEmail, UserCheckServiceModel.class);
     }
     return user;
+  }
+
+  @Override
+  public void addUserToReservation(Reservation reservation) throws NotFoundException {
+    User user = this.findByUsername(facade.getAuthentication().getName());
+    reservation.setGuest(user);
   }
 
   @Override

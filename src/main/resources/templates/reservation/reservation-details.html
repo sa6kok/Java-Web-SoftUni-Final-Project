@@ -14,91 +14,22 @@
                      alt="Card image cap">
             </div>
         </div>
-        <div class="col-md-3 mb-3">
-            <div class="card">
-                <img class="img-fluid"
-                     src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(38).jpg"
-                     alt="Card image cap">
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="card">
-                <img class="img-fluid"
-                     src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(38).jpg"
-                     alt="Card image cap">
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="card">
-                <img class="img-fluid"
-                     src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(38).jpg"
-                     alt="Card image cap">
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="card">
-                <img class="img-fluid"
-                     src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(38).jpg"
-                     alt="Card image cap">
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="card">
-                <img class="img-fluid"
-                     src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(38).jpg"
-                     alt="Card image cap">
-            </div>
-        </div>
     </div>
 </div>
 <div class="col-sm-7 col-md-8 col-lg-6 mx-auto">
     <div class="card card-signin my-5">
         <div class="card-body">
             <legend>Reservation details</legend>
-            <form th:action="@{/reservation/create}" class="form-horizontal" method="post">
+            <form id="reservationForm" th:action="@{/reservation/details/{id}(id=${model.getPropertyViewModel().getId()})}" class="form-horizontal" method="post">
                 <fieldset>
-                    <div class="form-label-group">
-                        <div class="form-label-group" >
-                            <input type="text" id="selectedCountry" class="form-control" name="country"
-                                   th:value="*{getPropertyViewModel().getCity().getCountry().getName()}" readonly required >
-                        </div>
-                        <label for="selectedCountry">Country </label>
-                    </div>
-                    <div class="form-label-group">
-                        <div class="form-label-group" >
-                            <input type="text" id="selectedCity" class="form-control" name="country"
-                                   th:value="*{getPropertyViewModel().getCity().getName()}" readonly required >
-                        </div>
-                        <label for="selectedCity">City </label>
-                    </div>
-                    <div class="form-label-group">
-                        <div class="form-label-group" >
-                            <input type="text" id="selectedPropertyName" class="form-control" name="country"
-                                   th:value="*{getPropertyViewModel().getName()}" readonly required >
-                        </div>
-                        <label for="selectedPropertyName">Property name </label>
-                    </div>
-                    <div class="form-label-group">
-                        <div class="form-label-group" >
-                            <textarea type="text" id="selectedPropertyDescription" rows="5" class="form-control"  name="description"
-                                   th:text="*{getPropertyViewModel().getDescription()}" readonly required ></textarea>
-                        </div>
-                        <label for="selectedPropertyDescription">Description </label>
-                    </div>
-                    <div class="form-label-group">
-                        <div class="form-label-group" >
-                            <input type="text" id="selectedPropertyPrice" class="form-control" name="country"
-                                   th:value="*{getPropertyViewModel().getPrice()}" readonly required >
-                        </div>
-                        <label for="selectedPropertyPrice">Price per night </label>
-                    </div>
+                    <th:block th:replace="fragments/details-property"/>
                     <h5 class="card-title">Reservation dates:</h5>
                     <div class="form-group">
                         <div class="input-group date form_date col-md-5" id="startDate" data-date=""
                              data-date-format="d.mm.yyyy"
                              data-link-field="dtp_input2" data-link-format="dd.mm.yyyy">
-                            <input id="startDatePickInput" class="form-control" size="16" type="text" name="startDate"
-                                   readonly required>
+                            <input id="startDatePickInput" th:value="*{startDate}" class="form-control" size="16" type="text" name="startDate"
+                                    required>
                             <span class="input-group-addon"><span
                                     class="glyphicon glyphicon-remove"></span></span>
                             <span class="input-group-addon"><span
@@ -111,7 +42,7 @@
                         <div class="input-group date form_date col-md-5" id="endDate" data-date=""
                              data-date-format="d.mm.yyyy"
                              data-link-field="dtp_input2" data-link-format="dd.mm.yyyy">
-                            <input id="endDatePickInput" class="form-control" size="16" type="text" name="endDate" readonly>
+                            <input id="endDatePickInput" th:value="*{endDate}" class="form-control" size="16" type="text" name="endDate" >
                             <span class="input-group-addon"><span
                                     class="glyphicon glyphicon-remove"></span></span>
                             <span class="input-group-addon"><span
@@ -120,17 +51,21 @@
                         <label for="dtp_inputCheckOut" class="col-md-3 control-label">Check-Out</label>
                         <input type="hidden" id="dtp_inputCheckOut" required/><br/>
                     </div>
-                    <div class="form-label-group" id="totalPrice">
+                    <div class="form-label-group">
+                        <div class="form-label-group col-md-5" >
+                            <input type="text" id="occupancyInput" th:value="*{occupancy}" class="form-control" name="occupancy"
+                                   required  >
+                        </div>
+                        <label for="occupancyInput" class="col-md-3 control-label">Person </label>
                     </div>
                     <div class="form-label-group">
-                        <div class="form-label-group" >
-                            <input type="text" id="totalAmount" class="form-control" name="country"
+                        <div class="form-label-group col-md-5" >
+                            <input type="text" id="totalAmount" class="form-control" name="totalPrice"
                                    readonly required  >
                         </div>
-                        <label for="selectedPropertyPrice">Price per night </label>
+                        <label for="totalAmount" class="col-md-3 control-label">Total Price </label>
                     </div>
-
-                    <button class="btn btn-lg btn-dark btn-block text-uppercase">Search</button>
+                    <button class="btn btn-lg btn-dark btn-block text-uppercase">Reserve</button>
                 </fieldset>
             </form>
         </div>
@@ -145,5 +80,5 @@
 <script type="text/javascript" src="/vendor/calender/bootstrap.min.js"></script>
 <script type="text/javascript" src="/vendor/calender/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript" src="/js/calender.js"></script>
-<script type="text/javascript" src="/js/calculatePrice.js"></script>
+<script type="text/javascript" src="/js/fillUpReservation.js"></script>
 </html>

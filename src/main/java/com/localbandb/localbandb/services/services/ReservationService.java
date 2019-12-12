@@ -13,9 +13,9 @@ import java.util.Optional;
 
 public interface ReservationService {
 
-  boolean create(ReservationServiceModel model);
+  boolean create(String propertyId, ReservationCreateModel model);
 
-  ReservationCreateModel fillUpModel( String id,  String start, String end,  String pax) throws NotFoundException;
+  ReservationCreateModel fillUpModel(String id, String start, String end, String pax) throws NotFoundException;
 
   @PreAuthorize("isAuthenticated()")
   ReservationCreateModel fillUpModel(String id) throws NotFoundException;

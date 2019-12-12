@@ -1,10 +1,14 @@
 package com.localbandb.localbandb.web.view.models;
 
+import javax.validation.constraints.Size;
+
 public class ReservationCreateModel {
   private String country;
   private String city;
   private Integer occupancy;
+  @Size(min = 10, max = 10)
   private String startDate;
+  @Size(min = 10, max = 10)
   private String endDate;
   private PropertyViewModel propertyViewModel;
   private String totalPrice;
