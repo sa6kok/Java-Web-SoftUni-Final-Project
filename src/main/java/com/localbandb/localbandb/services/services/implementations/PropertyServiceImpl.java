@@ -15,6 +15,8 @@ import com.localbandb.localbandb.web.view.models.PropertyViewModel;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,6 +47,7 @@ public class PropertyServiceImpl implements PropertyService {
   }
 
   @Override
+  @Secured("ROLE_HOST")
   public boolean save(PropertyServiceModel propertyServiceModel) throws NotFoundException {
     City city = cityService.findCityByName(propertyServiceModel.getCity());
 
@@ -60,9 +64,7 @@ public class PropertyServiceImpl implements PropertyService {
     if(property.getReservations() == null) {
       property.setReservations(new ArrayList<>());
     }
-    if(property.getReservationWithoutUsers() == null) {
-      property.setReservationWithoutUsers(new ArrayList<>());
-    }
+
     property.getPictures().add(propertyServiceModel.getPictureUrl());
     try {
       propertyRepository.save(property);
@@ -132,6 +134,27 @@ public class PropertyServiceImpl implements PropertyService {
       ret.add(date);
     }
     return ret;
+  }
+
+  @Override
+  public List<String> getListDatesBetweenStartAndEndFromString(String startDate, String endDate) {
+    List<String> collect = this.getDatesBetweenStartAndEndFromString(startDate, endDate).stream()
+            .map(dateService::getStringFromLocalDate).collect(Collectors.toList());
+    return collect;
+  }
+
+  @Override
+  public String getJointlyDates(String propertyId, String startDate, String endDate) {
+    List<String> requestedDates = getListDatesBetweenStartAndEndFromString(startDate, endDate);
+    List<String> busyDates = propertyRepository.findById(propertyId).get().getBusyDates()
+            .stream().map(dateService::getStringFromLocalDate).collect(Collectors.toList());
+    System.out.printf("");
+    busyDates.retainAll(requestedDates);
+    if(busyDates.size() == 0) {
+      return "";
+    }
+    List<String> collect = busyDates.stream().sorted(String::compareTo).collect(Collectors.toList());
+    return String.join(", ", collect);
   }
 
 

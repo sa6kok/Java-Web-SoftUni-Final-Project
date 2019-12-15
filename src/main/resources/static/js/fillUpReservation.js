@@ -1,3 +1,5 @@
+/*let busyDates;*/
+
 $("#endDatePickInput").change(function () {
 
     calculateAndFillPrice();
@@ -8,12 +10,34 @@ function swapDateMonth(date) {
     return  arrStart[1] + "." + arrStart[0] + "." + arrStart[2]
 }
 
+let payment = $("#checkPayment");
+payment.change(function () {
+    let btnPay = $("#btnPay");
+    if(payment.is(":checked")) {
+        btnPay.html("RESERVE AND PAY NOW");
+    } else  {
+        btnPay.html("RESERVE AND PAY LATER");
+    }
+
+});
+
 
 
 $(window).on( "load", function () {
      let startDate = $("#startDatePickInput");
     let endDate = $("#endDatePickInput");
     let occupancy = $("#occupancyInput");
+
+    let propertyId = $("#propertyId").val();
+   /* fetch(`/property/api/busyDates/${propertyId}`)
+        .then(response => response.json())
+        .then(response => {
+            if (response === null) {
+                return;
+            }
+          busyDates = response;
+        });*/
+
 
     if(startDate.val() === "") {
          return;

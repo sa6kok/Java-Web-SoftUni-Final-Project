@@ -5,6 +5,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "reservations")
@@ -35,6 +36,20 @@ public class Reservation extends BaseEntity {
   @Min(0)
   @Column(name = "total_price")
   private BigDecimal totalPrice;
+
+  @OneToMany(targetEntity = Payment.class, mappedBy = "reservation",
+          cascade = CascadeType.ALL,
+          orphanRemoval = true)
+  private List<Payment> payments;
+
+  @Column(name = "is_payed")
+  private boolean payed;
+
+  @Column(name = "is_canceled")
+  private boolean canceled;
+
+  @Column(name = "is_past")
+  private boolean past;
 
   public Reservation() {
   }
@@ -93,5 +108,45 @@ public class Reservation extends BaseEntity {
 
   public void setTotalPrice(BigDecimal totalPrice) {
     this.totalPrice = totalPrice;
+  }
+
+  public boolean isPayed() {
+    return payed;
+  }
+
+  public void setPayed(boolean payed) {
+    this.payed = payed;
+  }
+
+  public boolean isCanceled() {
+    return canceled;
+  }
+
+  public void setCanceled(boolean canceled) {
+    this.canceled = canceled;
+  }
+
+  public List<Payment> getPayment() {
+    return payments;
+  }
+
+  public void setPayment(List<Payment> payments) {
+    this.payments = payments;
+  }
+
+  public List<Payment> getPayments() {
+    return payments;
+  }
+
+  public void setPayments(List<Payment> payments) {
+    this.payments = payments;
+  }
+
+  public boolean isPast() {
+    return past;
+  }
+
+  public void setPast(boolean past) {
+    this.past = past;
   }
 }

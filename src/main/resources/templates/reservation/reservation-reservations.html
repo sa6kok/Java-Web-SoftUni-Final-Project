@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/head"/>
+<body>
+<th:block th:replace="fragments/navigation"/>
+<th:block th:replace="fragments/header"/>
+
+<div class="container">
+
+    <h2 class="my-4" th:text="${result}"></h2>
+    <br>
+    <h1 class="text-center">Your reservations</h1>
+    <br>
+    <hr>
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>Here you can see all your not payed reservation!</h2>
+        </div>
+        <div class="col-md-4">
+            <a class="btn btn-lg btn-secondary btn-block" th:href="@{/reservation/reservations/{filter}(filter=notPayed)}">VIEW NOT PAYED RESERVATION</a>
+        </div>
+    </div>
+    <hr>
+    <hr>
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>Hre you can see all your not payed reservation!</h2>
+        </div>
+        <div class="col-md-4">
+            <a class="btn btn-lg btn-secondary btn-block" th:href="@{/reservation/reservations/{filter}(filter=payed)}">VIEW PAYED RESERVATION</a>
+        </div>
+    </div>
+    <hr>
+
+    <hr>
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>Here you can see all your reservation!</h2>
+        </div>
+        <div class="col-md-4">
+            <a class="btn btn-lg btn-secondary btn-block" th:href="@{/reservation/reservations/{filter}(filter=all)}">VIEW ALL RESERVATION</a>
+        </div>
+    </div>
+    <hr>
+    <hr>
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>Here you can see all your future reservation!</h2>
+        </div>
+        <div class="col-md-4">
+            <a class="btn btn-lg btn-secondary btn-block" th:href="@{/reservation/reservations/{filter}(filter=future)}">VIEW FUTURE RESERVATION</a>
+        </div>
+    </div>
+    <hr>
+    <hr>
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>Here you can see all your past reservation!</h2>
+        </div>
+        <div class="col-md-4">
+            <a class="btn btn-lg btn-secondary btn-block"th:href="@{/reservation/reservations/{filter}(filter=past)}">VIEW PAST RESERVATION</a>
+        </div>
+    </div>
+    <hr>
+    <hr>
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>Here you can see all your canceled reservation!</h2>
+        </div>
+        <div class="col-md-4">
+            <a class="btn btn-lg btn-secondary btn-block" th:href="@{/reservation/reservations/{filter}(filter=canceled)}">VIEW CANCELED RESERVATION</a>
+        </div>
+    </div>
+    <hr>
+
+</div>
+<th:block th:replace="fragments/footer"/>
+</body>
+</html>

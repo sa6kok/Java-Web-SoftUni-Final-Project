@@ -18,4 +18,6 @@ public interface UserService extends UserDetailsService {
   UserCheckServiceModel checkIfUserWithEmailExist(String email);
 
     void addUserToReservation(Reservation reservation) throws NotFoundException;
+
+  User findById(String id);
 }

@@ -9,7 +9,10 @@
 <!-- Page Content -->
 <div class="container">
 
-    <h1 class="my-4">Welcome to Modern Business</h1>
+    <h1 class="my-4">Welcome to Local Bed and Breakfast. Here You can <a  th:href="@{/search/country}"> search </a>for incredible locations all over Europe.</h1>
+    <h2 class="my-4">In ore order to reserve You should be <a  th:href="@{/user/login}">Logged In.</a></h2>
+    <h2 class="my-4">You don't have an account <a th:href="@{/user/register/guest}">Register here.</a></h2>
+    <h2 class="my-4">If You want to offer Your location <a th:href="@{/user/register/host}">Register here.</a></h2>
 
     <!-- Marketing Icons Section -->
     <div class="row">

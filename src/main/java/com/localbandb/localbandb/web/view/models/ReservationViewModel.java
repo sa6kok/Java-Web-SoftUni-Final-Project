@@ -1,6 +1,9 @@
 package com.localbandb.localbandb.web.view.models;
 
+import javax.persistence.Column;
+
 public class ReservationViewModel {
+  private String id;
   private String country;
   private String city;
   private Integer occupancy;
@@ -8,8 +11,20 @@ public class ReservationViewModel {
   private String endDate;
   private PropertyViewModel propertyViewModel;
   private String totalPrice;
+  private ReviewViewModel review;
+  private boolean payed;
+  private boolean canceled;
+  private boolean past;
 
   public ReservationViewModel() {
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 
   public String getCountry() {
@@ -66,5 +81,37 @@ public class ReservationViewModel {
 
   public void setTotalPrice(String totalPrice) {
     this.totalPrice = totalPrice;
+  }
+
+  public ReviewViewModel getReview() {
+    return review;
+  }
+
+  public void setReview(ReviewViewModel review) {
+    this.review = review;
+  }
+
+  public boolean isPayed() {
+    return payed;
+  }
+
+  public void setPayed(boolean payed) {
+    this.payed = payed;
+  }
+
+  public boolean isCanceled() {
+    return canceled;
+  }
+
+  public void setCanceled(boolean canceled) {
+    this.canceled = canceled;
+  }
+
+  public boolean isPast() {
+    return past;
+  }
+
+  public void setPast(boolean past) {
+    this.past = past;
   }
 }

@@ -15,13 +15,13 @@
             <div class="card h-100">
                 <th:block th:if="${model} != null">
                     <a th:href="|/reservation/details/${property.getId()}/${model.getStartDate()}/${model.getEndDate()}/${model.getOccupancy()}|">
-                        <img class="card-img-top" th:src="${property.getPictures().get(0)}"
-                            th:alt="${property.getName()}"></a>
+                        <img class="card-img-top" th:src="${property.getFirstPicture()}"
+                            th:alt="${property.getName()}">
                 </th:block>
                 <th:block th:unless="${model} != null">
                     <a th:href="|/reservation/details/${property.getId()}|"><img
-                            class="card-img-top" th:src="${property.getPictures().get(0)}"
-                            th:alt="${property.getName()}"></a>
+                            class="card-img-top" th:src="${property.getFirstPicture()}"
+                            th:alt="${property.getName()}">
                 </th:block>
                 <div class="card-body">
                     <h4 class="card-title">
@@ -35,7 +35,7 @@
                     </h4>
                     <p class="card-text" th:text="${property.getShortDescription()}"></p>
                 </div>
-            </div>
+            </div></a>
         </div>
     </div>
 </div>

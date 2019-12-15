@@ -55,18 +55,17 @@ public class UserServiceImpl implements UserService {
       if(userRepository.count() == 0) {
          rolesToSave = roleService.findAll();
       } else {
-        rolesToSave.add(roleService.findByAuthority(userServiceModel.getRole()));
-        guest.setAuthorities(rolesToSave);
-        guest.setPayments(new ArrayList<>());
-
         switch (userServiceModel.getRole()) {
           case "GUEST":
             guest.setReservations(new ArrayList<>());
+            rolesToSave.add(roleService.findByAuthority("ROLE_GUEST"));
             break;
           case "HOST":
             guest.setProperties(new ArrayList<>());
+            rolesToSave.add(roleService.findByAuthority("ROLE_HOST"));
             break;
         }
+        guest.setPayments(new ArrayList<>());
       }
 
 
@@ -110,6 +109,12 @@ public class UserServiceImpl implements UserService {
   public void addUserToReservation(Reservation reservation) throws NotFoundException {
     User user = this.findByUsername(facade.getAuthentication().getName());
     reservation.setGuest(user);
+  }
+
+  @Override
+  public User findById(String id) {
+    User user = userRepository.findById(id).orElseThrow(()-> new UsernameNotFoundException("Username not found!"));
+    return user;
   }
 
   @Override

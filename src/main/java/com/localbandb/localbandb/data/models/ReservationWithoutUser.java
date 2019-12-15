@@ -1,3 +1,4 @@
+/*
 package com.localbandb.localbandb.data.models;
 
 import org.hibernate.validator.constraints.Email;
@@ -86,3 +87,4 @@ public class ReservationWithoutUser extends BaseEntity {
     this.totalPrice = totalPrice;
   }
 }
+*/

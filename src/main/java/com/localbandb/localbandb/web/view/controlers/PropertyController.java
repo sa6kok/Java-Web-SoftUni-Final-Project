@@ -11,6 +11,7 @@ import com.localbandb.localbandb.web.view.models.ReservationCreateModel;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,7 @@ public class PropertyController extends BaseController {
 
 
   @GetMapping("/create")
+  @Secured("ROLE_HOST")
   public ModelAndView getCreateProperty(@ModelAttribute("propertyCreateModel") PropertyCreateModel propertyCreateModel,  ModelAndView modelAndView) {
     List<String> countries = countryService.getAllCountryNames();
 
@@ -47,9 +49,7 @@ public class PropertyController extends BaseController {
 
   @GetMapping("/create/{country}")
   public ModelAndView getCreateProperty(@PathVariable("country") String country,@ModelAttribute PropertyCreateModel model, ModelAndView modelAndView) throws NotFoundException {
-
-    List<CityServiceModel> cities = countryService.findByName(country).getCities().stream()
-        .sorted(Comparator.comparing(CityServiceModel::getName)).collect(Collectors.toList());
+    List<CityServiceModel> cities =  countryService.findOrderedCitiesByCountry(country);
     if (cities.size() == 0) {
       return this.redirect("property/create/city/{country}");
     }
@@ -59,13 +59,13 @@ public class PropertyController extends BaseController {
   }
 
   @PostMapping("/create/{country}")
+  @Secured("ROLE_HOST")
   public ModelAndView postCreateProperty(@Valid @ModelAttribute PropertyCreateModel model,
                                          BindingResult bindingResult,
                                          @PathVariable("country") String country,
                                          ModelAndView modelAndView) throws NotFoundException {
     if(bindingResult.hasErrors()) {
-      List<CityServiceModel> cities = countryService.findByName(country).getCities().stream()
-          .sorted(Comparator.comparing(CityServiceModel::getName)).collect(Collectors.toList());
+      List<CityServiceModel> cities =  countryService.findOrderedCitiesByCountry(country);
       modelAndView.addObject("cities", cities);
       return this.view("property/property-create", modelAndView);
     }
@@ -97,6 +97,7 @@ public class PropertyController extends BaseController {
   public ModelAndView showProperties(@ModelAttribute("cityProperties") List<PropertyViewModel> propertyViewModels,
                                      @ModelAttribute("model") ReservationCreateModel reservationCreateModel,
                                      ModelAndView modelAndView) {
+
     if(reservationCreateModel.getStartDate() == null) {
       reservationCreateModel = null;
     }

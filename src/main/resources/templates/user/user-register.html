@@ -15,7 +15,7 @@
                     <th:block th:if="${message != null}">
                         <h2 class="card-title text-center text-danger">It did not work. Please try again.</h2>
                     </th:block>
-                    <h5 class="card-title text-center">Register as Guest</h5>
+                    <h5 class="card-title text-center" th:text="|Register as ${role.toUpperCase()}|"></h5>
                     <form class="form-signin" th:action="@{/user/register/{role}(role=${role})}" th:method="post" th:object="${userRegisterModel}"
                           oninput='confirmPassword.setCustomValidity(confirmPassword.value != password.value ? "Passwords do not match." : "")'>
                         <div class="form-label-group" th:classappend="${#fields.hasErrors('username')}? 'text-danger'">

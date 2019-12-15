@@ -1,5 +1,6 @@
 package com.localbandb.localbandb.services.services;
 
+import com.localbandb.localbandb.services.models.CityServiceModel;
 import com.localbandb.localbandb.services.models.CountryServiceModel;
 import javassist.NotFoundException;
 
@@ -14,4 +15,6 @@ public interface CountryService {
   void addCityToCountry(String country, String name) throws NotFoundException;
 
   List<String> getOrderedCitiesForCountry(String name) throws NotFoundException;
+
+    List<CityServiceModel> findOrderedCitiesByCountry(String country);
 }

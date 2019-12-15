@@ -15,6 +15,6 @@ public class DateServiceImpl implements DateService {
 
     @Override
     public String getStringFromLocalDate(LocalDate date) {
-        return null;
+      return   date.format(DateTimeFormatter.ofPattern("d.MM.yyyy"));
     }
 }

@@ -1,22 +1,29 @@
 package com.localbandb.localbandb.services.services;
 
-import com.localbandb.localbandb.data.models.Property;
-import com.localbandb.localbandb.services.models.ReservationServiceModel;
+import com.localbandb.localbandb.data.models.Reservation;
 import com.localbandb.localbandb.web.view.models.ReservationCreateModel;
+import com.localbandb.localbandb.web.view.models.ReservationViewModel;
 import javassist.NotFoundException;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface ReservationService {
 
-  boolean create(String propertyId, ReservationCreateModel model);
+    boolean create(String propertyId, ReservationCreateModel model);
 
-  ReservationCreateModel fillUpModel(String id, String start, String end, String pax) throws NotFoundException;
+    void save(Reservation reservation);
 
-  @PreAuthorize("isAuthenticated()")
-  ReservationCreateModel fillUpModel(String id) throws NotFoundException;
+    ReservationCreateModel fillUpModel(String id, String start, String end, String pax) throws NotFoundException;
+
+    ReservationCreateModel fillUpModel(String id) throws NotFoundException;
+
+    void addPaymentToReservation(Reservation savedReservation, String totalPrice) throws NotFoundException;
+
+    List<ReservationViewModel> findReservationsForUserWithFilter(String filter);
+
+    boolean payReservation(String id);
+
+    boolean cancelReservation(String id);
+
+    Reservation findById(String reservationId) throws NotFoundException;
 }

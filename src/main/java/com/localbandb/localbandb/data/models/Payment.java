@@ -12,17 +12,20 @@ public class Payment extends BaseEntity {
   @Column(name = "amount", nullable = false)
   private BigDecimal amount;
 
-  @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL)
+  @ManyToOne(targetEntity = User.class)
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User guest;
 
-  @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL)
+  @ManyToOne(targetEntity = User.class)
   @JoinColumn(name = "host_id", referencedColumnName = "id")
   private User host;
 
-  @Min(0)
   @Column(name = "payment_date", nullable = false)
   private LocalDate paymentDate;
+
+  @ManyToOne(targetEntity = Reservation.class, fetch = FetchType.LAZY)
+  @JoinColumn(name = "reservation_id", referencedColumnName = "id")
+  private Reservation reservation;
 
   public Payment() {
   }
@@ -58,5 +61,13 @@ public class Payment extends BaseEntity {
 
   public void setPaymentDate(LocalDate paymentDate) {
     this.paymentDate = paymentDate;
+  }
+
+  public Reservation getReservation() {
+    return reservation;
+  }
+
+  public void setReservation(Reservation reservation) {
+    this.reservation = reservation;
   }
 }

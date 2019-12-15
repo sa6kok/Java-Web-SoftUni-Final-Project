@@ -10,12 +10,12 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class PropertyViewModel {
   private String id;
   private String name;
@@ -29,8 +29,26 @@ public class PropertyViewModel {
   private Integer apartment;
   private City city;
   private List<String> pictures;
+  private String firstPicture;
   private List<LocalDate> busyDates;
 
+  public PropertyViewModel() {
+    this.pictures = new ArrayList<>();
+    this.busyDates = new ArrayList<>();
+  }
+
+
+
+  public String getFirstPicture() {
+    if( pictures == null || pictures.size() == 0) {
+      return "";
+    }
+    return pictures.get(0);
+  }
+
+  public void setFirstPicture(String firstPicture) {
+    this.firstPicture = firstPicture;
+  }
 
   public String getId() {
     return id;

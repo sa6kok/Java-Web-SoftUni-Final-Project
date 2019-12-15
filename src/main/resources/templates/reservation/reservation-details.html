@@ -5,72 +5,91 @@
 <body>
 <th:block th:replace="fragments/navigation"/>
 <th:block th:object="${model}">
-<div id="multi-item-example" class="carousel slide carousel-multi-item carousel-multi-item-2" data-ride="carousel">
-    <div class="carousel-inner" role="listbox" >
-        <div class="col-md-3 mb-3" th:each="picture : *{getPropertyViewModel().getPictures()}">
-            <div class="card">
-                <img class="img-fluid"
-                     th:src="${picture}"
-                     alt="Card image cap">
+    <div id="multi-item-example" class="carousel slide carousel-multi-item carousel-multi-item-2" data-ride="carousel">
+        <div class="carousel-inner" role="listbox">
+            <div class="col-md-3 mb-3" th:each="picture : *{getPropertyViewModel().getPictures()}">
+                <div class="card">
+                    <img class="img-fluid"
+                         th:src="${picture}"
+                         alt="Card image cap">
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="col-sm-7 col-md-8 col-lg-6 mx-auto">
-    <div class="card card-signin my-5">
-        <div class="card-body">
-            <legend>Reservation details</legend>
-            <form id="reservationForm" th:action="@{/reservation/details/{id}(id=${model.getPropertyViewModel().getId()})}" class="form-horizontal" method="post">
-                <fieldset>
-                    <th:block th:replace="fragments/details-property"/>
-                    <h5 class="card-title">Reservation dates:</h5>
-                    <div class="form-group">
-                        <div class="input-group date form_date col-md-5" id="startDate" data-date=""
-                             data-date-format="d.mm.yyyy"
-                             data-link-field="dtp_input2" data-link-format="dd.mm.yyyy">
-                            <input id="startDatePickInput" th:value="*{startDate}" class="form-control" size="16" type="text" name="startDate"
-                                    required>
-                            <span class="input-group-addon"><span
-                                    class="glyphicon glyphicon-remove"></span></span>
-                            <span class="input-group-addon"><span
-                                    class="glyphicon glyphicon-calendar"></span></span>
+    <div class="col-sm-7 col-md-8 col-lg-6 mx-auto">
+        <div class="card card-signin my-5">
+            <div class="card-body">
+                <legend>Reservation details</legend>
+                <form id="reservationForm"
+                      th:action="@{/reservation/details/{id}(id=${model.getPropertyViewModel().getId()})}"
+                      class="form-horizontal" method="post">
+                    <th:block th:if="${busyDates} != null">
+                        <label for="btnPay" class=" control-label text-danger"
+                               th:text="|On the following dates: ${busyDates} is the property not available. Please pick deifferent dates!|"> </label>
+                    </th:block>
+                    <fieldset>
+                        <th:block th:replace="fragments/details-property"/>
+                        <h5 class="card-title">Reservation dates:</h5>
+                        <div class="form-group">
+                            <div class="input-group date form_date col-md-5" id="startDate" data-date=""
+                                 data-date-format="d.mm.yyyy"
+                                 data-link-field="dtp_input2" data-link-format="dd.mm.yyyy">
+                                <input id="startDatePickInput" th:value="*{startDate}" class="form-control" size="16"
+                                       type="text" name="startDate"
+                                       required>
+                                <span class="input-group-addon"><span
+                                        class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span
+                                        class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                            <label for="dtp_inputCheckIn" class="col-md-3 control-label">Check-In</label>
+                            <input type="hidden" id="dtp_inputCheckIn"/><br/>
                         </div>
-                        <label for="dtp_inputCheckIn" class="col-md-3 control-label">Check-In</label>
-                        <input type="hidden" id="dtp_inputCheckIn"/><br/>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group date form_date col-md-5" id="endDate" data-date=""
-                             data-date-format="d.mm.yyyy"
-                             data-link-field="dtp_input2" data-link-format="dd.mm.yyyy">
-                            <input id="endDatePickInput" th:value="*{endDate}" class="form-control" size="16" type="text" name="endDate" >
-                            <span class="input-group-addon"><span
-                                    class="glyphicon glyphicon-remove"></span></span>
-                            <span class="input-group-addon"><span
-                                    class="glyphicon glyphicon-calendar"></span></span>
+                        <div class="form-group">
+                            <div class="input-group date form_date col-md-5" id="endDate" data-date=""
+                                 data-date-format="d.mm.yyyy"
+                                 data-link-field="dtp_input2" data-link-format="dd.mm.yyyy">
+                                <input id="endDatePickInput" th:value="*{endDate}" class="form-control" size="16"
+                                       type="text" name="endDate">
+                                <span class="input-group-addon"><span
+                                        class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span
+                                        class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                            <label for="dtp_inputCheckOut" class="col-md-3 control-label">Check-Out</label>
+                            <input type="hidden" id="dtp_inputCheckOut" required/><br/>
                         </div>
-                        <label for="dtp_inputCheckOut" class="col-md-3 control-label">Check-Out</label>
-                        <input type="hidden" id="dtp_inputCheckOut" required/><br/>
-                    </div>
-                    <div class="form-label-group">
-                        <div class="form-label-group col-md-5" >
-                            <input type="text" id="occupancyInput" th:value="*{occupancy}" class="form-control" name="occupancy"
-                                   required  >
+                        <div class="form-label-group">
+                            <div class="form-label-group col-md-5">
+                                <input type="text" id="occupancyInput" th:value="*{occupancy}" class="form-control"
+                                       name="occupancy"
+                                       required>
+                            </div>
+                            <label for="occupancyInput" class="col-md-3 control-label">Person </label>
                         </div>
-                        <label for="occupancyInput" class="col-md-3 control-label">Person </label>
-                    </div>
-                    <div class="form-label-group">
-                        <div class="form-label-group col-md-5" >
-                            <input type="text" id="totalAmount" class="form-control" name="totalPrice"
-                                   readonly required  >
+                        <div class="form-label-group">
+                            <div class="form-label-group col-md-5">
+                                <input type="text" id="totalAmount" class="form-control" name="totalPrice"
+                                       readonly required>
+                            </div>
+                            <label for="totalAmount" class="col-md-3 control-label">Total Price </label>
                         </div>
-                        <label for="totalAmount" class="col-md-3 control-label">Total Price </label>
-                    </div>
-                    <button class="btn btn-lg btn-dark btn-block text-uppercase">Reserve</button>
-                </fieldset>
-            </form>
+                        <div class="custom-control custom-checkbox mb-3">
+                            <input type="checkbox" class="custom-control-input" id="checkPayment" name="checkPayment">
+                            <label class="custom-control-label" for="checkPayment">Pay now (if You don't pay now You
+                                need to pay until the end of the next day)</label>
+                        </div>
+                        <button id="btnPay" class="btn btn-lg btn-dark btn-block text-uppercase confirmation">RESERVE AND PAY LATER
+                        </button>
+                        <th:block th:if="${busyDates} != null">
+                            <label for="btnPay" class=" control-label text-danger"
+                                   th:text="|On the following dates: ${busyDates} is the property not available. Please pick deifferent dates!|"> </label>
+                        </th:block>
+                    </fieldset>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 </th:block>
 
 <th:block th:replace="fragments/footer"/>
@@ -81,4 +100,5 @@
 <script type="text/javascript" src="/vendor/calender/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript" src="/js/calender.js"></script>
 <script type="text/javascript" src="/js/fillUpReservation.js"></script>
+<script type="text/javascript" src="/js/confirmation.js"></script>
 </html>

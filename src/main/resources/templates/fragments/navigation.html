@@ -13,13 +13,10 @@
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/search/country}">Search Location</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/search/country}">Search Location</a>
-                    </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="!isFullyAuthenticated()">
                         <a class="nav-link" th:href="@{/user/login}">Login</a>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" sec:authorize="!isFullyAuthenticated()">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             Register
@@ -29,7 +26,7 @@
                             <a class="dropdown-item" th:href="@{/user/register/host}">Register as Host</a>
                         </div>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_HOST')">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBlog" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             Property
@@ -40,7 +37,7 @@
                             <a class="dropdown-item" href="blog-post.html">Blog Post</a>
                         </div>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_GUEST')">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBlog1" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             Reservation

@@ -38,8 +38,8 @@ public class Property extends BaseEntity {
   @OneToMany(targetEntity = Reservation.class, mappedBy = "property", cascade = CascadeType.ALL)
   private List<Reservation> reservations;
 
-  @OneToMany(targetEntity = ReservationWithoutUser.class, mappedBy = "property", cascade = CascadeType.ALL)
-  private List<ReservationWithoutUser> reservationWithoutUsers;
+  @OneToMany(targetEntity = Review.class, mappedBy = "property", cascade = CascadeType.ALL)
+  private List<Review> reviews;
 
   @ElementCollection(targetClass = String.class)
   private List<String> pictures;
@@ -124,12 +124,12 @@ public class Property extends BaseEntity {
     this.reservations = reservations;
   }
 
-  public List<ReservationWithoutUser> getReservationWithoutUsers() {
-    return reservationWithoutUsers;
+  public List<Review> getReviews() {
+    return reviews;
   }
 
-  public void setReservationWithoutUsers(List<ReservationWithoutUser> reservationWithoutUsers) {
-    this.reservationWithoutUsers = reservationWithoutUsers;
+  public void setReviews(List<Review> reviews) {
+    this.reviews = reviews;
   }
 
   public List<String> getPictures() {

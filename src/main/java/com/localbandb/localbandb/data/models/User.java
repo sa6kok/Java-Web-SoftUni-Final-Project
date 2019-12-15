@@ -47,7 +47,7 @@ public class User extends BaseEntity implements UserDetails {
   private List<Reservation> reservations;
 
 
-  @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
   @JoinTable(
       name = "users_roles",
       joinColumns = @JoinColumn(

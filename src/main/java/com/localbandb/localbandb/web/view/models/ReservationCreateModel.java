@@ -6,12 +6,15 @@ public class ReservationCreateModel {
   private String country;
   private String city;
   private Integer occupancy;
-  @Size(min = 10, max = 10)
+  @Size(min = 8, max = 10)
   private String startDate;
-  @Size(min = 10, max = 10)
+  @Size(min = 8, max = 10)
   private String endDate;
   private PropertyViewModel propertyViewModel;
   private String totalPrice;
+  private boolean checkPayment;
+
+
 
   public ReservationCreateModel() {
   }
@@ -83,5 +86,12 @@ public class ReservationCreateModel {
 
 
     this.totalPrice = totalPrice;
+  }
+  public boolean isCheckPayment() {
+    return checkPayment;
+  }
+
+  public void setCheckPayment(boolean checkPayment) {
+    this.checkPayment = checkPayment;
   }
 }

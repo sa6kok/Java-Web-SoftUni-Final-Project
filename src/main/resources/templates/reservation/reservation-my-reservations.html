@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/head"/>
+<body>
+<th:block th:replace="fragments/navigation"/>
+<th:block th:each="reservation : ${reservations}" th:object="${reservation}">
+    <div class="col-sm-7 col-md-8 col-lg-6 mx-auto">
+        <div class="card card-signin my-5">
+            <h2 class="text-center">Reservation details</h2>
+            <div class="card-body">
+                <legend>Property details</legend>
+                <fieldset>
+                    <th:block th:replace="fragments/details-property"/>
+                    <h5 class="card-title">Reservation dates:</h5>
+                    <p th:text="|Check-In date: *{startDate}|"></p>
+                    <p th:text="|Check-Out date: *{endDate}|"></p>
+                    <p th:text="|Pax: *{occupancy}|"></p>
+                    <p th:text="|Total price: *{totalPrice}|"></p>
+                    <a th:if="*{payed}" class="btn btn-lg btn-dark btn-block text-uppercase text-danger ">PAYED</a>
+                    <a th:if="*{canceled}"
+                       class="btn btn-lg btn-dark btn-block text-uppercase text-danger">CANCELED</a>
+                    <th:block th:unless="*{past}">
+                        <th:block th:unless="*{canceled}">
+                            <a th:unless="*{payed}" th:href="@{/reservation/pay/{id}(id=${reservation.getId()})}"
+                               class="btn btn-lg btn-dark btn-block text-uppercase confirmation">RESERVATION is NOT
+                                PAYED PAY NOW</a>
+                        </th:block>
+                        <a th:unless="*{canceled}" th:href="@{/reservation/cancel/{id}(id=${reservation.getId()})}"
+                           class="btn btn-lg btn-dark btn-block text-uppercase confirmation">CANCEL RESERVATION</a>
+                    </th:block>
+                    <th:block th:unless="*{canceled}">
+                        <th:block th:if="*{past}">
+                            <th:block th:unless="*{review}">
+                                <h3 class="text-center">Write a review</h3>
+                                <form th:action="@{/review/create/{id}(id=${reservation.getId()})}" method="post">
+                                    <div class="form-group">
+                                        <select class="form-control" id="sel1" name="level">
+                                            <option class="dropdown-item" value="10">10 - excellent</option>
+                                            <option class="dropdown-item" value="7">9</option>
+                                            <option class="dropdown-item" value="8">8</option>
+                                            <option class="dropdown-item" value="7">7</option>
+                                            <option class="dropdown-item" value="6">6</option>
+                                            <option class="dropdown-item" value="5">5</option>
+                                            <option class="dropdown-item" value="4">4</option>
+                                            <option class="dropdown-item" value="3">3</option>
+                                            <option class="dropdown-item" value="2">2</option>
+                                            <option class="dropdown-item" value="1">1 - very bad</option>
+                                        </select>
+                                        <label for="sel1">How happy were You with Your stay</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea class="form-control" id="descriptionTextarea" rows="6"
+                                                  name="description"></textarea>
+                                        <label for="descriptionTextarea">Tell us something more!</label>
+                                    </div>
+                                    <button
+                                            class="btn btn-lg btn-dark btn-block text-uppercase confirmation">Send the
+                                        review
+                                    </button>
+                                </form>
+                            </th:block>
+                            <th:block th:if="*{review}">
+                                <h2 class="text-center" >Your Review</h2>
+                                <h3 class="text-center" th:text="|Review note: *{review.getLevel()}|"></h3>
+                                <h4 class="text-center" th:text="|Review description: *{review.getDescription()}|"></h4>
+                            </th:block>
+                        </th:block>
+                    </th:block>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block th:replace="fragments/footer"/>
+</body>
+<script type="text/javascript" src="/js/confirmation.js"></script>
+</html>
