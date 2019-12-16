@@ -1,10 +1,10 @@
-package com.localbandb.localbandb.services.services;
+package com.localbandb.localbandb.services.services.implementations;
 
+import com.localbandb.localbandb.base.TestBase;
 import com.localbandb.localbandb.data.models.City;
 import com.localbandb.localbandb.data.repositories.CityRepository;
-import com.localbandb.localbandb.services.base.ServiceTestBase;
 import com.localbandb.localbandb.services.services.CityService;
-import com.localbandb.localbandb.services.services.implementations.CityServiceImpl;
+import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -12,9 +12,9 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class CityServiceTest extends ServiceTestBase {
+class CityServiceTest extends TestBase {
    City testCity;
 
    @MockBean
@@ -24,13 +24,13 @@ class CityServiceTest extends ServiceTestBase {
     CityService cityService;
 
 
-  @Override
-  protected void beforeEach() {
-    testCity = new City();
-    testCity.setName("Hoho");
-  }
+    @Override
+    public void beforeEach() {
+        this.testCity = new City();
+        this.testCity.setName("Hoho");
+    }
 
-  @Test
+    @Test
   void save() {
    // mockedCityRepository.save(this.testCity);
     cityService.save(this.testCity);

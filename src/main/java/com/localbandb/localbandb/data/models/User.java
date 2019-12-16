@@ -61,6 +61,11 @@ public class User extends BaseEntity implements UserDetails {
   )
   private Set<Role> authorities;
 
+  public User() {
+    this.enabled = true;
+  }
+
+  private boolean enabled;
 
   public void setUsername(String username) {
     this.username = username;
@@ -166,6 +171,10 @@ public class User extends BaseEntity implements UserDetails {
   @Override
   @Transient
   public boolean isEnabled() {
-    return true;
+    return this.enabled;
+  }
+
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
   }
 }

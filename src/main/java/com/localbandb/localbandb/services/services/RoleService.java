@@ -6,9 +6,8 @@ import com.localbandb.localbandb.services.models.RoleServiceModel;
 import java.util.Set;
 
 public interface RoleService {
-  Role findByAuthority(String authority);
 
-  Set<Role> getListOfRoles(Set<RoleServiceModel> authorities);
+  Role findByAuthority(String authority);
 
   Set<Role> findAll();
 }

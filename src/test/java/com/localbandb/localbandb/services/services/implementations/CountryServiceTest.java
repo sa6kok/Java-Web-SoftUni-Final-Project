@@ -1,34 +1,27 @@
-package com.localbandb.localbandb.services.services;
+package com.localbandb.localbandb.services.services.implementations;
 
-import com.localbandb.localbandb.data.models.City;
+import com.localbandb.localbandb.base.TestBase;
 import com.localbandb.localbandb.data.models.Country;
 import com.localbandb.localbandb.data.repositories.CountryRepository;
-import com.localbandb.localbandb.services.base.ServiceTestBase;
-import com.localbandb.localbandb.services.models.CityServiceModel;
 import com.localbandb.localbandb.services.models.CountryServiceModel;
 import com.localbandb.localbandb.services.services.CityService;
 import com.localbandb.localbandb.services.services.CountryService;
-import com.localbandb.localbandb.services.services.implementations.CityServiceImpl;
-import com.localbandb.localbandb.services.services.implementations.CountryServiceImpl;
 import javassist.NotFoundException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.stubbing.OngoingStubbing;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.mapping.PropertyReferenceException;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class CountryServiceTest extends ServiceTestBase {
+class CountryServiceTest extends TestBase {
   Country testCountry;
 
   @MockBean
@@ -42,7 +35,7 @@ class CountryServiceTest extends ServiceTestBase {
 
 
   @Override
-  protected void beforeEach() {
+  public void beforeEach() {
     this.testCountry = new Country();
     this.testCountry.setName("Bulgaria");
   }
@@ -50,6 +43,7 @@ class CountryServiceTest extends ServiceTestBase {
 
 
   @Test
+  @WithMockUser(username="spring")
   void getAllCountryNames_whenThreeUnorderedCountries_shouldReturnThemOrdered() {
     List<Country> countries = new ArrayList<>();
     countries.add(new Country("Bulgaria"));
@@ -67,6 +61,7 @@ class CountryServiceTest extends ServiceTestBase {
   }
 
   @Test
+  @WithMockUser(username="spring")
   void findByName_whenCountryExist_shouldReturnCountry() throws NotFoundException {
    Mockito.when(mockedCountryRepository.findByName("Bulgaria")).thenReturn(testCountry);
 
@@ -77,8 +72,9 @@ class CountryServiceTest extends ServiceTestBase {
   }
 
   @Test
+  @WithMockUser(username="spring")
   void findByName_whenCountryDoesNotExist_shouldThrow() {
-    Mockito.when(mockedCountryRepository.findByName("Bulgaria")).thenReturn(testCountry);
+    Mockito.when(mockedCountryRepository.findByName("Bulg")).thenReturn(null);
 
     assertThrows(NotFoundException.class , () -> countryService.findByName("Bulg"));
   }

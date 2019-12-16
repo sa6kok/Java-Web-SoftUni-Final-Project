@@ -47,7 +47,7 @@ public class ReservationController extends BaseController {
   @PostMapping("/create")
   public ModelAndView createConfirm(@ModelAttribute ReservationCreateModel model, ModelAndView modelAndView, RedirectAttributes attributes) {
 
-    List<PropertyViewModel> properties = propertyService.getAllByCityAndFilterBusyDatesAndOccupancy(model.getCity(), model.getStartDate(), model.getEndDate(), model.getOccupancy());
+    List<PropertyViewModel> properties = propertyService.getAllPropertyServiceModelsByCityAndFilterBusyDatesAndOccupancy(model.getCity(), model.getStartDate(), model.getEndDate(), model.getOccupancy());
 
     attributes.addFlashAttribute("city", model.getCity());
     attributes.addFlashAttribute("model", model);
@@ -72,12 +72,8 @@ public class ReservationController extends BaseController {
   @GetMapping("/details/{id}")
   public ModelAndView showPropertyDetails(@PathVariable String id,
                                           ModelAndView modelAndView) throws NotFoundException {
-
     ReservationCreateModel reservationCreateModel = reservationService.fillUpModel(id);
-    System.out.println();
     modelAndView.addObject("model", reservationCreateModel);
-
-
     return this.view("reservation/reservation-details", modelAndView);
   }
 

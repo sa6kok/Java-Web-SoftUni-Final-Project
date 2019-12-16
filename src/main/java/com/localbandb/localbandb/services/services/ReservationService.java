@@ -11,7 +11,7 @@ public interface ReservationService {
 
     boolean create(String propertyId, ReservationCreateModel model);
 
-    void save(Reservation reservation);
+    Reservation save(Reservation reservation);
 
     ReservationCreateModel fillUpModel(String id, String start, String end, String pax) throws NotFoundException;
 

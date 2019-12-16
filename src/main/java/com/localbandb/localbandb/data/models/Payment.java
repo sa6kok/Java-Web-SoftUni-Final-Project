@@ -13,18 +13,18 @@ public class Payment extends BaseEntity {
   private BigDecimal amount;
 
   @ManyToOne(targetEntity = User.class)
-  @JoinColumn(name = "user_id", referencedColumnName = "id")
+  @JoinColumn(name = "user_id", referencedColumnName = "id",  nullable = false)
   private User guest;
 
   @ManyToOne(targetEntity = User.class)
-  @JoinColumn(name = "host_id", referencedColumnName = "id")
+  @JoinColumn(name = "host_id", referencedColumnName = "id", nullable = false)
   private User host;
 
   @Column(name = "payment_date", nullable = false)
   private LocalDate paymentDate;
 
   @ManyToOne(targetEntity = Reservation.class, fetch = FetchType.LAZY)
-  @JoinColumn(name = "reservation_id", referencedColumnName = "id")
+  @JoinColumn(name = "reservation_id", referencedColumnName = "id", nullable = false)
   private Reservation reservation;
 
   public Payment() {

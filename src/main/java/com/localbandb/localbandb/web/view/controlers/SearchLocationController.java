@@ -48,7 +48,7 @@ public class SearchLocationController extends BaseController {
     modelAndView.addObject("cities", cities);
     List<PropertyViewModel> cityProperties = propertyService.getAllByCity(city);
     attributes.addFlashAttribute("cityProperties", cityProperties);
-    attributes.addFlashAttribute("city", city );
+    attributes.addFlashAttribute("message", "Available locations in " + city );
     return this.redirect("property/show", modelAndView);
   }
 

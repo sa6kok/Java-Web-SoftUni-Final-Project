@@ -1,3 +1,4 @@
+/*
 package com.localbandb.localbandb.web.base;
 
 import com.localbandb.localbandb.base.TestBase;
@@ -6,7 +7,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ApiTestBase extends TestBase {
+public class ApiTestBaseWeb extends TestBase {
   @LocalServerPort
   protected int port;
 
@@ -26,4 +27,4 @@ public class ApiTestBase extends TestBase {
 
     return getRestTemplate();
   }
-}
+}*/

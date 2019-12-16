@@ -90,11 +90,11 @@ public class UserController extends BaseController {
    List<String> roles =  authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
 
     if(roles.contains("ROLE_ADMIN")) {
-      return this.view("home/index");
+      return this.redirect("admin/home");
     } else if (roles.contains("ROLE_GUEST")){
      return this.redirect("reservation/guest/home");
     } else if (roles.contains("ROLE_HOST")) {
-        return this.redirect("property/show/all");
+        return this.redirect("property/show/my");
     }
     return this.view("reservation/reservation-reservations", modelAndView);
   }

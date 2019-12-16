@@ -1,20 +1,27 @@
 package com.localbandb.localbandb.base;
 
+import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration
+@WithMockUser(roles={"HOST", "ADMIN", "GUEST"})
 @SpringBootTest
-@ExtendWith(MockitoExtension.class)
-public class TestBase {
+public abstract class TestBase {
   @BeforeEach
-  private void setupTest() {
+  public void setupTest() {
     MockitoAnnotations.initMocks(this);
     this.beforeEach();
   }
 
-  protected void beforeEach() {
+  public void beforeEach() {
   }
 }

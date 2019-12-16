@@ -19,6 +19,7 @@ public class CityServiceImpl implements CityService {
   }
 
   @Override
+  @PreAuthorize("permitAll")
   public void save(City city) {
     if (city.getProperties() == null) {
       city.setProperties(new ArrayList<>());

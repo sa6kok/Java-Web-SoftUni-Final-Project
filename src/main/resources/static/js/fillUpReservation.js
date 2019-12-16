@@ -28,16 +28,6 @@ $(window).on( "load", function () {
     let endDate = $("#endDatePickInput");
     let occupancy = $("#occupancyInput");
 
-    let propertyId = $("#propertyId").val();
-   /* fetch(`/property/api/busyDates/${propertyId}`)
-        .then(response => response.json())
-        .then(response => {
-            if (response === null) {
-                return;
-            }
-          busyDates = response;
-        });*/
-
 
     if(startDate.val() === "") {
          return;
@@ -65,7 +55,7 @@ function calculateAndFillPrice() {
     let Difference_In_Time = date2.getTime() - date1.getTime();
 
     let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-    let totalPrice = Difference_In_Days * Number(price);
+    let totalPrice = Difference_In_Days.toFixed(0) * Number(price);
     if(isNaN(totalPrice)) {
         totalPrice = 0;
     }

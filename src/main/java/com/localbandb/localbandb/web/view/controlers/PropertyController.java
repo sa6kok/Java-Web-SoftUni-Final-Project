@@ -2,12 +2,9 @@ package com.localbandb.localbandb.web.view.controlers;
 
 import com.localbandb.localbandb.services.models.CityServiceModel;
 import com.localbandb.localbandb.services.models.PropertyServiceModel;
-import com.localbandb.localbandb.web.view.models.CountryViewModel;
-import com.localbandb.localbandb.web.view.models.PropertyViewModel;
+import com.localbandb.localbandb.web.view.models.*;
 import com.localbandb.localbandb.services.services.CountryService;
 import com.localbandb.localbandb.services.services.PropertyService;
-import com.localbandb.localbandb.web.view.models.PropertyCreateModel;
-import com.localbandb.localbandb.web.view.models.ReservationCreateModel;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/property")
@@ -97,7 +93,9 @@ public class PropertyController extends BaseController {
   public ModelAndView showProperties(@ModelAttribute("cityProperties") List<PropertyViewModel> propertyViewModels,
                                      @ModelAttribute("model") ReservationCreateModel reservationCreateModel,
                                      ModelAndView modelAndView) {
-
+    if(propertyViewModels == null) {
+      propertyViewModels = new ArrayList<>();
+    }
     if(reservationCreateModel.getStartDate() == null) {
       reservationCreateModel = null;
     }
@@ -109,9 +107,37 @@ public class PropertyController extends BaseController {
 
   @GetMapping("/show/all")
   public ModelAndView showProperties(ModelAndView modelAndView) {
-    List<PropertyViewModel> properties = propertyService.getAll();
+    List<PropertyViewModel> properties = propertyService.getAllOrderedByAverageReviews();
     modelAndView.addObject("properties", properties);
-    modelAndView.addObject("city", "all over Europe!");
+    modelAndView.addObject("message", "Available locations all over Europe!");
     return this.view("property/property-show", modelAndView);
+  }
+  @GetMapping("/show/my")
+  public ModelAndView showMyProperties(ModelAndView modelAndView) {
+    List<PropertyViewModel> properties = propertyService.getMyProperties();
+    modelAndView.addObject("properties", properties);
+    modelAndView.addObject("message", "My Properties");
+    return this.view("property/property-show", modelAndView);
+  }
+
+  @GetMapping("/details/{id}")
+  public ModelAndView showMyProperties(@PathVariable String id,  ModelAndView modelAndView) throws NotFoundException {
+    PropertyViewModel property = propertyService.findById(id);
+    modelAndView.addObject("property", property);
+    modelAndView.addObject("message", "Property Details");
+    return this.view("property/property-details", modelAndView);
+  }
+  @GetMapping("/add/picture/{id}")
+  public ModelAndView addPictureToProperty(@PathVariable String id,
+                                           @ModelAttribute PictureAddModel pictureAddModel,
+                                           ModelAndView modelAndView) throws NotFoundException {
+    String  message  = "Property Details";
+   if(!propertyService.addPictureToProperty(id, pictureAddModel)) {
+     message = message + "\nPicture was not added!";
+   }
+    PropertyViewModel property = propertyService.findById(id);
+    modelAndView.addObject("property", property);
+    modelAndView.addObject("message", message);
+    return this.view("property/property-details", modelAndView);
   }
 }

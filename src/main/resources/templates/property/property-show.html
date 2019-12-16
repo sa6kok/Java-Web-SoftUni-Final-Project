@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:replace="fragments/head"/>
 <body>
 <th:block th:replace="fragments/navigation"/>
 <div class="container">
-    <h2 class="text-center pt-5" th:text="|Available properties ${city}|">Available properties for Your search!</h2>
+    <h2 class="text-center pt-5" th:text="${message}"></h2>
     <th:block th:if="${properties.size() == 0}" th:class="align-items-center">
         <h2 th:text="|No properties in ${city}!|" class="text-center"></h2>
         <a th:href="@{/search/country}"><h2 class="text-center">Search for other properties!</h2></a>
@@ -14,14 +15,21 @@
         <div class="col-lg-4 col-sm-6 portfolio-item" th:each="property : ${properties}">
             <div class="card h-100">
                 <th:block th:if="${model} != null">
-                    <a th:href="|/reservation/details/${property.getId()}/${model.getStartDate()}/${model.getEndDate()}/${model.getOccupancy()}|">
+                    <a th:href="|/reservation/details/${property.getId()}/${model.getStartDate()}/${model.getEndDate()}/${model.getOccupancy()}|"
+                       sec:authorize="hasRole('ROLE_GUEST')">
                         <img class="card-img-top" th:src="${property.getFirstPicture()}"
-                            th:alt="${property.getName()}">
+                             th:alt="${property.getName()}"></a>
                 </th:block>
                 <th:block th:unless="${model} != null">
-                    <a th:href="|/reservation/details/${property.getId()}|"><img
-                            class="card-img-top" th:src="${property.getFirstPicture()}"
-                            th:alt="${property.getName()}">
+                    <a th:href="|/reservation/details/${property.getId()}|" sec:authorize="hasRole('ROLE_GUEST')">
+                        <img class="card-img-top" th:src="${property.getFirstPicture()}"
+                             th:alt="${property.getName()}" ></a>
+                    <a th:href="|/property/details/${property.getId()}|" sec:authorize="hasRole('ROLE_HOST')">
+                        <img class="card-img-top" th:src="${property.getFirstPicture()}"
+                             th:alt="${property.getName()}"></a>
+                    <a th:href="|/reservation/details/${property.getId()}|" sec:authorize="isAnonymous()">
+                        <img class="card-img-top" th:src="${property.getFirstPicture()}"
+                             th:alt="${property.getName()}" ></a>
                 </th:block>
                 <div class="card-body">
                     <h4 class="card-title">
@@ -34,13 +42,12 @@
                         <p th:text="|Location: ${property.getCity().getName()}|"></p>
                     </h4>
                     <p class="card-text" th:text="${property.getShortDescription()}"></p>
+                    <p th:text="|Average Reviews level: ${property.getAverageReviews()}|"></p>
                 </div>
-            </div></a>
+            </div>
         </div>
     </div>
 </div>
-
-
 <th:block th:replace="fragments/footer"/>
 </body>
 </html>

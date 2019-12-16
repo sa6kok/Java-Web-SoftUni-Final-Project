@@ -9,19 +9,19 @@ import com.localbandb.localbandb.services.models.UserCheckServiceModel;
 import com.localbandb.localbandb.services.models.UserServiceModel;
 import com.localbandb.localbandb.services.services.RoleService;
 import com.localbandb.localbandb.services.services.UserService;
+import com.localbandb.localbandb.web.view.models.UserViewModel;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -106,22 +106,56 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Secured("ROLE_GUEST")
   public void addUserToReservation(Reservation reservation) throws NotFoundException {
     User user = this.findByUsername(facade.getAuthentication().getName());
     reservation.setGuest(user);
   }
 
   @Override
-  public User findById(String id) {
-    User user = userRepository.findById(id).orElseThrow(()-> new UsernameNotFoundException("Username not found!"));
+  @Secured({"ROLE_ADMIN", "ROLE_GUEST","ROLE_HOST"})
+  public User findById(String id) throws NotFoundException {
+    User user = userRepository.findById(id).orElseThrow(()-> new NotFoundException("Username not found!"));
     return user;
   }
 
   @Override
+  @Secured("ROLE_ADMIN")
+  public List<UserViewModel> findAllUsersWithoutTheLoggedIn() {
+    String username = this.facade.getAuthentication().getName();
+    return userRepository.findAllByUsernameNot(username).stream()
+            .map(u -> {
+              UserViewModel userViewModel = modelMapper.map(u, UserViewModel.class);
+              if(u.isEnabled()) {
+                userViewModel.setActive(true);
+              }
+              return userViewModel;
+            }).collect(Collectors.toList());
+  }
+
+  @Override
+  @Secured("ROLE_ADMIN")
+  public boolean changeUserStatus(String id) {
+
+    try {
+      User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+      if(user.isEnabled()) {
+        user.setEnabled(false);
+      } else if (!user.isEnabled()) {
+        user.setEnabled(true);
+      }
+      userRepository.saveAndFlush(user);
+      return true;
+    } catch (Exception ex) {
+      return false;
+    }
+
+  }
+
+  @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    User guest = this.userRepository
+    return this.userRepository
         .findByUsername(username)
         .orElseThrow(() -> new UsernameNotFoundException("Username not found!"));
-    return guest;
   }
 }

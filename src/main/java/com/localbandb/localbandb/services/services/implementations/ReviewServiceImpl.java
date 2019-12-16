@@ -7,6 +7,7 @@ import com.localbandb.localbandb.services.services.ReservationService;
 import com.localbandb.localbandb.services.services.ReviewService;
 import com.localbandb.localbandb.web.view.models.ReviewCreateModel;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,6 +24,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 
     @Override
+    @Secured("ROLE_GUEST")
     public boolean save(ReviewCreateModel model, String reservationId) {
         try {
             Reservation reservation = reservationService.findById(reservationId);
@@ -31,7 +33,8 @@ public class ReviewServiceImpl implements ReviewService {
             review.setProperty(reservation.getProperty());
             Review saved = reviewRepository.save(review);
             reservation.setReview(saved);
-            reservationService.save(reservation);
+            Reservation savedReservation = reservationService.save(reservation);
+            savedReservation.getProperty().getReviews().add(saved);
 
             return true;
         } catch (Exception ex) {

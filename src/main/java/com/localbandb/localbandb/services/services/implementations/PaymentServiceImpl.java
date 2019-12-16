@@ -8,6 +8,7 @@ import com.localbandb.localbandb.data.repositories.PaymentRepository;
 import com.localbandb.localbandb.services.services.PaymentService;
 import com.localbandb.localbandb.services.services.UserService;
 import javassist.NotFoundException;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @Secured({"ROLE_ADMIN", "ROLE_GUEST"})
     public boolean save(Payment payment) {
        try {
            paymentRepository.save(payment);
@@ -35,23 +37,23 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public void createPayment(Reservation reservation) throws NotFoundException {
+    @Secured("ROLE_GUEST")
+    public void createPayment(Reservation reservation){
         Payment payment = new Payment();
 
-        User host = userService.findById(reservation.getProperty().getHost().getId());
-        User guest = userService.findByUsername(authenticationFacade.getAuthentication().getName());
-        payment.setGuest(guest);
-        payment.setHost(host);
-        payment.setAmount(reservation.getTotalPrice());
-        payment.setPaymentDate(LocalDate.now());
-        payment.setReservation(reservation);
-
         try {
+            User host = userService.findById(reservation.getProperty().getHost().getId());
+            User guest = userService.findByUsername(authenticationFacade.getAuthentication().getName());
+            payment.setGuest(guest);
+            payment.setHost(host);
+            payment.setAmount(reservation.getTotalPrice());
+            payment.setPaymentDate(LocalDate.now());
+            payment.setReservation(reservation);
             Payment savedPayment = paymentRepository.saveAndFlush(payment);
             reservation.getPayment().add(savedPayment);
 
         } catch (Exception ex) {
-
+                ex.getStackTrace();
         }
 
     }

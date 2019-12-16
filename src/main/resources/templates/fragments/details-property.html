@@ -50,4 +50,22 @@
         </div>
         <label for="selectedPropertyPrice">Price per night </label>
     </div>
+    <th:block th:if="*{getPropertyViewModel().getReviewViewModels().size() > 0}">
+    <a id="btnReviewShow" class="btn btn-lg btn-light btn-block text-uppercase"  onclick="showReviews(event)">Show Reviews</a>
+    <div class="card-body" id="reviewsShow" style="display: none">
+        <div class="form-label-group">
+            <div class="card card-signin my-5" th:each="review : *{getPropertyViewModel().getReviewViewModels()}">
+                <div class="form-label-group">
+                    <p  class="text-center" th:text="|Review level: ${review.getLevel()}|"></p>
+                    <p  class="text-center">Description</p>
+                    <textarea type="text" id="reviewDescription" class="form-control" rows="3" name="reviewDescription"
+                              th:text="${review.getDescription()}" readonly required></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    </th:block>
+    <th:block th:if="*{getPropertyViewModel().getReviewViewModels().size() == 0}">
+        <p class="btn btn-lg btn-light btn-block text-uppercase" >No reviews for the property</p>
+    </th:block>
 </th:block>

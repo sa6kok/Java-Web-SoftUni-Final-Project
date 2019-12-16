@@ -25,6 +25,10 @@ public class PropertyServiceModel {
   private int floor;
   private int apartment;
 
+  public String getName() {
+    return name;
+  }
+
   public String getPictureUrl() {
     return pictureUrl;
   }

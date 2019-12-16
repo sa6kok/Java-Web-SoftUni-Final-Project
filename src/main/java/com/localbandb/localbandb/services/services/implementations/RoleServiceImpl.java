@@ -4,6 +4,8 @@ import com.localbandb.localbandb.data.models.Role;
 import com.localbandb.localbandb.data.repositories.RoleRepository;
 import com.localbandb.localbandb.services.models.RoleServiceModel;
 import com.localbandb.localbandb.services.services.RoleService;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -19,16 +21,14 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
+  @Secured({"ROLE_ADMIN", "ROLE_GUEST","ROLE_HOST"})
   public Role findByAuthority(String authority) {
     return roleRepository.findByAuthority(authority);
   }
 
-  @Override
-  public Set<Role> getListOfRoles(Set<RoleServiceModel> authorities) {
-    return authorities.stream().map(a -> roleRepository.findByAuthority(a.getAuthority())).collect(Collectors.toSet());
-  }
 
   @Override
+  @PreAuthorize("permitAll")
   public Set<Role> findAll() {
     return new HashSet<>(roleRepository.findAll());
   }

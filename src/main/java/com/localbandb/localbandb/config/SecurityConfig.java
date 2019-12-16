@@ -24,14 +24,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http
-                .cors().disable()
                 .csrf().csrfTokenRepository(csrfTokenRepository())
                 .and()
                 .authorizeRequests()
                 .antMatchers("/js/**", "/css/**", "/vendor/**").permitAll()
                 .antMatchers("/", "/user/register/**", "/user/login/**",
                         "/user/api/register/**", "/user/api/registerWithEmail/**").anonymous()
-                .antMatchers("/search/**", "/property/show").permitAll()
+                .antMatchers("/search/**", "/property/show","/property/show/all").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -46,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/")
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/");
+                .accessDeniedPage("/error");
     }
 
     @Bean

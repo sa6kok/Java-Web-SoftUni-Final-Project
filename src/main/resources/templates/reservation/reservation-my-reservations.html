@@ -61,7 +61,7 @@
                                 </form>
                             </th:block>
                             <th:block th:if="*{review}">
-                                <h2 class="text-center" >Your Review</h2>
+                                <h2 class="text-center" >Your Review for the Reservation</h2>
                                 <h3 class="text-center" th:text="|Review note: *{review.getLevel()}|"></h3>
                                 <h4 class="text-center" th:text="|Review description: *{review.getDescription()}|"></h4>
                             </th:block>
@@ -75,5 +75,5 @@
 
 <th:block th:replace="fragments/footer"/>
 </body>
-<script type="text/javascript" src="/js/confirmation.js"></script>
+<script type="text/javascript" src="/js/confirmAndExpand.js"></script>
 </html>

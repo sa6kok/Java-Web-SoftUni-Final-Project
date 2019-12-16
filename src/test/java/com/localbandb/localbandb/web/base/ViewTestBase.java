@@ -1,3 +1,4 @@
+/*
 package com.localbandb.localbandb.web.base;
 
 import com.localbandb.localbandb.base.TestBase;
@@ -9,4 +10,4 @@ import org.springframework.test.web.servlet.MockMvc;
 public class ViewTestBase extends TestBase {
   @Autowired
   protected MockMvc mockMvc;
-}
+}*/

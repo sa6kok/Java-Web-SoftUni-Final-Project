@@ -42,6 +42,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     @Override
+    @Secured("ROLE_GUEST")
     public boolean create(String propertyId, ReservationCreateModel model) {
 
         try {
@@ -69,8 +70,9 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void save(Reservation reservation) {
-        reservationRepository.saveAndFlush(reservation);
+    @Secured("ROLE_GUEST")
+    public Reservation save(Reservation reservation) {
+      return   reservationRepository.saveAndFlush(reservation);
     }
 
     @Override
@@ -95,11 +97,13 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Secured("ROLE_GUEST")
     public void addPaymentToReservation(Reservation savedReservation, String totalPrice) throws NotFoundException {
         paymentService.createPayment(savedReservation);
     }
 
     @Override
+    @Secured("ROLE_GUEST")
     public List<ReservationViewModel> findReservationsForUserWithFilter(String filter) {
         List<Reservation> reservation = new ArrayList<>();
         String username = authenticationFacade.getAuthentication().getName();
@@ -130,7 +134,7 @@ public class ReservationServiceImpl implements ReservationService {
     private List<ReservationViewModel> getReservationViewModelsFromReservation(List<Reservation> reservationRepositoryAllByGuestUsername) {
         return reservationRepositoryAllByGuestUsername .stream()
                 .map(r ->{
-                    PropertyViewModel pvm = mapper.map(r.getProperty(), PropertyViewModel.class);
+                    PropertyViewModel pvm = propertyService.getPropertyViewModel(r.getProperty());
                     ReservationViewModel rvm = mapper.map(r, ReservationViewModel.class);
                     rvm.setPropertyViewModel(pvm);
                     return rvm;
@@ -138,6 +142,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Secured("ROLE_GUEST")
     public boolean payReservation(String id)  {
         Reservation reservation = reservationRepository.getOne(id);
 
@@ -155,9 +160,14 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Secured({"ROLE_GUEST","ROLE_HOST"})
     public boolean cancelReservation(String id) {
+        String currentUsername = authenticationFacade.getAuthentication().getName();
         try {
-            Reservation reservation = reservationRepository.getOne(id);
+            Reservation reservation = reservationRepository.findById(id).orElseThrow();
+            if (!reservation.getGuest().getUsername().equals(currentUsername) || !reservation.getProperty().getHost().getUsername().equals(currentUsername)) {
+                return false;
+            }
             reservation.setCanceled(true);
             reservationRepository.saveAndFlush(reservation);
             return true;
@@ -169,6 +179,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Secured("ROLE_GUEST")
     public Reservation findById(String reservationId) throws NotFoundException {
        return reservationRepository.findById(reservationId).orElseThrow(() -> new NotFoundException("Not Found"));
     }

@@ -31,10 +31,12 @@ public class PropertyViewModel {
   private List<String> pictures;
   private String firstPicture;
   private List<LocalDate> busyDates;
+  private List<ReviewViewModel> reviewViewModels;
 
   public PropertyViewModel() {
     this.pictures = new ArrayList<>();
     this.busyDates = new ArrayList<>();
+    this.reviewViewModels = new ArrayList<>();
   }
 
 
@@ -81,6 +83,15 @@ public class PropertyViewModel {
            .append(this.apartment == null ? "" : this.apartment);
 
    return sb.toString();
+  }
+
+  public String getAverageReviews() {
+    if(this.reviewViewModels.size() == 0) {
+      return "No Reviews.";
+    }
+    Double avg = this.reviewViewModels.stream().mapToDouble(ReviewViewModel::getLevel).average().orElse(0.00);
+
+    return String.format("%.2f", avg);
   }
 
   public void setDescription(String description) {
@@ -173,5 +184,13 @@ public class PropertyViewModel {
 
   public void setBusyDates(List<LocalDate> busyDates) {
     this.busyDates = busyDates;
+  }
+
+  public List<ReviewViewModel> getReviewViewModels() {
+    return reviewViewModels;
+  }
+
+  public void setReviewViewModels(List<ReviewViewModel> reviewViewModels) {
+    this.reviewViewModels = reviewViewModels;
   }
 }
