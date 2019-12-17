@@ -16,4 +16,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, String
     List<Reservation> findAllByGuest_Username_AndPayedOrderByStartDateAsc(String username, boolean payed);
 
     List<Reservation> findAllByGuest_Username_AndCanceledOrderByStartDateAsc(String username, boolean canceled);
+
+    List<Reservation> findAllByPayedAndCanceledAndPast(boolean payed, boolean canceled, boolean past);
+
+    List<Reservation> findAllByProperty_Host_Username(String username);
 }

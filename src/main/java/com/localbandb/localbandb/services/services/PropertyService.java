@@ -37,5 +37,10 @@ public interface PropertyService {
     boolean addPictureToProperty(String id, PictureAddModel pictureAddModel);
 
     PropertyViewModel getPropertyViewModel(Property p);
+
+    boolean eraseBusyDatesFromCancel(String id, LocalDate startDate, LocalDate endDate);
+
+    String getOwnerUsername(String id);
+
 }
 

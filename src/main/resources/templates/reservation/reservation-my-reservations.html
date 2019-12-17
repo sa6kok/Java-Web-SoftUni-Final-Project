@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:replace="fragments/head"/>
 <body>
 <th:block th:replace="fragments/navigation"/>
@@ -22,7 +23,7 @@
                        class="btn btn-lg btn-dark btn-block text-uppercase text-danger">CANCELED</a>
                     <th:block th:unless="*{past}">
                         <th:block th:unless="*{canceled}">
-                            <a th:unless="*{payed}" th:href="@{/reservation/pay/{id}(id=${reservation.getId()})}"
+                            <a sec:authorize="hasRole('ROLE_GUEST')" th:unless="*{payed}" th:href="@{/reservation/pay/{id}(id=${reservation.getId()})}"
                                class="btn btn-lg btn-dark btn-block text-uppercase confirmation">RESERVATION is NOT
                                 PAYED PAY NOW</a>
                         </th:block>
@@ -31,7 +32,7 @@
                     </th:block>
                     <th:block th:unless="*{canceled}">
                         <th:block th:if="*{past}">
-                            <th:block th:unless="*{review}">
+                            <th:block th:unless="*{review}" sec:authorize="hasRole('ROLE_GUEST')">
                                 <h3 class="text-center">Write a review</h3>
                                 <form th:action="@{/review/create/{id}(id=${reservation.getId()})}" method="post">
                                     <div class="form-group">

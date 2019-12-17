@@ -3,12 +3,14 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:replace="fragments/head"/>
-<body>
 <th:block th:replace="fragments/navigation"/>
+<body>
 <div class="container">
+    <hr>
     <div class="align-items-center">
         <h2 class="text-center" th:text="${message}"></h2>
         <div class="carousel slide carousel-multi-item carousel-multi-item-2" data-ride="carousel">
+            <h2 class="text-center" >Property Details</h2>
             <div class="carousel-inner" role="listbox">
                 <div class="col-md-3 mb-3" th:each="picture : ${property.getPictures()}">
                     <img class="img-fluid"
@@ -94,8 +96,8 @@
             <th:block th:if="${property.getReviewViewModels().size() == 0}">
                 <p class="btn btn-lg btn-light btn-block text-uppercase">No reviews for the property</p>
             </th:block>
-            <form class="form-signin" th:action="@{/property/add/picture/{id}(id=*{property.getId()})}"
-                  th:method="get">
+            <form class="form-signin" th:if="${isOwner}"
+                  th:action="@{/property/add/picture/{id}(id=*{property.getId()})}" th:method="get">
                 <input type="text" id="picture" class="form-control" name="pictureUrl"
                        placeholder="Paste a Picture URL" required>
                 <label for="picture">Paste a picture URL to add picture</label>

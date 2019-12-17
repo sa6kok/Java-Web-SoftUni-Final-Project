@@ -3,7 +3,7 @@
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top" xmlns:th="http://www.w3.org/1999/html">
         <div class="container">
             <a class="navbar-brand" th:href="@{/}" sec:authorize="!isFullyAuthenticated()">Home</a>
-            <a class="navbar-brand" th:href="@{/admin/home}" sec:authorize="hasRole('ROLE_ADMIN')">Home</a>
+            <a class="navbar-brand" th:href="@{/admin/home}" sec:authorize="hasRole('ROLE_ADMIN')">Home Admin</a>
             <a class="navbar-brand" th:href="@{/reservation/guest/home}" sec:authorize="hasRole('ROLE_GUEST')">Home</a>
             <a class="navbar-brand" th:href="@{/property/show/my}" sec:authorize="hasRole('ROLE_HOST')">Home</a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
@@ -36,6 +36,9 @@
                         <a class="nav-link" href="/property/show/my">Show my properties</a>
                     </li>
                     <li class="nav-item" sec:authorize="hasRole('ROLE_HOST')">
+                        <a class="nav-link" href="/reservation/reservations/properties">Show all reservations for my properties</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ROLE_GUEST')">
                         <a class="nav-link" href="/property/show/all">All Properties</a>
                     </li>
                     <li class="nav-item" sec:authorize="hasRole('ROLE_GUEST')">

@@ -212,4 +212,26 @@ public class PropertyServiceImpl implements PropertyService {
         return propertyViewModel;
     }
 
+    @Override
+    @PreAuthorize("permitAll")
+    public boolean eraseBusyDatesFromCancel(String id, LocalDate startDate, LocalDate endDate) {
+        try {
+            Property property = propertyRepository.findById(id).orElseThrow();
+
+            List<LocalDate> busyDates = property.getBusyDates();
+            List<LocalDate> daysToCancel = this.getDatesBetweenStartAndEnd(startDate, endDate);
+            List<LocalDate> collect = busyDates.stream().filter(o -> !daysToCancel.contains(o)).collect(Collectors.toList());
+            property.setBusyDates(collect);
+            propertyRepository.saveAndFlush(property);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    @Override
+    public String getOwnerUsername(String id) {
+        return propertyRepository.findById(id).orElseThrow().getHost().getUsername();
+    }
+
 }

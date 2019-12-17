@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 public class UserRegisterModel {
 
   @Size(min = 3, max = 25, message = "should be between 3 and 15 symbols!")
+  @Pattern(regexp = "^[a-zA-Z]+$", message = " is not valid! Use only letters")
   private String username;
 
   @Size(min = 4, message = "should be at least 4 symbols!")
@@ -34,7 +35,10 @@ public class UserRegisterModel {
   }
 
   public String getUsername() {
-    return username;
+    if(username == null) {
+      return null;
+    }
+    return username.toLowerCase();
   }
 
   public void setUsername(String username) {

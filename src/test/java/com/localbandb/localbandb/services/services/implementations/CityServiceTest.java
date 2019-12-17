@@ -32,7 +32,6 @@ class CityServiceTest extends TestBase {
 
     @Test
   void save() {
-   // mockedCityRepository.save(this.testCity);
     cityService.save(this.testCity);
     ArgumentCaptor<City> argument = ArgumentCaptor.forClass(City.class);
     Mockito.verify(mockedCityRepository).save(argument.capture());

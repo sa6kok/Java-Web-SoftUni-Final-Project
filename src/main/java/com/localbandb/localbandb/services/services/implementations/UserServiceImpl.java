@@ -26,136 +26,133 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
-  private final UserRepository userRepository;
-  private final RoleService roleService;
-  private final AuthenticationFacade facade;
-  private final ModelMapper modelMapper;
-  private final BCryptPasswordEncoder encoder;
+    private final UserRepository userRepository;
+    private final RoleService roleService;
+    private final AuthenticationFacade facade;
+    private final ModelMapper modelMapper;
+    private final BCryptPasswordEncoder encoder;
 
-  @Autowired
-  public UserServiceImpl(UserRepository userRepository, RoleService roleService, AuthenticationFacade facade, ModelMapper modelMapper, BCryptPasswordEncoder encoder) {
-    this.userRepository = userRepository;
-    this.roleService = roleService;
-    this.facade = facade;
-    this.modelMapper = modelMapper;
-    this.encoder = encoder;
-  }
-
-  @Override
-  @PreAuthorize("isAnonymous()")
-  public boolean saveUser(UserServiceModel userServiceModel) {
-    if (!userServiceModel.getPassword().equals(userServiceModel.getConfirmPassword())) {
-      return false;
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService, AuthenticationFacade facade, ModelMapper modelMapper, BCryptPasswordEncoder encoder) {
+        this.userRepository = userRepository;
+        this.roleService = roleService;
+        this.facade = facade;
+        this.modelMapper = modelMapper;
+        this.encoder = encoder;
     }
-    try {
-      userServiceModel.setPassword(encoder.encode(userServiceModel.getPassword()));
-      User guest = modelMapper.map(userServiceModel, User.class);
-      Set<Role> rolesToSave = new HashSet<>();
 
-      if(userRepository.count() == 0) {
-         rolesToSave = roleService.findAll();
-      } else {
-        switch (userServiceModel.getRole()) {
-          case "GUEST":
-            guest.setReservations(new ArrayList<>());
-            rolesToSave.add(roleService.findByAuthority("ROLE_GUEST"));
-            break;
-          case "HOST":
-            guest.setProperties(new ArrayList<>());
-            rolesToSave.add(roleService.findByAuthority("ROLE_HOST"));
-            break;
+    @Override
+    @PreAuthorize("permitAll")
+    public boolean saveUser(UserServiceModel userServiceModel) {
+        if (!userServiceModel.getPassword().equals(userServiceModel.getConfirmPassword())) {
+            return false;
         }
-        guest.setPayments(new ArrayList<>());
-      }
+        try {
+            userServiceModel.setPassword(encoder.encode(userServiceModel.getPassword()));
+            User guest = modelMapper.map(userServiceModel, User.class);
+            Set<Role> rolesToSave = new HashSet<>();
 
+            if (userRepository.count() == 0) {
+                rolesToSave = roleService.findAll();
+            } else {
+                switch (userServiceModel.getRole()) {
+                    case "GUEST":
+                        guest.setReservations(new ArrayList<>());
+                        Role toSaveGuest = roleService.findByAuthority("ROLE_GUEST");
+                        rolesToSave.add(toSaveGuest);
+                        break;
+                    case "HOST":
+                        guest.setProperties(new ArrayList<>());
+                        Role toSave = roleService.findByAuthority("ROLE_HOST");
+                        rolesToSave.add(toSave);
+                        break;
+                }
 
-      guest.setAuthorities(rolesToSave);
-      userRepository.saveAndFlush(guest);
-      return true;
-    } catch (Exception ex) {
-      return false;
-    }
-  }
-
-  @Override
-  public User findByUsername(String username) throws NotFoundException {
-    return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("Username not found!"));
-  }
-
-
-  @Override
-  @PreAuthorize("isAnonymous()")
-  public UserCheckServiceModel checkIfUserExist(String username) {
-    UserCheckServiceModel user = new UserCheckServiceModel();
-    Optional<User> byUsername = userRepository.findByUsername(username);
-    if (byUsername.isPresent()) {
-      user = modelMapper.map(byUsername.get(), UserCheckServiceModel.class);
-    }
-    return user;
-  }
-
-  @Override
-  @PreAuthorize("isAnonymous()")
-  public UserCheckServiceModel checkIfUserWithEmailExist(String email) {
-    UserCheckServiceModel user = new UserCheckServiceModel();
-    User byEmail = userRepository.findByEmail(email);
-    if (byEmail != null) {
-      user = modelMapper.map(byEmail, UserCheckServiceModel.class);
-    }
-    return user;
-  }
-
-  @Override
-  @Secured("ROLE_GUEST")
-  public void addUserToReservation(Reservation reservation) throws NotFoundException {
-    User user = this.findByUsername(facade.getAuthentication().getName());
-    reservation.setGuest(user);
-  }
-
-  @Override
-  @Secured({"ROLE_ADMIN", "ROLE_GUEST","ROLE_HOST"})
-  public User findById(String id) throws NotFoundException {
-    User user = userRepository.findById(id).orElseThrow(()-> new NotFoundException("Username not found!"));
-    return user;
-  }
-
-  @Override
-  @Secured("ROLE_ADMIN")
-  public List<UserViewModel> findAllUsersWithoutTheLoggedIn() {
-    String username = this.facade.getAuthentication().getName();
-    return userRepository.findAllByUsernameNot(username).stream()
-            .map(u -> {
-              UserViewModel userViewModel = modelMapper.map(u, UserViewModel.class);
-              if(u.isEnabled()) {
-                userViewModel.setActive(true);
-              }
-              return userViewModel;
-            }).collect(Collectors.toList());
-  }
-
-  @Override
-  @Secured("ROLE_ADMIN")
-  public boolean changeUserStatus(String id) {
-
-    try {
-      User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
-      if(user.isEnabled()) {
-        user.setEnabled(false);
-      } else if (!user.isEnabled()) {
-        user.setEnabled(true);
-      }
-      userRepository.saveAndFlush(user);
-      return true;
-    } catch (Exception ex) {
-      return false;
+                guest.setPayments(new ArrayList<>());
+            }
+            guest.setAuthorities(rolesToSave);
+            userRepository.saveAndFlush(guest);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
-  }
+    @Override
+    public User findByUsername(String username) throws NotFoundException {
+        return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("Username not found!"));
+    }
 
-  @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    return this.userRepository
-        .findByUsername(username)
-        .orElseThrow(() -> new UsernameNotFoundException("Username not found!"));
-  }
+
+    @Override
+    public UserCheckServiceModel checkIfUserExist(String username) {
+        UserCheckServiceModel user = new UserCheckServiceModel();
+        Optional<User> byUsername = userRepository.findByUsername(username);
+        if (byUsername.isPresent()) {
+            user = modelMapper.map(byUsername.get(), UserCheckServiceModel.class);
+        }
+        return user;
+    }
+
+    @Override
+    public UserCheckServiceModel checkIfUserWithEmailExist(String email) {
+        UserCheckServiceModel user = new UserCheckServiceModel();
+        User byEmail = userRepository.findByEmail(email);
+        if (byEmail != null) {
+            user = modelMapper.map(byEmail, UserCheckServiceModel.class);
+        }
+        return user;
+    }
+
+    @Override
+    @Secured("ROLE_GUEST")
+    public void addUserToReservation(Reservation reservation) throws NotFoundException {
+        User user = this.findByUsername(facade.getAuthentication().getName());
+        reservation.setGuest(user);
+    }
+
+    @Override
+    public User findById(String id) throws NotFoundException {
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("Username not found!"));
+    }
+
+    @Override
+    @Secured("ROLE_ADMIN")
+    public List<UserViewModel> findAllUsersWithoutTheLoggedIn() {
+        String username = this.facade.getAuthentication().getName();
+        return userRepository.findAllByUsernameNot(username).stream()
+                .map(u -> {
+                    UserViewModel userViewModel = modelMapper.map(u, UserViewModel.class);
+                    if (u.isEnabled()) {
+                        userViewModel.setActive(true);
+                    }
+                    return userViewModel;
+                }).collect(Collectors.toList());
+    }
+
+    @Override
+    @Secured("ROLE_ADMIN")
+    public boolean changeUserStatus(String id) {
+
+        try {
+            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+            if (user.isEnabled()) {
+                user.setEnabled(false);
+            } else if (!user.isEnabled()) {
+                user.setEnabled(true);
+            }
+            userRepository.saveAndFlush(user);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found!"));
+    }
 }

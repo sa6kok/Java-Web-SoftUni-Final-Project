@@ -1,14 +1,14 @@
 package com.localbandb.localbandb.web.view.controlers;
 
-import com.localbandb.localbandb.data.models.City;
-import com.localbandb.localbandb.services.models.CityServiceModel;
 import com.localbandb.localbandb.services.services.CountryService;
 import com.localbandb.localbandb.services.services.PropertyService;
 import com.localbandb.localbandb.web.view.models.PropertyViewModel;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -47,9 +47,9 @@ public class SearchLocationController extends BaseController {
     List<String> cities = countryService.getOrderedCitiesForCountry(country);
     modelAndView.addObject("cities", cities);
     List<PropertyViewModel> cityProperties = propertyService.getAllByCity(city);
-    attributes.addFlashAttribute("cityProperties", cityProperties);
-    attributes.addFlashAttribute("message", "Available locations in " + city );
-    return this.redirect("property/show", modelAndView);
+    modelAndView.addObject("properties", cityProperties);
+    modelAndView.addObject("message", "Available locations in " + city );
+    return this.view("property/property-show", modelAndView);
   }
 
 }

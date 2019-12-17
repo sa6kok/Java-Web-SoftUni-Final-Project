@@ -21,7 +21,7 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
-  @Secured({"ROLE_ADMIN", "ROLE_GUEST","ROLE_HOST"})
+  @PreAuthorize("permitAll")
   public Role findByAuthority(String authority) {
     return roleRepository.findByAuthority(authority);
   }

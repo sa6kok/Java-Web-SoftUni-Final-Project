@@ -1,6 +1,7 @@
 package com.localbandb.localbandb.services.services.implementations;
 
 import com.localbandb.localbandb.config.authentication.AuthenticationFacade;
+import com.localbandb.localbandb.data.models.BaseEntity;
 import com.localbandb.localbandb.data.models.Payment;
 import com.localbandb.localbandb.data.models.Reservation;
 import com.localbandb.localbandb.data.repositories.ReservationRepository;
@@ -12,9 +13,11 @@ import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,6 +55,7 @@ public class ReservationServiceImpl implements ReservationService {
             propertyService.addPropertyToReservation(propertyId, reservation);
             userService.addUserToReservation(reservation);
             reservation.setPayment(new ArrayList<>());
+            reservation.setCreated(LocalDate.now());
             Reservation savedReservation = reservationRepository.save(reservation);
 
             if (model.isCheckPayment()) {
@@ -72,7 +76,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Secured("ROLE_GUEST")
     public Reservation save(Reservation reservation) {
-      return   reservationRepository.saveAndFlush(reservation);
+        return reservationRepository.saveAndFlush(reservation);
     }
 
     @Override
@@ -103,56 +107,58 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    @Secured("ROLE_GUEST")
+    @Secured({"ROLE_GUEST", "ROLE_HOST"})
     public List<ReservationViewModel> findReservationsForUserWithFilter(String filter) {
-        List<Reservation> reservation = new ArrayList<>();
+        List<Reservation> reservations = new ArrayList<>();
         String username = authenticationFacade.getAuthentication().getName();
 
         switch (filter) {
             case "payed":
-                reservation = reservationRepository.findAllByGuest_Username_AndPayedOrderByStartDateAsc(username, true);
+                reservations = reservationRepository.findAllByGuest_Username_AndPayedOrderByStartDateAsc(username, true);
                 break;
             case "notPayed":
-                reservation = reservationRepository.findAllByGuest_Username_AndPayedOrderByStartDateAsc(username, false);
+                reservations = reservationRepository.findAllByGuest_Username_AndPayedOrderByStartDateAsc(username, false);
                 break;
             case "all":
-                reservation = reservationRepository.findAllByGuest_UsernameOrderByStartDateAsc(username);
+                reservations = reservationRepository.findAllByGuest_UsernameOrderByStartDateAsc(username);
                 break;
             case "future":
-                reservation = reservationRepository.findAllByGuest_Username_AndPastOrderByEndDateAsc(username, false);
+                reservations = reservationRepository.findAllByGuest_Username_AndPastOrderByEndDateAsc(username, false);
                 break;
             case "past":
-                reservation = reservationRepository.findAllByGuest_Username_AndPastOrderByEndDateAsc(username, true);
+                reservations = reservationRepository.findAllByGuest_Username_AndPastOrderByEndDateAsc(username, true);
                 break;
             case "canceled":
-                reservation = reservationRepository.findAllByGuest_Username_AndCanceledOrderByStartDateAsc(username, true);
+                reservations = reservationRepository.findAllByGuest_Username_AndCanceledOrderByStartDateAsc(username, true);
+                break;
+            case "properties":
+                reservations = reservationRepository.findAllByProperty_Host_Username(username);
                 break;
         }
-        return getReservationViewModelsFromReservation(reservation);
+        return getReservationViewModelsFromReservation(reservations);
     }
-
     private List<ReservationViewModel> getReservationViewModelsFromReservation(List<Reservation> reservationRepositoryAllByGuestUsername) {
-        return reservationRepositoryAllByGuestUsername .stream()
-                .map(r ->{
+        return reservationRepositoryAllByGuestUsername.stream()
+                .map(r -> {
                     PropertyViewModel pvm = propertyService.getPropertyViewModel(r.getProperty());
                     ReservationViewModel rvm = mapper.map(r, ReservationViewModel.class);
                     rvm.setPropertyViewModel(pvm);
                     return rvm;
-                } ).collect(Collectors.toList());
+                }).collect(Collectors.toList());
     }
 
     @Override
     @Secured("ROLE_GUEST")
-    public boolean payReservation(String id)  {
-        Reservation reservation = reservationRepository.getOne(id);
+    public boolean payReservation(String id) {
 
         try {
+            Reservation reservation = reservationRepository.findById(id).orElseThrow();
             this.addPaymentToReservation(reservation, reservation.getTotalPrice().toString());
-            Reservation savedReservation = reservationRepository.getOne(id);
-          if(this.checkIfItIsPayed(savedReservation)) {
-              savedReservation.setPayed(true);
-              reservationRepository.saveAndFlush(savedReservation);
-          }
+            Reservation savedReservation = reservationRepository.findById(id).orElseThrow();
+            if (this.checkIfItIsPayed(savedReservation)) {
+                savedReservation.setPayed(true);
+                reservationRepository.saveAndFlush(savedReservation);
+            }
             return true;
         } catch (Exception ex) {
             return false;
@@ -160,16 +166,17 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    @Secured({"ROLE_GUEST","ROLE_HOST"})
+    @PreAuthorize("permitAll")
     public boolean cancelReservation(String id) {
         String currentUsername = authenticationFacade.getAuthentication().getName();
         try {
             Reservation reservation = reservationRepository.findById(id).orElseThrow();
-            if (!reservation.getGuest().getUsername().equals(currentUsername) || !reservation.getProperty().getHost().getUsername().equals(currentUsername)) {
+            if (!reservation.getGuest().getUsername().equals(currentUsername)) {
                 return false;
             }
-            reservation.setCanceled(true);
             reservationRepository.saveAndFlush(reservation);
+            propertyService.eraseBusyDatesFromCancel(reservation.getProperty().getId(), reservation.getStartDate(), reservation.getEndDate());
+            reservation.setCanceled(true);
             return true;
         } catch (Exception ex) {
             return false;
@@ -181,7 +188,22 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Secured("ROLE_GUEST")
     public Reservation findById(String reservationId) throws NotFoundException {
-       return reservationRepository.findById(reservationId).orElseThrow(() -> new NotFoundException("Not Found"));
+        return reservationRepository.findById(reservationId).orElseThrow(() -> new NotFoundException("Not Found"));
+    }
+
+    @Override
+    public void findReservationsToCancelAndCancelAutomaticScheduled() {
+        List<Reservation> allByPayedAndCanceled = reservationRepository
+                .findAllByPayedAndCanceledAndPast(false, false, false);
+       allByPayedAndCanceled.stream().filter(this::findIfResaIsOlderThanOneDay)
+               .map(BaseEntity::getId).forEach(this::cancelReservation);
+    }
+
+    private boolean findIfResaIsOlderThanOneDay(Reservation reservation) {
+        LocalDate created = reservation.getCreated();
+        LocalDate today = LocalDate.now();
+        LocalDate diff = today.minusDays(1);
+        return diff.isAfter(created);
     }
 
     private boolean checkIfItIsPayed(Reservation savedReservation) {

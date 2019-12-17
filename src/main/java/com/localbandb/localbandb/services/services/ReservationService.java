@@ -26,4 +26,6 @@ public interface ReservationService {
     boolean cancelReservation(String id);
 
     Reservation findById(String reservationId) throws NotFoundException;
+
+    void findReservationsToCancelAndCancelAutomaticScheduled();
 }

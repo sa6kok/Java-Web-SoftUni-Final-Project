@@ -18,6 +18,9 @@ public class Reservation extends BaseEntity {
   @Column(name = "end_date", nullable = false)
   private LocalDate endDate;
 
+  @Column(name = "created", nullable = false)
+  private LocalDate created;
+
   @Min(1)
   private Integer occupancy;
 
@@ -68,6 +71,14 @@ public class Reservation extends BaseEntity {
 
   public void setEndDate(LocalDate endDate) {
     this.endDate = endDate;
+  }
+
+  public LocalDate getCreated() {
+    return created;
+  }
+
+  public void setCreated(LocalDate created) {
+    this.created = created;
   }
 
   public Integer getOccupancy() {
