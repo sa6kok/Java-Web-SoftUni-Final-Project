@@ -9,6 +9,7 @@ import com.localbandb.localbandb.data.models.User;
 import com.localbandb.localbandb.data.repositories.PaymentRepository;
 import com.localbandb.localbandb.services.services.UserService;
 import javassist.NotFoundException;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,35 +17,42 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import javax.persistence.PersistenceException;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 public class PaymentServiceImplTest extends TestBase {
 
-    private Payment payment;
+    private static Payment payment;
 
     @MockBean
     PaymentRepository mockedPaymentRepository;
 
     @MockBean
-    AuthenticationFacade mockedAuthenticationFacade;
+    UserService userService;
 
     @MockBean
-    UserService mockedUserService;
+    AuthenticationFacade mockedAuthenticationFacade;
 
     @Autowired
     public PaymentServiceImpl paymentService;
 
-    @Override
-    public void beforeEach() {
-        this.payment = new Payment();
+
+
+    @BeforeClass
+    public static void init() {
+        payment = new Payment();
+        payment.setId("id");
+        payment.setAmount(BigDecimal.TEN);
     }
 
     @Test
     public void save_withEmptyEntity_returnsFalse() {
-        Mockito.when(mockedPaymentRepository.save(this.payment)).thenThrow(PersistenceException.class);
-        assertFalse(paymentService.save(this.payment));
+        Mockito.when(mockedPaymentRepository.save(payment)).thenThrow(PersistenceException.class);
+        assertFalse(paymentService.save(payment));
     }
 
 
@@ -59,13 +67,19 @@ public class PaymentServiceImplTest extends TestBase {
 
     @Test
     public void save_withValidEntity_returnsTrue() {
-        Mockito.when(mockedPaymentRepository.save(this.payment)).thenReturn(new Payment());
-        assertTrue(paymentService.save(this.payment));
+        Mockito.when(mockedPaymentRepository.save(payment)).thenReturn(new Payment());
+        assertTrue(paymentService.save(payment));
     }
 
 
     @Test
-    public void createPayment() {
+    public void createPayment_whenEverythingIsOk_doesNotThrow() throws NotFoundException {
+        Reservation reservation = new Reservation();
+        User user = new User();
+        Mockito.when(userService.findById("id")).thenReturn(user);
+        Mockito.when(userService.findByUsername("username")).thenReturn(user);
+        when(mockedPaymentRepository.saveAndFlush(payment)).thenReturn(payment);
+        paymentService.createPayment(reservation);
 
     }
 
@@ -74,48 +88,17 @@ public class PaymentServiceImplTest extends TestBase {
         Payment testPayment = new Payment();
         Reservation reservation = new Reservation();
         reservation.setTotalPrice(BigDecimal.valueOf(10));
-//        Mockito.when(mockedAuthenticationFacade.getAuthentication().getName()).thenReturn("Pesho");
         try {
-            Mockito.when(mockedUserService.findByUsername("Pesho")).thenReturn(new User());
+            Mockito.when(userService.findByUsername("Pesho")).thenReturn(new User());
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
-        Mockito.when(mockedUserService.findById("Pesho")).thenThrow(NotFoundException.class);
+        Mockito.when(userService.findById("Pesho")).thenThrow(NotFoundException.class);
         Mockito.when(mockedPaymentRepository.saveAndFlush(testPayment)).thenThrow(PersistenceException.class);
 
       paymentService.createPayment(reservation);
     }
-    @Test
-    public void createPayment_withoutUser_doesNotThrow() throws NotFoundException {
-        Payment testPayment = new Payment();
-        Reservation reservation = new Reservation();
-        reservation.setTotalPrice(BigDecimal.valueOf(10));
-//        Mockito.when(mockedAuthenticationFacade.getAuthentication().getName()).thenReturn("Pesho");
-        try {
-            Mockito.when(mockedUserService.findByUsername("Pesho")).thenThrow( NotFoundException.class);
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-        }
-        Mockito.when(mockedUserService.findById("Pesho")).thenReturn(new User());
-        Mockito.when(mockedPaymentRepository.saveAndFlush(testPayment)).thenThrow(PersistenceException.class);
-
-        paymentService.createPayment(reservation);
-    }
-
-    @Test
-    public void createPayment_withoutGuest_doesNotThrow() {
-        Payment testPayment = new Payment();
-        Reservation reservation = new Reservation();
-        Mockito.when(mockedPaymentRepository.saveAndFlush(testPayment)).thenThrow(PersistenceException.class);
-        paymentService.createPayment(reservation);
-    }
 
 
-    @Test
-    public void createPayment_withoutReservation_throws() {
-        Payment testPayment = new Payment();
-        Reservation reservation = new Reservation();
-        Mockito.when(mockedPaymentRepository.save(testPayment)).thenThrow(NullPointerException.class);
-        paymentService.createPayment(reservation);
-    }
+
 }

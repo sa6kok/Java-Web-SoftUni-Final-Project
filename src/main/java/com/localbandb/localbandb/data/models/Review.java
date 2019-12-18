@@ -12,12 +12,9 @@ import javax.validation.constraints.Size;
 @Table(name = "reviews")
 public class Review extends BaseEntity {
 
-  @Min(0)
-  @Max(10)
   @Column(name = "level")
   private Integer level;
 
-  @Size(min = 15)
   @Column(name = "description", columnDefinition = "TEXT", nullable = false)
   private String description;
 

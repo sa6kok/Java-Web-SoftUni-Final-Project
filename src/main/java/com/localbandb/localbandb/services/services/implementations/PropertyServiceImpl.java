@@ -9,6 +9,7 @@ import com.localbandb.localbandb.services.services.DateService;
 import com.localbandb.localbandb.services.services.PropertyService;
 import com.localbandb.localbandb.services.services.UserService;
 import com.localbandb.localbandb.web.view.models.PictureAddModel;
+import com.localbandb.localbandb.web.view.models.PropertyCreateModel;
 import com.localbandb.localbandb.web.view.models.PropertyViewModel;
 import com.localbandb.localbandb.web.view.models.ReviewViewModel;
 import javassist.NotFoundException;
@@ -43,9 +44,9 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     @Secured("ROLE_HOST")
-    public boolean save(PropertyServiceModel propertyServiceModel) throws NotFoundException {
+    public boolean save(PropertyCreateModel model) throws NotFoundException {
+        PropertyServiceModel propertyServiceModel = modelMapper.map(model, PropertyServiceModel.class);
         City city = cityService.findCityByName(propertyServiceModel.getCity());
-
         Property property = modelMapper.map(propertyServiceModel, Property.class);
         User user = userService.findByUsername(authenticationFacade.getAuthentication().getName());
         property.setHost(user);
@@ -232,6 +233,12 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public String getOwnerUsername(String id) {
         return propertyRepository.findById(id).orElseThrow().getHost().getUsername();
+    }
+
+    @Override
+    public boolean checkIfUserIsPropertyOwner(String propertyId) {
+        String owner = this.getOwnerUsername(propertyId);
+        return authenticationFacade.getAuthentication().getName().equals(owner);
     }
 
 }

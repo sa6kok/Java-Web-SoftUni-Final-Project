@@ -9,6 +9,7 @@ import com.localbandb.localbandb.services.models.UserCheckServiceModel;
 import com.localbandb.localbandb.services.models.UserServiceModel;
 import com.localbandb.localbandb.services.services.RoleService;
 import com.localbandb.localbandb.services.services.UserService;
+import com.localbandb.localbandb.web.view.models.UserRegisterModel;
 import com.localbandb.localbandb.web.view.models.UserViewModel;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
@@ -43,7 +44,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("permitAll")
-    public boolean saveUser(UserServiceModel userServiceModel) {
+    public boolean saveUser(UserRegisterModel userRegisterModel, String role) {
+
+        UserServiceModel userServiceModel = modelMapper.map(userRegisterModel, UserServiceModel.class);
+        userServiceModel.setRole(role.toUpperCase());
         if (!userServiceModel.getPassword().equals(userServiceModel.getConfirmPassword())) {
             return false;
         }
@@ -123,9 +127,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAllByUsernameNot(username).stream()
                 .map(u -> {
                     UserViewModel userViewModel = modelMapper.map(u, UserViewModel.class);
+                    List<String> roles = u.getAuthorities().stream().map(Role::getAuthority).collect(Collectors.toList());
                     if (u.isEnabled()) {
                         userViewModel.setActive(true);
                     }
+                    userViewModel.setRoles(roles);
                     return userViewModel;
                 }).collect(Collectors.toList());
     }

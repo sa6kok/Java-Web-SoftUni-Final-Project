@@ -25,7 +25,7 @@
                       class="form-horizontal" method="post">
                     <th:block th:if="${busyDates} != null">
                         <label for="btnPay" class=" control-label text-danger"
-                               th:text="|On the following dates: ${busyDates} is the property not available. Please pick deifferent dates!|"> </label>
+                               th:text="|On the following dates: ${busyDates} is the property not available. Please pick different dates!|"> </label>
                     </th:block>
                     <fieldset>
                         <th:block th:replace="fragments/details-property"/>
@@ -61,7 +61,7 @@
                         </div>
                         <div class="form-label-group">
                             <div class="form-label-group col-md-5">
-                                <input type="text" id="occupancyInput" th:value="*{occupancy}" class="form-control"
+                                <input type="number" id="occupancyInput" th:value="*{occupancy}" class="form-control"
                                        name="occupancy"
                                        required>
                             </div>
@@ -83,7 +83,7 @@
                         </button>
                         <th:block th:if="${busyDates} != null">
                             <label for="btnPay" class=" control-label text-danger"
-                                   th:text="|On the following dates: ${busyDates} is the property not available. Please pick deifferent dates!|"> </label>
+                                   th:text="|On the following dates: ${busyDates} is the property not available. Please pick different dates!|"> </label>
                         </th:block>
                     </fieldset>
                 </form>

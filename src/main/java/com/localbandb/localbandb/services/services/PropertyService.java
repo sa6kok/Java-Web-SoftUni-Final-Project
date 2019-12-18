@@ -4,15 +4,17 @@ import com.localbandb.localbandb.data.models.Property;
 import com.localbandb.localbandb.data.models.Reservation;
 import com.localbandb.localbandb.services.models.PropertyServiceModel;
 import com.localbandb.localbandb.web.view.models.PictureAddModel;
+import com.localbandb.localbandb.web.view.models.PropertyCreateModel;
 import com.localbandb.localbandb.web.view.models.PropertyViewModel;
 import javassist.NotFoundException;
+import org.springframework.security.access.annotation.Secured;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface PropertyService {
 
-    boolean save(PropertyServiceModel propertyServiceModel) throws NotFoundException;
+    boolean save(PropertyCreateModel model) throws NotFoundException;
 
     List<PropertyViewModel> getAllOrderedByAverageReviews();
 
@@ -42,5 +44,6 @@ public interface PropertyService {
 
     String getOwnerUsername(String id);
 
+    boolean checkIfUserIsPropertyOwner(String propertyId);
 }
 

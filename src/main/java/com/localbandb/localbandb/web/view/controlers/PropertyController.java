@@ -1,10 +1,9 @@
 package com.localbandb.localbandb.web.view.controlers;
 
 import com.localbandb.localbandb.services.models.CityServiceModel;
-import com.localbandb.localbandb.services.models.PropertyServiceModel;
-import com.localbandb.localbandb.web.view.models.*;
 import com.localbandb.localbandb.services.services.CountryService;
 import com.localbandb.localbandb.services.services.PropertyService;
+import com.localbandb.localbandb.web.view.models.*;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,21 +16,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
+
+import static com.localbandb.localbandb.web.view.constants.Constants.*;
 
 @Controller
 @RequestMapping("/property")
 public class PropertyController extends BaseController {
     private final CountryService countryService;
     private final PropertyService propertyService;
-    private final ModelMapper modelMapper;
 
     @Autowired
     public PropertyController(CountryService countryService, PropertyService propertyService, ModelMapper modelMapper) {
         this.countryService = countryService;
         this.propertyService = propertyService;
-        this.modelMapper = modelMapper;
     }
 
 
@@ -67,26 +65,20 @@ public class PropertyController extends BaseController {
             modelAndView.addObject("cities", cities);
             return this.view("property/property-create", modelAndView);
         }
-        PropertyServiceModel propertyServiceModel = modelMapper.map(model, PropertyServiceModel.class);
-        propertyService.save(propertyServiceModel);
+        propertyService.save(model);
         return this.redirect("property/show/all");
     }
 
     @GetMapping("/create/city/{country}")
     public ModelAndView createCity(@PathVariable("country") String country, ModelAndView modelAndView, @ModelAttribute CountryViewModel countryViewModel) {
-
-
         modelAndView.addObject("country", country);
-
         return this.view("property/property-create-city", modelAndView);
     }
 
 
     @PostMapping("/create/city/{country}")
     public ModelAndView createCityConfirm(@PathVariable("country") String country, ModelAndView modelAndView, @ModelAttribute CountryViewModel countryViewModel) throws NotFoundException {
-
         countryService.addCityToCountry(country, countryViewModel.getName());
-
         return this.redirect("property/create/" + country, modelAndView);
     }
 
@@ -95,9 +87,6 @@ public class PropertyController extends BaseController {
     public ModelAndView showProperties(@ModelAttribute("cityProperties") List<PropertyViewModel> propertyViewModels,
                                        @ModelAttribute("model") ReservationCreateModel reservationCreateModel,
                                        ModelAndView modelAndView) {
-        if (propertyViewModels == null) {
-            propertyViewModels = new ArrayList<>();
-        }
         if (reservationCreateModel.getStartDate() == null) {
             reservationCreateModel = null;
         }
@@ -111,7 +100,7 @@ public class PropertyController extends BaseController {
     public ModelAndView showProperties(ModelAndView modelAndView) {
         List<PropertyViewModel> properties = propertyService.getAllOrderedByAverageReviews();
         modelAndView.addObject("properties", properties);
-        modelAndView.addObject("message", "Available locations all over Europe!");
+        modelAndView.addObject("message", AVAILABLE_LOCATIONS_ALL_OVER_EUROPE);
         return this.view("property/property-show", modelAndView);
     }
 
@@ -119,29 +108,23 @@ public class PropertyController extends BaseController {
     public ModelAndView showMyProperties(ModelAndView modelAndView) {
         List<PropertyViewModel> properties = propertyService.getMyProperties();
         modelAndView.addObject("properties", properties);
-        modelAndView.addObject("message", "My Properties");
+        modelAndView.addObject("message", MY_PROPERTIES);
         return this.view("property/property-show", modelAndView);
     }
 
     @GetMapping("/details/{id}")
     public ModelAndView showMyProperties(@PathVariable String id, ModelAndView modelAndView, Principal principal) throws NotFoundException {
         PropertyViewModel property = propertyService.findById(id);
-        String owner = propertyService.getOwnerUsername(id);
-        boolean isOwner = false;
-        if(principal.getName().equals(owner)) {
-          isOwner = true;
-        }
+        boolean isOwner = propertyService.checkIfUserIsPropertyOwner(id);
         modelAndView.addObject("property", property);
         modelAndView.addObject("isOwner", isOwner);
         return this.view("property/property-details", modelAndView);
     }
 
     @GetMapping("/add/picture/{id}")
-    public ModelAndView addPictureToProperty(@PathVariable String id,
-                                             @ModelAttribute PictureAddModel pictureAddModel,
-                                             ModelAndView modelAndView, RedirectAttributes attributes) throws NotFoundException {
+    public ModelAndView addPictureToProperty(@PathVariable String id, @ModelAttribute PictureAddModel pictureAddModel, ModelAndView modelAndView, RedirectAttributes attributes) {
         if (!propertyService.addPictureToProperty(id, pictureAddModel)) {
-            attributes.addFlashAttribute("message", "\nPicture was not added!");
+            attributes.addFlashAttribute("message", PICTURE_WAS_NOT_ADDED);
         }
         return this.redirect("property/details/" + id, modelAndView);
     }

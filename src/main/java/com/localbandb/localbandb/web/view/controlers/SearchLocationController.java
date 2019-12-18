@@ -14,6 +14,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+import static com.localbandb.localbandb.web.view.constants.Constants.AVAILABLE_LOCATION_IN;
+
 @Controller
 @RequestMapping("/search")
 public class SearchLocationController extends BaseController {
@@ -28,15 +30,18 @@ public class SearchLocationController extends BaseController {
 
   @GetMapping("/country")
   public ModelAndView searchCountry(ModelAndView modelAndView) {
-    List<String> countries = countryService.getAllCountryNames();
-    modelAndView.addObject("countries", countries);
 
+    List<String> countries = countryService.getAllCountryNames();
+
+    modelAndView.addObject("countries", countries);
     return this.view("location/search-location", modelAndView);
   }
 
   @GetMapping("/country/{country}")
   public ModelAndView searchCountry(@PathVariable String country, ModelAndView modelAndView) throws NotFoundException {
+
     List<String> cities = countryService.getOrderedCitiesForCountry(country);
+
     modelAndView.addObject("cities", cities);
     modelAndView.addObject("currentCountry", country);
     return this.view("location/search-location", modelAndView);
@@ -44,11 +49,13 @@ public class SearchLocationController extends BaseController {
 
   @GetMapping("/country/{country}/{city}")
   public ModelAndView searchCountry(@PathVariable String country, @PathVariable String city, ModelAndView modelAndView, RedirectAttributes attributes) throws NotFoundException {
+
     List<String> cities = countryService.getOrderedCitiesForCountry(country);
-    modelAndView.addObject("cities", cities);
     List<PropertyViewModel> cityProperties = propertyService.getAllByCity(city);
+
+    modelAndView.addObject("cities", cities);
     modelAndView.addObject("properties", cityProperties);
-    modelAndView.addObject("message", "Available locations in " + city );
+    modelAndView.addObject("message", AVAILABLE_LOCATION_IN + city );
     return this.view("property/property-show", modelAndView);
   }
 

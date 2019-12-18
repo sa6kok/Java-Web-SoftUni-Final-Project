@@ -9,39 +9,41 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
+import static com.localbandb.localbandb.web.view.constants.Constants.*;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class PropertyCreateModel {
 
-  @Size(min = 3, max = 15, message = "should be between 3 and 15 symbols!")
+  @Size(min = 3, max = 15, message = SHOULD_BE_BETWEEN_3_15_SYMBOLS)
   private String name;
 
-  @Size(min = 15, message = "should be at least 15 symbols!")
+  @Size(min = 15, message = SHOULD_BE_AT_LEAST_15_SYMBOLS)
   private String description;
 
-  @Min(value = 1, message = " should be at least one!")
+  @Min(value = 1, message = SHOULD_BE_AT_LEAST_1)
   private Integer maxOccupancy;
 
-  @Min(value = 0, message = " should be a positive number!")
+  @Min(value = 0, message = SHOULD_BE_A_POSITIVE_NUMBER)
   private BigDecimal price;
 
-  @NotEmpty(message = " should not be empty!")
+  @NotEmpty(message = SHOULD_NOT_BE_EMPTY)
   private String city;
 
-  @Size(min = 3, max = 25, message = "should be between 3 and 15 symbols!")
+  @Size(min = 3, max = 25, message = SHOULD_BE_BETWEEN_3_15_SYMBOLS)
   private String street;
 
-  @Min(value = 0, message = " should be a positive number!")
+  @Min(value = 0, message = SHOULD_BE_A_POSITIVE_NUMBER)
   private int streetNumber;
 
 
   private String streetNumberAddition;
 
-  @Min(value = 0, message = " should be a positive number!")
+  @Min(value = 0, message = SHOULD_BE_A_POSITIVE_NUMBER)
   private int floor;
 
-  @Min(value = 0, message = " should be a positive number!")
+  @Min(value = 0, message = SHOULD_BE_A_POSITIVE_NUMBER)
   private int apartment;
 
   private String pictureUrl;

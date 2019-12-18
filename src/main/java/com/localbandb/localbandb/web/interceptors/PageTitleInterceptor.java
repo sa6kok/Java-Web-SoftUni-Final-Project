@@ -12,7 +12,7 @@ public class PageTitleInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
-        String title = "A place better than at home";
+        String title = "LOCAL B&B BETTER THAN HOME";
 
         if (modelAndView == null) {
             modelAndView = new ModelAndView();

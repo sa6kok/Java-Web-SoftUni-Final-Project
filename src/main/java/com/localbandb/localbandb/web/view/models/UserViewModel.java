@@ -1,5 +1,7 @@
 package com.localbandb.localbandb.web.view.models;
 
+import java.util.List;
+
 public class UserViewModel {
     private String id;
     private String username;
@@ -7,6 +9,7 @@ public class UserViewModel {
     private String firstName;
     private String lastName;
     private Integer age;
+    private List<String> roles;
     private boolean isActive;
 
     public UserViewModel() {
@@ -60,11 +63,23 @@ public class UserViewModel {
         this.age = age;
     }
 
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
     public boolean isActive() {
         return isActive;
     }
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public String getRolesInString() {
+        return String.join(", ", this.roles);
     }
 }

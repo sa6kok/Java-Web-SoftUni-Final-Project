@@ -2,13 +2,15 @@ package com.localbandb.localbandb.web.view.models;
 
 import javax.validation.constraints.Size;
 
+import static com.localbandb.localbandb.web.view.constants.Constants.THE_DATE_IS_NOT_CORRECT;
+
 public class ReservationCreateModel {
   private String country;
   private String city;
   private Integer occupancy;
-  @Size(min = 8, max = 10)
+  @Size(min = 8, max = 10, message = THE_DATE_IS_NOT_CORRECT)
   private String startDate;
-  @Size(min = 8, max = 10)
+  @Size(min = 8, max = 10, message = THE_DATE_IS_NOT_CORRECT)
   private String endDate;
   private PropertyViewModel propertyViewModel;
   private String totalPrice;

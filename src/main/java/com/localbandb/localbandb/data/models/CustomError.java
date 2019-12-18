@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 public class CustomError extends BaseEntity{
-    @Column(name = "exception")
+    @Column(name = "exception", columnDefinition = "TEXT")
     String  exception;
 
     @Column(name = "stack_trace", columnDefinition = "TEXT")

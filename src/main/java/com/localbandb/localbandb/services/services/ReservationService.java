@@ -28,4 +28,6 @@ public interface ReservationService {
     Reservation findById(String reservationId) throws NotFoundException;
 
     void findReservationsToCancelAndCancelAutomaticScheduled();
+
+    void findReservationToSetPastTrueAutomaticScheduled();
 }

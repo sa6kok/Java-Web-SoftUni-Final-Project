@@ -21,7 +21,6 @@ public class ReservationApiController {
 
   @GetMapping("/reservation/api/create/{country}")
   public List<String> fillCitiesForCountryInSelect(@PathVariable String country) throws NotFoundException {
-    List<String> orderedCitiesForCountry = countryService.getOrderedCitiesForCountry(country);
-    return orderedCitiesForCountry;
+    return countryService.getOrderedCitiesForCountry(country);
   }
 }

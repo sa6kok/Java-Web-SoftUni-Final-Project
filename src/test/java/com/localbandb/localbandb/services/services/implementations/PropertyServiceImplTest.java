@@ -11,6 +11,7 @@ import com.localbandb.localbandb.services.services.CityService;
 import com.localbandb.localbandb.services.services.DateService;
 import com.localbandb.localbandb.services.services.PropertyService;
 import com.localbandb.localbandb.services.services.UserService;
+import com.localbandb.localbandb.web.view.models.PropertyCreateModel;
 import com.localbandb.localbandb.web.view.models.PropertyViewModel;
 import javassist.NotFoundException;
 import org.junit.Before;
@@ -33,6 +34,7 @@ public class PropertyServiceImplTest extends TestBase {
 
     private Property property;
     private PropertyServiceModel propertyServiceModel;
+    private PropertyCreateModel propertyCreateModel;
 
 
     @MockBean
@@ -62,8 +64,10 @@ public class PropertyServiceImplTest extends TestBase {
    @Before
     public void beforeEach() {
         this.property = new Property();
-        this.propertyServiceModel = new PropertyServiceModel();
-        this.propertyServiceModel.setPictureUrl("url");
+       this.propertyServiceModel = new PropertyServiceModel();
+       this.propertyServiceModel.setPictureUrl("url");
+       this.propertyCreateModel = new PropertyCreateModel();
+
     }
 
 
@@ -71,7 +75,7 @@ public class PropertyServiceImplTest extends TestBase {
     public void save_withoutCity_returnsFalse() throws NotFoundException {
         Mockito.when(cityService.findCityByName("Pesho")).thenReturn(null);
 
-        assertFalse(propertyService.save(this.propertyServiceModel));
+        assertFalse(propertyService.save(this.propertyCreateModel));
     }
 
     @Test
@@ -79,7 +83,7 @@ public class PropertyServiceImplTest extends TestBase {
         Mockito.when(userService.findByUsername("Pesho")).thenReturn(null);
 
 
-        assertFalse(propertyService.save(this.propertyServiceModel));
+        assertFalse(propertyService.save(this.propertyCreateModel));
     }
 
     @Test
@@ -88,7 +92,7 @@ public class PropertyServiceImplTest extends TestBase {
         Mockito.when(userService.findByUsername("Pesho")).thenReturn(new User());
         Mockito.when(modelMapper.map(this.propertyServiceModel, Property.class)).thenReturn(null);
 
-        assertFalse(propertyService.save(this.propertyServiceModel));
+        assertFalse(propertyService.save(this.propertyCreateModel));
     }
 
 

@@ -2,6 +2,7 @@ package com.localbandb.localbandb.data.repositories;
 
 import com.localbandb.localbandb.data.models.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,4 +21,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, String
     List<Reservation> findAllByPayedAndCanceledAndPast(boolean payed, boolean canceled, boolean past);
 
     List<Reservation> findAllByProperty_Host_Username(String username);
+
+    @Secured("ROLE_ADMIN")
+    List<Reservation> findAll();
 }

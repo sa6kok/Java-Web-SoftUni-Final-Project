@@ -134,6 +134,8 @@ public class ReservationServiceImpl implements ReservationService {
             case "properties":
                 reservations = reservationRepository.findAllByProperty_Host_Username(username);
                 break;
+            case "admin":
+                reservations = reservationRepository.findAll();
         }
         return getReservationViewModelsFromReservation(reservations);
     }
@@ -193,14 +195,30 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public void findReservationsToCancelAndCancelAutomaticScheduled() {
-        List<Reservation> allByPayedAndCanceled = reservationRepository
+        List<Reservation> allByNotPayedAndNotCanceledAndNotPast = reservationRepository
                 .findAllByPayedAndCanceledAndPast(false, false, false);
-       allByPayedAndCanceled.stream().filter(this::findIfResaIsOlderThanOneDay)
+       allByNotPayedAndNotCanceledAndNotPast.stream().filter(this::findIfResaIsOlderThanOneDay)
                .map(BaseEntity::getId).forEach(this::cancelReservation);
+    }
+
+    @Override
+    public void findReservationToSetPastTrueAutomaticScheduled() {
+        List<Reservation> allByPayedAndNotCanceledNotPast = reservationRepository
+                .findAllByPayedAndCanceledAndPast(true, false, false);
+        allByPayedAndNotCanceledNotPast.stream()
+                .filter(this::findIfResaEndDateIsOlderThanOneDay).forEach(r -> r.setPast(true));
+        reservationRepository.saveAll(allByPayedAndNotCanceledNotPast);
     }
 
     private boolean findIfResaIsOlderThanOneDay(Reservation reservation) {
         LocalDate created = reservation.getCreated();
+        LocalDate today = LocalDate.now();
+        LocalDate diff = today.minusDays(1);
+        return diff.isAfter(created);
+    }
+
+    private boolean findIfResaEndDateIsOlderThanOneDay(Reservation reservation) {
+        LocalDate created = reservation.getEndDate();
         LocalDate today = LocalDate.now();
         LocalDate diff = today.minusDays(1);
         return diff.isAfter(created);

@@ -7,7 +7,6 @@ import com.localbandb.localbandb.data.models.User;
 import com.localbandb.localbandb.data.repositories.PaymentRepository;
 import com.localbandb.localbandb.services.services.PaymentService;
 import com.localbandb.localbandb.services.services.UserService;
-import javassist.NotFoundException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
